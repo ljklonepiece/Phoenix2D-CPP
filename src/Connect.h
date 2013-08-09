@@ -18,9 +18,23 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
+#ifndef CONNECT_H_
+#define CONNECT_H_
 
-int main() {
-	std::cout << "Hello world!";
-	return 0;
+typedef struct _socket {
+	int socketfd;
+	struct sockaddr_in server;
+} Socket;
+
+namespace connection {
+class Connect {
+	Socket sock;
+public:
+	Connect();
+	~Connect();
+	void connectToServer();
+	bool sendMessage(std::string msg);
+	std::string receiveMessage();
+};
 }
+#endif /* CONNECT_H_ */

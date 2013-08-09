@@ -18,9 +18,20 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
+#include "Connect.h"
 
-int main() {
-	std::cout << "Hello world!";
-	return 0;
+namespace connection {
+
+Connect::Connect() {
+
+}
+
+Connect::~Connect() {
+
+}
+
+bool Connect::sendMessage(std::string msg) {
+	return true;
+}
+
 }
