@@ -21,20 +21,22 @@
 #ifndef CONNECT_H_
 #define CONNECT_H_
 
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <string>
+
 typedef struct _socket {
 	int socketfd;
 	struct sockaddr_in server;
 } Socket;
 
-namespace connection {
 class Connect {
 	Socket sock;
 public:
-	Connect();
+	Connect(const char *host, int port);
 	~Connect();
-	void connectToServer();
-	bool sendMessage(std::string msg);
+	bool        sendMessage(std::string msg);
 	std::string receiveMessage();
 };
-}
+
 #endif /* CONNECT_H_ */

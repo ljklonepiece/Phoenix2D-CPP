@@ -18,9 +18,13 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "Connect.h"
 #include <iostream>
 
 int main() {
-	std::cout << "Hello world!";
+	Connect connect("localhost", 6000);
+	connect.sendMessage("(init Phoenix2D (version 15.0))");
+	std::cout << connect.receiveMessage() << std::endl;
+	connect.sendMessage("(bye)");
 	return 0;
 }
