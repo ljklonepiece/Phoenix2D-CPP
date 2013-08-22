@@ -32,6 +32,7 @@ typedef struct _socket {
 
 class Connect {
 	Socket sock;
+	void connectToServer(const char *host, int port);
 public:
 	Connect(const char *host, int port);
 	~Connect();

@@ -18,11 +18,28 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Controller.h"
-#include <iostream>
+#ifndef CONTROLLER_H_
+#define CONTROLLER_H_
 
-int main() {
-	Controller controller("Phoenix", 'p', "localhost");
-	controller.connect();
-	return 0;
-}
+#include <string>
+
+class Connect;
+
+class Controller {
+	Connect *c;
+	bool connected;
+public:
+	static std::string HOSTNAME;
+	static std::string TEAM_NAME;
+	static std::string SIDE;
+	static int UNIFORM_NUMBER;
+	static char AGENT_TYPE;
+	Controller(const char *teamName, char agentType, const char *hostname);
+	~Controller();
+	void connect();
+	bool isConnected();
+	void reconnect();
+	void disconnect();
+};
+
+#endif /* CONTROLLER_H_ */

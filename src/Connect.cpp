@@ -21,8 +21,13 @@
 #include "Connect.h"
 #include <netdb.h>
 #include <string.h>
+#include <iostream>
 
 Connect::Connect(const char *host, int port) {
+	connectToServer(host, port);
+}
+
+void Connect::connectToServer(const char *host, int port) {
 	int sockfd;
 	struct sockaddr_in server_addr;
 	struct hostent *host_0;
@@ -30,7 +35,8 @@ Connect::Connect(const char *host, int port) {
 	if (inet_addr(host) == INADDR_NONE) {
 		host_0 = (struct hostent *)gethostbyname(host);
 		if (host_0 == 0) {
-			//Error: can not get host
+			std::cerr << "can not get host" << std::endl; //Error: can not get host
+			return;
 		} else {
 			addr_ptr = (struct in_addr *)(*host_0->h_addr_list);
 			host = inet_ntoa(*addr_ptr);
@@ -38,14 +44,16 @@ Connect::Connect(const char *host, int port) {
 	}
 	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 	if (sockfd < 0) {
-		//Error: can not open socket
+		std::cerr << "can not open socket" << std::endl; //Error: can not open socket
+		return;
 	}
 	bzero(&server_addr, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(0);
 	sock.server.sin_addr.s_addr = htonl(INADDR_ANY);
 	if (bind(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-		//Error: can not bind host
+		std::cerr << "can not bind host" << std::endl; //Error: can not bind host
+		return;
 	}
 	sock.socketfd = sockfd;
 	bzero(&sock.server, sizeof(sock.server));
@@ -72,7 +80,7 @@ std::string Connect::receiveMessage() {
 	servlen = sizeof(serv_addr);
 	n = recvfrom(sock.socketfd, msg, 2048, 0, (struct sockaddr *)&serv_addr, &servlen);
 	if (n < 0) {
-		return "Error";
+		return "(error socket_failed)";
 	} else {
 		sock.server.sin_port = serv_addr.sin_port;
 		return std::string(msg);
