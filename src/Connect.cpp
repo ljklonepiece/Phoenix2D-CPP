@@ -74,11 +74,11 @@ bool Connect::sendMessage(std::string msg) {
 
 std::string Connect::receiveMessage() {
 	int n;
-	char msg[2048];
+	char msg[4096];
 	socklen_t servlen;
 	struct sockaddr_in serv_addr;
 	servlen = sizeof(serv_addr);
-	n = recvfrom(sock.socketfd, msg, 2048, 0, (struct sockaddr *)&serv_addr, &servlen);
+	n = recvfrom(sock.socketfd, msg, 4096, 0, (struct sockaddr *)&serv_addr, &servlen);
 	if (n < 0) {
 		return "(error socket_failed)";
 	} else {

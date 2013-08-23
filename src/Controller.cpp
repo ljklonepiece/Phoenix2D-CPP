@@ -18,16 +18,17 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Controller.h>
+#include "Controller.h"
 #include <boost/regex.hpp>
 #include <iostream>
 #include <cstdlib>
+#include "Connect.h"
 #include "Self.h"
 
 std::string Controller::HOSTNAME = "localhost";
 std::string Controller::TEAM_NAME = "undefined";
 std::string Controller::SIDE = "l";
-int Controller::UNIFORM_NUMBER = "0";
+int Controller::UNIFORM_NUMBER = 0;
 char Controller::AGENT_TYPE = 'p';
 
 Controller::Controller(const char *teamName, char agentType, const char *hostname) {
@@ -75,7 +76,8 @@ void Controller::connect() {
 		int unum;
 		if (boost::regex_match(message.c_str(), match, response)) {
 			side = match[1];
-			unum = atoi((char *)match[2]); //C++11: use std::stoi()
+			std::string unum_str = std::string() + match[1];
+			unum = atoi(unum_str.c_str()); //C++11: use std::stoi()
 		} else {
 			side = "undefined";
 			unum = 0;
@@ -94,7 +96,8 @@ void Controller::connect() {
 		}
 		std::cout << c->receiveMessage() << std::endl; //server_params
 		message = c->receiveMessage(); //player_params
-		Self self(message);
+		std::cout << message << std::endl;
+		Self self(message.c_str());
 		for (int i = 0; i < Self::PLAYER_TYPES; i++) {
 			std::cout << c->receiveMessage() << std::endl; //player_types
 		}

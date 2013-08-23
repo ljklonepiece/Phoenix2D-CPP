@@ -211,18 +211,18 @@ double      Server::WIND_RAND                      = 0.0;
 double      Server::WIND_RANDOM                    = 0.0;
 
 Server::Server(const char *server_params) {
-	this->server_params = server_params;
+	this->server_params = std::string(server_params);
 }
 
 Server::~Server() {
 
 }
 
-std::string Server::getParameter(const char *parameter) {
+std::string Server::getParameter(std::string parameter) {
 	boost::regex parameter_regex("\\(" + parameter + "\\s+([\\w\\-\\.~%]*)\\)");
 	boost::cmatch match;
-	if (boost::regex_match(server_params, match, parameter_regex)) {
-		return match[1];
+	if (boost::regex_match(server_params.c_str(), match, parameter_regex)) {
+		return std::string() + match[1];
 	} else {
 		return "";
 	}

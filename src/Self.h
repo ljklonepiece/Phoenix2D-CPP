@@ -40,8 +40,8 @@ class Self {
 	double *kick_power_rate;
 	double *foul_detect_probability;
 	double *catchable_area_l_stretch;
-	char *player_params;
-	std::string getParameter(const char *parameter);
+	std::string player_params;
+	std::string getParameter(std::string parameter);
 public:
 	static int         ALLOW_MULT_DEFAULT_TYPE;
 	static double      CATCHABLE_AREA_L_STRECH_MAX;

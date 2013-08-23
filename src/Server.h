@@ -24,8 +24,8 @@
 #include <string>
 
 class Server {
-	char *server_params;
-	std::string getParameter(const char *parameter);
+	std::string server_params;
+	std::string getParameter(std::string parameter);
 public:
 	static double      AUDIO_CUT_DIST;
 	static int         AUTO_MODE;

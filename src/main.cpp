@@ -24,5 +24,6 @@
 int main() {
 	Controller controller("Phoenix", 'p', "localhost");
 	controller.connect();
+	controller.disconnect();
 	return 0;
 }
