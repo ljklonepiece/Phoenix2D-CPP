@@ -24,6 +24,7 @@
 #include <cstdlib>
 #include "Connect.h"
 #include "Self.h"
+#include "Reader.h"
 
 std::string Controller::HOSTNAME = "localhost";
 std::string Controller::TEAM_NAME = "undefined";
@@ -37,6 +38,7 @@ Controller::Controller(const char *teamName, char agentType, const char *hostnam
 	Controller::TEAM_NAME = std::string(teamName);
 	connected = false;
 	c = 0;
+	r = 0;
 }
 
 Controller::~Controller() {
@@ -68,7 +70,7 @@ void Controller::connect() {
 	c->sendMessage(message);
 	message = c->receiveMessage();
 	if (boost::regex_match(message.c_str(), match, error)) {
-		std::cerr << match[1] << std::endl; //Error
+		std::cerr << "Controller::connect() -> " << match[1] << std::endl; //Error
 		return;
 	} else {
 		boost::regex response("\\(init\\s+(l|r)\\s+(\\d+)\\s+([\\w\\_]+)\\)"); //i.e (init l 1 before_kick_off)
@@ -76,12 +78,12 @@ void Controller::connect() {
 		int unum;
 		if (boost::regex_match(message.c_str(), match, response)) {
 			side = match[1];
-			std::string unum_str = std::string() + match[1];
+			std::string unum_str = std::string() + match[2];
 			unum = atoi(unum_str.c_str()); //C++11: use std::stoi()
 		} else {
 			side = "undefined";
 			unum = 0;
-			std::cerr << "Does not match response" << std::endl;
+			std::cerr << "Controller::connect() -> Does not match response" << std::endl;
 		}
 		switch (Controller::AGENT_TYPE) {
 		case 't':
@@ -94,13 +96,20 @@ void Controller::connect() {
 			Controller::UNIFORM_NUMBER = unum;
 			break;
 		}
-		std::cout << c->receiveMessage() << std::endl; //server_params
+		message = c->receiveMessage(); //server_params
+		Server *server = new Server(message);
 		message = c->receiveMessage(); //player_params
-		std::cout << message << std::endl;
-		Self self(message.c_str());
+		Self *self = new Self(message);
 		for (int i = 0; i < Self::PLAYER_TYPES; i++) {
-			std::cout << c->receiveMessage() << std::endl; //player_types
+			message = c->receiveMessage(); //player_type
+			self->addPlayerType(message);
 		}
+		r = new Reader(c);
+		r->start();
+		/* For testing purpose*/
+		if (server) delete server;
+		if (self) delete self;
+		/**/
 		connected = true;
 	}
 }
@@ -114,6 +123,7 @@ void Controller::reconnect() {
 }
 
 void Controller::disconnect() {
+	r->stop();
 	if (isConnected()) {
 		c->sendMessage("(bye)");
 	}

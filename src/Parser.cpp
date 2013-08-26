@@ -18,30 +18,17 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONTROLLER_H_
-#define CONTROLLER_H_
+#include "Parser.h"
 
-#include <string>
+Parser::Parser(Self *self, Game *game) {
+	this->self = self;
+	this->game = game;
+}
 
-class Connect;
-class Reader;
+Parser::~Parser() {
 
-class Controller {
-	Connect *c;
-	Reader *r;
-	bool connected;
-public:
-	static std::string HOSTNAME;
-	static std::string TEAM_NAME;
-	static std::string SIDE;
-	static int UNIFORM_NUMBER;
-	static char AGENT_TYPE;
-	Controller(const char *teamName, char agentType, const char *hostname);
-	~Controller();
-	void connect();
-	bool isConnected();
-	void reconnect();
-	void disconnect();
-};
+}
 
-#endif /* CONTROLLER_H_ */
+void Parser::parseMessage(std::string message) {
+
+}

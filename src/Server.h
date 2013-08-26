@@ -215,7 +215,7 @@ public:
 	static double      WIND_NONE;
 	static double      WIND_RAND;
 	static double      WIND_RANDOM;
-	Server(const char *server_params);
+	Server(std::string server_params);
 	~Server();
 };
 

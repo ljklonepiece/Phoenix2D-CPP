@@ -18,30 +18,24 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONTROLLER_H_
-#define CONTROLLER_H_
+#ifndef READER_H_
+#define READER_H_
 
-#include <string>
+#include <pthread.h>
 
 class Connect;
-class Reader;
 
-class Controller {
-	Connect *c;
-	Reader *r;
-	bool connected;
+class Reader {
+	Connect *connect;
+	bool running;
+	void *read(void *arg);
+	pthread_t thread;
 public:
-	static std::string HOSTNAME;
-	static std::string TEAM_NAME;
-	static std::string SIDE;
-	static int UNIFORM_NUMBER;
-	static char AGENT_TYPE;
-	Controller(const char *teamName, char agentType, const char *hostname);
-	~Controller();
-	void connect();
-	bool isConnected();
-	void reconnect();
-	void disconnect();
+	Reader(Connect *connect);
+	~Reader();
+	bool isRunning();
+	void start();
+	void stop();
 };
 
-#endif /* CONTROLLER_H_ */
+#endif /* READER_H_ */

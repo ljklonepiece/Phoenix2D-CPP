@@ -18,30 +18,18 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONTROLLER_H_
-#define CONTROLLER_H_
+#include "Game.h"
 
-#include <string>
+int Game::GAME_TIME = 0;
+int Game::SIMULATION_TIME = 0;
+int Game::GOALS = 0;
+int Game::GOALS_AGAINST = 0;
+std::string Game::PLAY_MODE = "before_kick_off";
 
-class Connect;
-class Reader;
+Game::Game() {
 
-class Controller {
-	Connect *c;
-	Reader *r;
-	bool connected;
-public:
-	static std::string HOSTNAME;
-	static std::string TEAM_NAME;
-	static std::string SIDE;
-	static int UNIFORM_NUMBER;
-	static char AGENT_TYPE;
-	Controller(const char *teamName, char agentType, const char *hostname);
-	~Controller();
-	void connect();
-	bool isConnected();
-	void reconnect();
-	void disconnect();
-};
+}
 
-#endif /* CONTROLLER_H_ */
+Game::~Game() {
+
+}

@@ -95,37 +95,37 @@ std::vector<std::string> Self::COLLISION;              //empty
 int         Self::FOUL_CHARGED                         = 0;
 std::string Self::FOUL_CARD                            = "none";
 
-Self::Self(const char *player_params) {
-	this->player_params = std::string(player_params);
-	Self::ALLOW_MULT_DEFAULT_TYPE = atoi((getParameter("allow_mult_default_type")).c_str());
-	Self::CATCHABLE_AREA_L_STRECH_MAX = atof((getParameter("catchable_area_l_stretch_max")).c_str());
-	Self::CATCHABLE_AREA_L_STRECH_MIN = atof((getParameter("catchable_area_l_stretch_min")).c_str());
-	Self::DASH_POWER_RATE_DELTA_MAX = atof((getParameter("dash_power_rate_delta_max")).c_str());
-	Self::DASH_POWER_RATE_DELTA_MIN = atof((getParameter("dash_power_rate_delta_min")).c_str());
-	Self::EFFORT_MAX_DELTA_FACTOR = atof((getParameter("effort_max_delta_factor")).c_str());
-	Self::EFFORT_MIN_DELTA_FACTOR = atof((getParameter("effort_min_delta_factor")).c_str());
-	Self::EXTRA_STAMINA_DELTA_MAX = atof((getParameter("extra_stamina_delta_max")).c_str());
-	Self::EXTRA_STAMINA_DELTA_MIN = atof((getParameter("extra_stamina_delta_min")).c_str());
+Self::Self(std::string player_params) {
+	this->player_params = player_params;
+	Self::ALLOW_MULT_DEFAULT_TYPE              = atoi((getParameter("allow_mult_default_type")).c_str());
+	Self::CATCHABLE_AREA_L_STRECH_MAX          = atof((getParameter("catchable_area_l_stretch_max")).c_str());
+	Self::CATCHABLE_AREA_L_STRECH_MIN          = atof((getParameter("catchable_area_l_stretch_min")).c_str());
+	Self::DASH_POWER_RATE_DELTA_MAX            = atof((getParameter("dash_power_rate_delta_max")).c_str());
+	Self::DASH_POWER_RATE_DELTA_MIN            = atof((getParameter("dash_power_rate_delta_min")).c_str());
+	Self::EFFORT_MAX_DELTA_FACTOR              = atof((getParameter("effort_max_delta_factor")).c_str());
+	Self::EFFORT_MIN_DELTA_FACTOR              = atof((getParameter("effort_min_delta_factor")).c_str());
+	Self::EXTRA_STAMINA_DELTA_MAX              = atof((getParameter("extra_stamina_delta_max")).c_str());
+	Self::EXTRA_STAMINA_DELTA_MIN              = atof((getParameter("extra_stamina_delta_min")).c_str());
 	Self::FOUL_DETECT_PROBABILITY_DELTA_FACTOR = atof((getParameter("foul_detect_probability_delta_factor")).c_str());
-	Self::INERTIA_MOMENT_DELTA_FACTOR = atof((getParameter("inertia_moment_delta_factor")).c_str());
-	Self::KICK_POWER_RATE_DELTA_MAX = atof((getParameter("kick_power_rate_delta_max")).c_str());
-	Self::KICK_POWER_RATE_DELTA_MIN = atof((getParameter("kick_power_rate_delta_min")).c_str());
-	Self::KICK_RAND_DELTA_FACTOR = atof((getParameter("kick_rand_delta_factor")).c_str());
-	Self::KICKABLE_MARGIN_DELTA_MAX = atof((getParameter("kickable_margin_delta_max")).c_str());
-	Self::KICKABLE_MARGIN_DELTA_MIN = atof((getParameter("kickable_margin_delta_min")).c_str());
-	Self::NEW_DASH_POWER_RATE_DELTA_MAX = atof((getParameter("new_dash_power_rate_delta_max")).c_str());
-	Self::NEW_DASH_POWER_RATE_DELTA_MIN = atof((getParameter("new_dash_power_rate_delta_min")).c_str());
-	Self::NEW_STAMINA_INC_MAX_DELTA_FACTOR = atof((getParameter("new_stamina_inc_max_delta_factor")).c_str());
-	Self::PLAYER_DECAY_DELTA_MAX = atof((getParameter("player_decay_delta_max")).c_str());
-	Self::PLAYER_DECAY_DELTA_MIN = atof((getParameter("player_decay_delta_min")).c_str());
-	Self::PLAYER_SIZE_DELTA_FACTOR = atof((getParameter("player_size_delta_factor")).c_str());
-	Self::PLAYER_SPEED_MAX_DELTA_MAX = atof((getParameter("player_speed_max_delta_max")).c_str());
-	Self::PLAYER_SPEED_MAX_DELTA_MIN = atof((getParameter("player_speed_max_delta_min")).c_str());
-	Self::PLAYER_TYPES = atoi((getParameter("player_types")).c_str());
-	Self::PT_MAX = atoi((getParameter("pt_max")).c_str());
-	Self::RANDOM_SEED = atoi((getParameter("random_seed")).c_str());
-	Self::STAMINA_INC_MAX_DELTA_FACTOR = atof((getParameter("stamina_inc_max_delta_factor")).c_str());
-	Self::SUBS_MAX = atoi((getParameter("subs_max")).c_str());
+	Self::INERTIA_MOMENT_DELTA_FACTOR          = atof((getParameter("inertia_moment_delta_factor")).c_str());
+	Self::KICK_POWER_RATE_DELTA_MAX            = atof((getParameter("kick_power_rate_delta_max")).c_str());
+	Self::KICK_POWER_RATE_DELTA_MIN            = atof((getParameter("kick_power_rate_delta_min")).c_str());
+	Self::KICK_RAND_DELTA_FACTOR               = atof((getParameter("kick_rand_delta_factor")).c_str());
+	Self::KICKABLE_MARGIN_DELTA_MAX            = atof((getParameter("kickable_margin_delta_max")).c_str());
+	Self::KICKABLE_MARGIN_DELTA_MIN            = atof((getParameter("kickable_margin_delta_min")).c_str());
+	Self::NEW_DASH_POWER_RATE_DELTA_MAX        = atof((getParameter("new_dash_power_rate_delta_max")).c_str());
+	Self::NEW_DASH_POWER_RATE_DELTA_MIN        = atof((getParameter("new_dash_power_rate_delta_min")).c_str());
+	Self::NEW_STAMINA_INC_MAX_DELTA_FACTOR     = atof((getParameter("new_stamina_inc_max_delta_factor")).c_str());
+	Self::PLAYER_DECAY_DELTA_MAX               = atof((getParameter("player_decay_delta_max")).c_str());
+	Self::PLAYER_DECAY_DELTA_MIN               = atof((getParameter("player_decay_delta_min")).c_str());
+	Self::PLAYER_SIZE_DELTA_FACTOR             = atof((getParameter("player_size_delta_factor")).c_str());
+	Self::PLAYER_SPEED_MAX_DELTA_MAX           = atof((getParameter("player_speed_max_delta_max")).c_str());
+	Self::PLAYER_SPEED_MAX_DELTA_MIN           = atof((getParameter("player_speed_max_delta_min")).c_str());
+	Self::PLAYER_TYPES                         = atoi((getParameter("player_types")).c_str());
+	Self::PT_MAX                               = atoi((getParameter("pt_max")).c_str());
+	Self::RANDOM_SEED                          = atoi((getParameter("random_seed")).c_str());
+	Self::STAMINA_INC_MAX_DELTA_FACTOR         = atof((getParameter("stamina_inc_max_delta_factor")).c_str());
+	Self::SUBS_MAX                             = atoi((getParameter("subs_max")).c_str());
 	types_id = new int[Self::PLAYER_TYPES];
 	player_speed_max = new double[Self::PLAYER_TYPES];
 	stamina_inc_max = new double[Self::PLAYER_TYPES];
@@ -161,13 +161,43 @@ Self::~Self() {
 	if (catchable_area_l_stretch) delete[] catchable_area_l_stretch;
 }
 
+void Self::addPlayerType(std::string player_type) {
+	int id = atoi((getParameter(player_type, "id")).c_str());
+	types_id[id]                 = id;
+	player_speed_max[id]         = atof((getParameter(player_type, "player_speed_max")).c_str());
+	stamina_inc_max[id]          = atof((getParameter(player_type, "stamina_inc_max")).c_str());
+	player_decay[id]             = atof((getParameter(player_type, "player_decay")).c_str());
+	inertia_moment[id]           = atof((getParameter(player_type, "inertia_moment")).c_str());
+	dash_power_rate[id]          = atof((getParameter(player_type, "dash_power_rate")).c_str());
+	player_size[id]              = atof((getParameter(player_type, "player_size")).c_str());
+	kickable_margin[id]          = atof((getParameter(player_type, "player_size")).c_str());
+	kick_rand[id]                = atof((getParameter(player_type, "kick_rand")).c_str());
+	extra_stamina[id]            = atof((getParameter(player_type, "extra_stamina")).c_str());
+	effort_max[id]               = atof((getParameter(player_type, "effort_max")).c_str());
+	effort_min[id]               = atof((getParameter(player_type, "effort_min")).c_str());
+	kick_power_rate[id]          = atof((getParameter(player_type, "kick_power_rate")).c_str());
+	foul_detect_probability[id]  = atof((getParameter(player_type, "foul_detect_probability")).c_str());
+	catchable_area_l_stretch[id] = atof((getParameter(player_type, "catchable_area_l_stretch")).c_str());
+}
+
+std::string Self::getParameter(std::string player_type, std::string parameter) {
+	boost::regex parameter_regex("\\(" + parameter + "\\s+([\\w\\-\\.]+)\\)");
+	boost::cmatch match;
+	if (boost::regex_search(player_type.c_str(), match, parameter_regex)) {
+		return std::string() + match[1];
+	} else {
+		std::cerr << "Self::getParameter(string, string) -> search failed miserably for parameter " << parameter << std::endl;
+		return "";
+	}
+}
+
 std::string Self::getParameter(std::string parameter) {
 	boost::regex parameter_regex("\\(" + parameter + "\\s+([\\w\\-\\.]+)\\)");
 	boost::cmatch match;
 	if (boost::regex_search(player_params.c_str(), match, parameter_regex)) {
 		return std::string() + match[1];
 	} else {
-		std::cerr << "search failed miserably" << std::endl;
+		std::cerr << "Self::getParameter(string) -> search failed miserably for parameter " << parameter << std::endl;
 		return "";
 	}
 }

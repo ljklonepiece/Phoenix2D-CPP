@@ -42,6 +42,7 @@ class Self {
 	double *catchable_area_l_stretch;
 	std::string player_params;
 	std::string getParameter(std::string parameter);
+	std::string getParameter(std::string player_type, std::string parameter);
 public:
 	static int         ALLOW_MULT_DEFAULT_TYPE;
 	static double      CATCHABLE_AREA_L_STRECH_MAX;
@@ -115,8 +116,9 @@ public:
 	static std::vector<std::string> COLLISION;
 	static int         FOUL_CHARGED;
 	static std::string FOUL_CARD;
-	Self(const char *player_params);
+	Self(std::string player_params);
 	~Self();
+	void addPlayerType(std::string player_type);
 };
 
 #endif /* SELF_H_ */
