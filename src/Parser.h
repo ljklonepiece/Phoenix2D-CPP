@@ -22,6 +22,7 @@
 #define PARSER_H_
 
 #include <string>
+#include <boost/regex.hpp>
 
 class Self;
 class Game;
@@ -29,8 +30,9 @@ class Game;
 class Parser {
 	Self *self;
 	Game *game;
+	boost::regex sense_body;
 public:
-	Parser(Self *self, Game *game);
+	Parser(Self *self);
 	~Parser();
 	void parseMessage(std::string message);
 };

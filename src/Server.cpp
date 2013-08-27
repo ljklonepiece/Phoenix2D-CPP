@@ -214,7 +214,7 @@ double      Server::WIND_RANDOM                    = 0.0;
 Server::Server(std::string server_params) {
 	this->server_params = server_params;
 	Server::AUDIO_CUT_DIST                 = atof((getParameter("audio_cut_dist").c_str()));
-	Server::AUTO_MODE                      = atoi((getParameter("audio_mode").c_str()));
+	Server::AUTO_MODE                      = atoi((getParameter("auto_mode").c_str()));
 	Server::BACK_DASH_RATE                 = atof((getParameter("back_dash_rate").c_str()));
 	Server::BACK_PASSES                    = atoi((getParameter("back_passes").c_str()));
 	Server::BALL_ACCEL_MAX                 = atof((getParameter("ball_accel_max").c_str()));
@@ -359,7 +359,7 @@ Server::Server(std::string server_params) {
 	Server::SEND_COMMS                     = atoi((getParameter("send_comms").c_str()));
 	Server::SEND_STEP                      = atoi((getParameter("send_step").c_str()));
 	Server::SEND_VI_STEP                   = atoi((getParameter("send_vi_step").c_str()));
-	Server::SENSE_BODY_STEP                = atoi((getParameter("send_body_step").c_str()));
+	Server::SENSE_BODY_STEP                = atoi((getParameter("sense_body_step").c_str()));
 	Server::SIDE_DASH_RATE                 = atof((getParameter("side_dash_rate").c_str()));
 	Server::SIMULATOR_STEP                 = atoi((getParameter("simulator_step").c_str()));
 	Server::SLOW_DOWN_FACTOR               = atof((getParameter("slow_down_factor").c_str()));

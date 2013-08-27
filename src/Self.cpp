@@ -22,6 +22,9 @@
 #include <boost/regex.hpp>
 #include <cstdlib>
 
+std::string Self::TEAM_NAME                            = "Phoenix2D";
+int         Self::UNIFORM_NUMBER                       = 1;
+std::string Self::SIDE                                 = "l";
 int         Self::ALLOW_MULT_DEFAULT_TYPE              = 0;
 double      Self::CATCHABLE_AREA_L_STRECH_MAX          = 1.3;
 double      Self::CATCHABLE_AREA_L_STRECH_MIN          = 1.0;
@@ -95,8 +98,11 @@ std::vector<std::string> Self::COLLISION;              //empty
 int         Self::FOUL_CHARGED                         = 0;
 std::string Self::FOUL_CARD                            = "none";
 
-Self::Self(std::string player_params) {
+Self::Self(std::string player_params, std::string team_name, int unum, std::string side) {
 	this->player_params = player_params;
+	Self::TEAM_NAME = team_name;
+	Self::UNIFORM_NUMBER = unum;
+	Self::SIDE = side;
 	Self::ALLOW_MULT_DEFAULT_TYPE              = atoi((getParameter("allow_mult_default_type")).c_str());
 	Self::CATCHABLE_AREA_L_STRECH_MAX          = atof((getParameter("catchable_area_l_stretch_max")).c_str());
 	Self::CATCHABLE_AREA_L_STRECH_MIN          = atof((getParameter("catchable_area_l_stretch_min")).c_str());

@@ -19,16 +19,39 @@
  */
 
 #include "Parser.h"
+#include <iostream>
 
-Parser::Parser(Self *self, Game *game) {
+Parser::Parser(Self *self) {
 	this->self = self;
-	this->game = game;
+	sense_body = boost::regex("\\(sense_body\\s+(\\d+)\\s+");
+	game = 0;
 }
 
 Parser::~Parser() {
-
+	if (game) delete game;
+	if (self) delete self;
 }
 
+/*
+ * Possible messages:
+ * (sense_body ...)
+ * (see ...)
+ * (hear ...)
+ */
 void Parser::parseMessage(std::string message) {
+	size_t found = message.find_first_of(" ");
+	std::string message_type = message.substr(1, found - 1);
+	std::cout << "Message type: " << message_type << std::endl;
+	if (message_type.compare("sense_body") == 0) {
+		boost::cmatch match;
+		if (boost::regex_search(message.c_str(), match, sense_body)) {
+			std::cout << "Game time: " << match[1] << std::endl;
+		}
+	} else if (message_type.compare("see") == 0) {
 
+	} else if (message_type.compare("hear") == 0) {
+
+	} else {
+		std::cerr << "Parse::parseMessage(string) -> message " << message << " not recognized" << std::endl;
+	}
 }

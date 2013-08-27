@@ -44,6 +44,9 @@ class Self {
 	std::string getParameter(std::string parameter);
 	std::string getParameter(std::string player_type, std::string parameter);
 public:
+	static std::string TEAM_NAME;
+	static int         UNIFORM_NUMBER;
+	static std::string SIDE;
 	static int         ALLOW_MULT_DEFAULT_TYPE;
 	static double      CATCHABLE_AREA_L_STRECH_MAX;
 	static double      CATCHABLE_AREA_L_STRECH_MIN;
@@ -116,9 +119,10 @@ public:
 	static std::vector<std::string> COLLISION;
 	static int         FOUL_CHARGED;
 	static std::string FOUL_CARD;
-	Self(std::string player_params);
+	Self(std::string player_params, std::string team_name, int unum, std::string side);
 	~Self();
 	void addPlayerType(std::string player_type);
+	void processSenseBody(std::string sense_body);
 };
 
 #endif /* SELF_H_ */

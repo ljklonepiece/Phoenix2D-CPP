@@ -21,21 +21,33 @@
 #include "Reader.h"
 #include <string>
 #include <iostream>
+#include "Connect.h"
+#include "Parser.h"
 
-Reader::Reader(Connect *connect) {
+Reader::Reader(Connect *connect, Parser *parser) {
 	this->connect = connect;
+	this->parser = parser;
 	running = false;
 	thread = 0;
 }
 
-void *Reader::read(void *arg) {
+Reader::~Reader() {
+	if (parser) delete parser;
+}
+
+void *Reader::run(void *arg) {
+	Reader* reader = (Reader *)arg;
+	reader->execute();
+	return 0;
+}
+
+void Reader::execute() {
 	int i = 0;
 	while (i < 100) {
-		std::string message = connect->receiveMessage();
-		std::cout << i++ << ": " << message << std::endl;
+		parser->parseMessage(connect->receiveMessage());
+		i++;
 	}
 	std::cout << "Reader::read() -> thread stopped" << std::endl;
-	return 0;
 }
 
 bool Reader::isRunning() {
@@ -44,7 +56,7 @@ bool Reader::isRunning() {
 
 void Reader::start() {
 	running = true;
-	int success = pthread_create(&thread, 0, read, 0);
+	int success = pthread_create(&thread, 0, Reader::run, this);
 	if (success) {
 		running = false;
 		std::cerr << "Reader::start() -> error creating thread" << std::endl;

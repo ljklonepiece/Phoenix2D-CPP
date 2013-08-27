@@ -25,35 +25,36 @@
 #include "Connect.h"
 #include "Self.h"
 #include "Reader.h"
+#include "Server.h"
+#include "Parser.h"
 
-std::string Controller::HOSTNAME = "localhost";
-std::string Controller::TEAM_NAME = "undefined";
-std::string Controller::SIDE = "l";
-int Controller::UNIFORM_NUMBER = 0;
 char Controller::AGENT_TYPE = 'p';
 
 Controller::Controller(const char *teamName, char agentType, const char *hostname) {
-	Controller::HOSTNAME = std::string(hostname);
+	this->hostname = std::string(hostname);
 	Controller::AGENT_TYPE = agentType;
-	Controller::TEAM_NAME = std::string(teamName);
+	team_name = std::string(teamName);
 	connected = false;
 	c = 0;
-	r = 0;
+	reader = 0;
+	server = 0;
 }
 
 Controller::~Controller() {
+	if (reader) delete reader;
+	if (server) delete server;
 	if (c) delete c;
 }
 
 void Controller::connect() {
-	std::string message = "(init " + Controller::TEAM_NAME + " (version 15.1)";
+	std::string message = "(init " + team_name + " (version 15.1)";
 	int port = 6000;
 	switch (Controller::AGENT_TYPE) {
 	case 'g':
 		message = message + " (goalie))";
 		break;
 	case 't':
-		message = "(init (version 15))";
+		message = "(init (version 15.1))";
 		port = 6001;
 		break;
 	case 'c':
@@ -66,7 +67,7 @@ void Controller::connect() {
 	}
 	boost::regex error("\\(error\\s+([\\w\\_]+)\\)"); //i.e (error no_more_team_or_player_or_goalie)
 	boost::cmatch match;
-	c = new Connect(Controller::HOSTNAME.c_str(), port);
+	c = new Connect(hostname.c_str(), port);
 	c->sendMessage(message);
 	message = c->receiveMessage();
 	if (boost::regex_match(message.c_str(), match, error)) {
@@ -87,29 +88,24 @@ void Controller::connect() {
 		}
 		switch (Controller::AGENT_TYPE) {
 		case 't':
-			Controller::SIDE = "trainer";
+			side = "trainer";
 			break;
 		case 'c': //Especial case, we need to consider the regex for this case
 			break;
 		default:
-			Controller::SIDE = side;
-			Controller::UNIFORM_NUMBER = unum;
 			break;
 		}
 		message = c->receiveMessage(); //server_params
-		Server *server = new Server(message);
+		server = new Server(message);
 		message = c->receiveMessage(); //player_params
-		Self *self = new Self(message);
+		Self *self = new Self(message, team_name, unum, side);
 		for (int i = 0; i < Self::PLAYER_TYPES; i++) {
 			message = c->receiveMessage(); //player_type
 			self->addPlayerType(message);
 		}
-		r = new Reader(c);
-		r->start();
-		/* For testing purpose*/
-		if (server) delete server;
-		if (self) delete self;
-		/**/
+		Parser *parser = new Parser(self);
+		reader = new Reader(c, parser);
+		reader->start();
 		connected = true;
 	}
 }
@@ -123,7 +119,8 @@ void Controller::reconnect() {
 }
 
 void Controller::disconnect() {
-	r->stop();
+	std::cout << "Controller::disconnect() -> waiting for reader" << std::endl;
+	reader->stop();
 	if (isConnected()) {
 		c->sendMessage("(bye)");
 	}

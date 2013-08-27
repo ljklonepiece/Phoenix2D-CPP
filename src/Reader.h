@@ -24,14 +24,17 @@
 #include <pthread.h>
 
 class Connect;
+class Parser;
 
 class Reader {
 	Connect *connect;
+	Parser *parser;
 	bool running;
-	void *read(void *arg);
+	static void *run(void *arg);
+	void execute();
 	pthread_t thread;
 public:
-	Reader(Connect *connect);
+	Reader(Connect *connect, Parser *parser);
 	~Reader();
 	bool isRunning();
 	void start();

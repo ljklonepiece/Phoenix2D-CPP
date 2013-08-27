@@ -25,16 +25,17 @@
 
 class Connect;
 class Reader;
+class Server;
+class Parser;
 
 class Controller {
 	Connect *c;
-	Reader *r;
+	Reader *reader;
+	Server *server;
 	bool connected;
+	std::string team_name;
+	std::string hostname;
 public:
-	static std::string HOSTNAME;
-	static std::string TEAM_NAME;
-	static std::string SIDE;
-	static int UNIFORM_NUMBER;
 	static char AGENT_TYPE;
 	Controller(const char *teamName, char agentType, const char *hostname);
 	~Controller();
