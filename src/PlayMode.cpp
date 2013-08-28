@@ -18,25 +18,25 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMANDS_H_
-#define COMMANDS_H_
+#include "PlayMode.h"
+#include "Commands.h"
 
-#include <vector>
-#include "Command.h"
+PlayMode::PlayMode(Commands *commands) {
+	this->commands = commands;
+}
 
-class Connect;
+PlayMode::~PlayMode() {
 
-class Commands {
-	Connect *connect;
-	std::vector<Command> commands_to_send;
-public:
-	Commands(Connect *connect);
-	~Commands();
-	void move(double x, double y);
-	void turn(double moment);
-	void turnNeck(double angle);
-	void dash(double power, double direction);
-	int sendCommands();
-};
+}
 
-#endif /* COMMANDS_H_ */
+void PlayMode::onStart() {
+
+}
+
+void PlayMode::onPostExecute() {
+	commands->sendCommands();
+}
+
+void PlayMode::onEnd() {
+
+}

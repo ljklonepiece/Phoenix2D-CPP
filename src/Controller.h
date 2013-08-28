@@ -27,11 +27,13 @@ class Connect;
 class Reader;
 class Server;
 class Parser;
+class Commands;
 
 class Controller {
 	Connect *c;
 	Reader *reader;
 	Server *server;
+	Commands *commands;
 	bool connected;
 	std::string team_name;
 	std::string hostname;
@@ -43,6 +45,7 @@ public:
 	bool isConnected();
 	void reconnect();
 	void disconnect();
+	Commands *getCommands();
 };
 
 #endif /* CONTROLLER_H_ */

@@ -1,4 +1,4 @@
-/*
+ /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
  * Copyright (c) 2013 Ivan Gonzalez
  *
@@ -18,25 +18,21 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMANDS_H_
-#define COMMANDS_H_
+#ifndef PLAYMODE_H_
+#define PLAYMODE_H_
 
-#include <vector>
-#include "Command.h"
+class Commands;
 
-class Connect;
-
-class Commands {
-	Connect *connect;
-	std::vector<Command> commands_to_send;
+class PlayMode {
+protected:
+	Commands *commands;
 public:
-	Commands(Connect *connect);
-	~Commands();
-	void move(double x, double y);
-	void turn(double moment);
-	void turnNeck(double angle);
-	void dash(double power, double direction);
-	int sendCommands();
+	PlayMode(Commands *commands);
+	virtual ~PlayMode();
+	void onStart();
+	virtual void onPlayerExecute() = 0;
+	void onPostExecute();
+	void onEnd();
 };
 
-#endif /* COMMANDS_H_ */
+#endif /* PLAYMODE_H_ */

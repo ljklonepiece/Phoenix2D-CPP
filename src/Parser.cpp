@@ -37,7 +37,6 @@ Parser::~Parser() {
 void Parser::parseMessage(std::string message) {
 	size_t found = message.find_first_of(" ");
 	std::string message_type = message.substr(1, found - 1);
-	std::cout << "Message type: " << message_type << std::endl;
 	if (message_type.compare("sense_body") == 0) {
 		boost::cmatch match;
 		if (boost::regex_search(message.c_str(), match, sense_body)) {

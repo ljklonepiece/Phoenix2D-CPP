@@ -67,6 +67,7 @@ Connect::~Connect() {
 }
 
 void Connect::disconnect() {
+	shutdown(sock.socketfd, SHUT_RDWR);
 	close(sock.socketfd);
 }
 

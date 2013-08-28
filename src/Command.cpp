@@ -25,6 +25,10 @@ Command::Command(std::string command, int weight) {
 	this->weight = weight;
 }
 
+Command::~Command() {
+
+}
+
 std::string Command::getCommand() {
 	return command;
 }

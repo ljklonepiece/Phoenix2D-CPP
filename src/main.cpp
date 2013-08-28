@@ -21,13 +21,18 @@
 #include "Controller.h"
 #include <iostream>
 #include "Game.h"
+#include "Commands.h"
+#include "BeforeKickOff.h"
 
 int main() {
 	Controller controller("Phoenix", 'p', "localhost");
 	controller.connect();
+	Commands *commands = controller.getCommands();
+	BeforeKickOff before_kick_off(commands);
 	int i = 0;
-	while (Game::nextCycle()) {
-		std::cout << "Game time: " << Game::GAME_TIME << ", simulation time: " << Game::SIMULATION_TIME << std::endl;
+	while (Game::nextCycle() && i < 200) {
+		before_kick_off.onPlayerExecute();
+		before_kick_off.onPostExecute();
 		i++;
 	}
 	controller.disconnect();

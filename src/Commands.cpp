@@ -22,9 +22,11 @@
 #include <sstream>
 #include <iomanip>
 #include <string>
+#include "Command.h"
+#include "Connect.h"
 
-Commands::Commands() {
-	connect = 0;
+Commands::Commands(Connect *connect) {
+	this->connect = connect;
 }
 
 Commands::~Commands() {
@@ -53,4 +55,20 @@ void Commands::dash(double power, double direction) {
 	std::string command;
 	std::getline(ss, command);
 	commands_to_send.push_back(Command(command, 1));
+}
+
+int Commands::sendCommands() {
+	if (commands_to_send.size() > 0) {
+		std::string message = "";
+		int weight = 0;
+		do {
+			weight += commands_to_send.at(0).getWeight();
+			if (weight < 2) {
+				message += commands_to_send.at(0).getCommand();
+				commands_to_send.erase(commands_to_send.begin());
+			}
+		} while (weight < 2 && commands_to_send.size() > 0);
+		connect->sendMessage(message);
+	}
+	return 0;
 }

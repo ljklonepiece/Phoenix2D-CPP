@@ -18,25 +18,22 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMANDS_H_
-#define COMMANDS_H_
+#include "BeforeKickOff.h"
+#include "Game.h"
+#include "Commands.h"
 
-#include <vector>
-#include "Command.h"
+BeforeKickOff::BeforeKickOff(Commands *commands) : PlayMode(commands) {
 
-class Connect;
+}
 
-class Commands {
-	Connect *connect;
-	std::vector<Command> commands_to_send;
-public:
-	Commands(Connect *connect);
-	~Commands();
-	void move(double x, double y);
-	void turn(double moment);
-	void turnNeck(double angle);
-	void dash(double power, double direction);
-	int sendCommands();
-};
+BeforeKickOff::~BeforeKickOff() {
 
-#endif /* COMMANDS_H_ */
+}
+
+void BeforeKickOff::onPlayerExecute() {
+	if (Game::SIMULATION_TIME == 10) {
+		commands->move(-10.0, 0.0);
+	} else if (Game::SIMULATION_TIME % 20 == 0) {
+		commands->turn(45.0);
+	}
+}

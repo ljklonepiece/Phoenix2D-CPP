@@ -27,6 +27,7 @@
 #include "Reader.h"
 #include "Server.h"
 #include "Parser.h"
+#include "Commands.h"
 
 char Controller::AGENT_TYPE = 'p';
 
@@ -38,9 +39,11 @@ Controller::Controller(const char *teamName, char agentType, const char *hostnam
 	c = 0;
 	reader = 0;
 	server = 0;
+	commands = 0;
 }
 
 Controller::~Controller() {
+	if (commands) delete commands;
 	if (reader) delete reader;
 	if (server) delete server;
 	if (c) delete c;
@@ -124,4 +127,11 @@ void Controller::disconnect() {
 		reader->stop();
 	}
 	connected = false;
+}
+
+Commands *Controller::getCommands() {
+	if (!commands) {
+		commands = new Commands(c);
+	}
+	return commands;
 }
