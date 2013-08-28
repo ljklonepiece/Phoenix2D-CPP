@@ -18,27 +18,17 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONNECT_H_
-#define CONNECT_H_
+#include "Command.h"
 
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <string>
+Command::Command(std::string command, int weight) {
+	this->command = command;
+	this->weight = weight;
+}
 
-typedef struct _socket {
-	int socketfd;
-	struct sockaddr_in server;
-} Socket;
+std::string Command::getCommand() {
+	return command;
+}
 
-class Connect {
-	Socket sock;
-	void connectToServer(const char *host, int port);
-public:
-	Connect(const char *host, int port);
-	~Connect();
-	void disconnect();
-	bool        sendMessage(std::string msg);
-	std::string receiveMessage();
-};
-
-#endif /* CONNECT_H_ */
+int Command::getWeight() {
+	return weight;
+}

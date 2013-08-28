@@ -22,16 +22,24 @@
 #define GAME_H_
 
 #include <string>
+#include <pthread.h>
 
 class Game {
+	static pthread_cond_t CYCLE_COND;
+	static pthread_mutex_t CYCLE_MUTEX;
+	static bool CYCLE_FLAG;
+	static bool ON_GAME;
 public:
 	static int SIMULATION_TIME;
 	static int GAME_TIME;
 	static int GOALS;
 	static int GOALS_AGAINST;
 	static std::string PLAY_MODE;
+	static bool nextCycle();
 	Game();
 	~Game();
+	void updateTime(int game_time);
+	void updatePlayMode(std::string play_mode);
 };
 
 #endif /* GAME_H_ */

@@ -63,6 +63,10 @@ void Connect::connectToServer(const char *host, int port) {
 }
 
 Connect::~Connect() {
+
+}
+
+void Connect::disconnect() {
 	close(sock.socketfd);
 }
 

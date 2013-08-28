@@ -20,10 +20,16 @@
 
 #include "Controller.h"
 #include <iostream>
+#include "Game.h"
 
 int main() {
 	Controller controller("Phoenix", 'p', "localhost");
 	controller.connect();
+	int i = 0;
+	while (Game::nextCycle()) {
+		std::cout << "Game time: " << Game::GAME_TIME << ", simulation time: " << Game::SIMULATION_TIME << std::endl;
+		i++;
+	}
 	controller.disconnect();
 	return 0;
 }

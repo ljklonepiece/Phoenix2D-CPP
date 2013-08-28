@@ -42,10 +42,8 @@ void *Reader::run(void *arg) {
 }
 
 void Reader::execute() {
-	int i = 0;
-	while (i < 100) {
+	while (running) {
 		parser->parseMessage(connect->receiveMessage());
-		i++;
 	}
 	std::cout << "Reader::read() -> thread stopped" << std::endl;
 }
@@ -66,6 +64,8 @@ void Reader::start() {
 void Reader::stop() {
 	void *res;
 	running = false;
+	connect->sendMessage("(bye)");
+	connect->disconnect();
 	int success = pthread_join(thread, &res);
 	if (success) {
 		std::cerr << "Reader::stop() -> failed to join thread" << std::endl;

@@ -119,10 +119,9 @@ void Controller::reconnect() {
 }
 
 void Controller::disconnect() {
-	std::cout << "Controller::disconnect() -> waiting for reader" << std::endl;
-	reader->stop();
 	if (isConnected()) {
-		c->sendMessage("(bye)");
+		std::cout << "Controller::disconnect() -> waiting for reader" << std::endl;
+		reader->stop();
 	}
 	connected = false;
 }
