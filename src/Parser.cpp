@@ -26,6 +26,7 @@
 Parser::Parser(Self *self) {
 	this->self = self;
 	sense_body = boost::regex("\\(sense_body\\s+(\\d+)\\s+");
+	hear_regex = boost::regex("\\(hear\\s+(\\d+)\\s+(referee|online_coach_left|online_coach_right)\\)");
 	game = new Game();
 }
 
@@ -38,15 +39,15 @@ void Parser::parseMessage(std::string message) {
 	size_t found = message.find_first_of(" ");
 	std::string message_type = message.substr(1, found - 1);
 	if (message_type.compare("sense_body") == 0) {
+		self->processSenseBody(message);
 		boost::cmatch match;
 		if (boost::regex_search(message.c_str(), match, sense_body)) {
-			std::string time = std::string() + match[1];
-			game->updateTime(atoi(time.c_str()));
+			game->updateTime(atoi((std::string() + match[1]).c_str()));
 		}
 	} else if (message_type.compare("see") == 0) {
 
 	} else if (message_type.compare("hear") == 0) {
-
+		std::cout << "Message: " << message << std::endl;
 	} else if (message_type.compare("change_player_type") == 0) {
 
 	} else {

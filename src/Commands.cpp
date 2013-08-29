@@ -57,6 +57,11 @@ void Commands::dash(double power, double direction) {
 	commands_to_send.push_back(Command(command, 1));
 }
 
+void Commands::say(std::string message) {
+	std::string command = "(say " + message + ")";
+	commands_to_send.push_back(Command(command, 1));
+}
+
 int Commands::sendCommands() {
 	if (commands_to_send.size() > 0) {
 		std::string message = "";

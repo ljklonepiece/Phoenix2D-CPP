@@ -23,6 +23,7 @@
 
 #include <string>
 #include <vector>
+#include <boost/regex.hpp>
 
 class Self {
 	int    *types_id;
@@ -43,6 +44,7 @@ class Self {
 	std::string player_params;
 	std::string getParameter(std::string parameter);
 	std::string getParameter(std::string player_type, std::string parameter);
+	boost::regex sense_body;
 public:
 	static std::string TEAM_NAME;
 	static int         UNIFORM_NUMBER;

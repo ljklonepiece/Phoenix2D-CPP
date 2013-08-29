@@ -19,8 +19,8 @@
  */
 
 #include "Self.h"
-#include <boost/regex.hpp>
 #include <cstdlib>
+#include <sstream>
 
 std::string Self::TEAM_NAME                            = "Phoenix2D";
 int         Self::UNIFORM_NUMBER                       = 1;
@@ -147,6 +147,39 @@ Self::Self(std::string player_params, std::string team_name, int unum, std::stri
 	kick_power_rate = new double[Self::PLAYER_TYPES];
 	foul_detect_probability = new double[Self::PLAYER_TYPES];
 	catchable_area_l_stretch = new double[Self::PLAYER_TYPES];
+	sense_body = boost::regex("^\\(sense_body\\s+\\d+\\s+" +
+					"\\(view_mode\\s+(\\w+)\\s+(\\w+)\\)\\s*" + //group 1 group 2
+					"\\(stamina\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\)\\s*" + //\\-\\d+|\\d+\\.\\d+ //group 3 group 4 group 5
+					"\\(speed\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\)\\s*" + //group 6 group 7
+					"\\(head_angle\\s+([\\d\\.\\-e]+)\\)\\s*" + //group 8
+					"\\(kick\\s+(\\d+)\\)\\s*" + //group 9
+					"\\(dash\\s+(\\d+)\\)\\s*" + //group 10
+					"\\(turn\\s+(\\d+)\\)\\s*" + //group 11
+					"\\(say\\s+(\\d+)\\)\\s*" + //group 12
+					"\\(turn_neck\\s+(\\d+)\\)\\s*" + //group 13
+					"\\(catch\\s+(\\d+)\\)\\s*" + //group 14
+					"\\(move\\s+(\\d+)\\)\\s*" + //group 15
+					"\\(change_view\\s+(\\d+)\\)\\s*" + //group 16
+					"\\(arm\\s+" +
+						"\\(movable\\s+(\\d+)\\)\\s*" + //group 17
+						"\\(expires\\s+(\\d+)\\)\\s*" + //group 18
+						"\\(target\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\)\\s*" + //group 19 20
+						"\\(count\\s+(\\d+)\\)\\s*" + //group 21
+					"\\)\\s*" +
+					"\\(focus\\s+" +
+						"\\(target\\s+(none|[lr]\\s+\\d+)\\)\\s*" + //group 22
+						"\\(count\\s+(\\d+)\\)\\s*" + //group 23
+					"\\)\\s*" +
+					"\\(tackle\\s+" +
+	   					"\\(expires\\s+(\\d+)\\)\\s*" + //group 24
+	   					"\\(count\\s+(\\d+)\\)\\s*" + //group 25
+	   				"\\)\\s*" +
+	   				"\\(collision\\s+(none|\\(ball\\)|\\(player\\)|\\(post\\)|\\s)+\\)\\s*" + //group 26
+	   				"\\(foul\\s+" +
+	   					"\\(charged\\s+(\\d+)\\)\\s*" + //group 27
+	   					"\\(card\\s+(none|yellow|red)\\)\\s*" + //group 28
+	   				"\\)\\s*" +
+			"\\)$");
 }
 
 Self::~Self() {
@@ -205,5 +238,46 @@ std::string Self::getParameter(std::string parameter) {
 	} else {
 		std::cerr << "Self::getParameter(string) -> search failed miserably for parameter " << parameter << std::endl;
 		return "";
+	}
+}
+
+void Self::processSenseBody(std::string sense_body) {
+	boost::cmatch match;
+	if (boost::regex_match(sense_body.c_str(), match, this->sense_body)) {
+		Self::VIEW_MODE_QUALITY = match[1];
+		Self::VIEW_MODE_WIDTH = match[2];
+		Self::STAMINA = atof((std::string() + match[3]).c_str());
+		Self::EFFORT = atof((std::string() + match[4]).c_str());
+		Self::STAMINA_CAPACITY = atof((std::string() + match[5]).c_str());
+		Self::AMOUNT_OF_SPEED = atof((std::string() + match[6]).c_str());
+		Self::DIRECTION_OF_SPEED = atof((std::string() + match[7]).c_str());
+		Self::HEAD_ANGLE = atof((std::string() + match[8]).c_str());
+		Self::KICK_COUNT = atoi((std::string() + match[9]).c_str());
+		Self::DASH_COUNT = atoi((std::string() + match[10]).c_str());
+		Self::TURN_COUNT = atoi((std::string() + match[11]).c_str());
+		Self::SAY_COUNT = atoi((std::string() + match[12]).c_str());
+		Self::TURN_NECK_COUNT = atoi((std::string() + match[13]).c_str());
+		Self::CATCH_COUNT = atoi((std::string() + match[14]).c_str());
+		Self::MOVE_COUNT = atoi((std::string() + match[15]).c_str());
+		Self::CHANGE_VIEW_COUNT = atoi((std::string() + match[16]).c_str());
+		Self::ARM_MOVABLE = atoi((std::string() + match[17]).c_str());
+		Self::ARM_EXPIRES = atoi((std::string() + match[18]).c_str());
+		Self::ARM_DIST = atof((std::string() + match[19]).c_str());
+		Self::ARM_DIR = atof((std::string() + match[20]).c_str());
+		Self::ARM_COUNT = atoi((std::string() + match[21]).c_str());
+		Self::FOCUS_TARGET = match[22];
+		Self::FOCUS_COUNT = match[23];
+		Self::TACKLE_EXPIRES = atoi((std::string() + match[24]).c_str());
+		Self::TACKLE_COUNT = atoi((std::string() + match[25]).c_str());
+		Self::COLLISION.clear();
+		std::stringstream ss(std::string() + match[26]);
+		std::string token;
+		while(std::getline(ss, token, ' ')) {
+			Self::COLLISION.push_back(token);
+		}
+		Self::FOUL_CHARGED = atoi((std::string() + match[27]).c_str());
+		Self::FOUL_CARD = match[28];
+	} else {
+		std::cerr << "Self::processSenseBody(string) -> failed to match sense body" << std::endl;
 	}
 }

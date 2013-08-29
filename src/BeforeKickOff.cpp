@@ -35,5 +35,11 @@ void BeforeKickOff::onPlayerExecute() {
 		commands->move(-10.0, 0.0);
 	} else if (Game::SIMULATION_TIME % 20 == 0) {
 		commands->turn(45.0);
+	} else if (Game::SIMULATION_TIME == 200) {
+		if (Self::TEAM_NAME.compare("Phoenix") == 0) {
+			commands->say("phoenix");
+		} else {
+			commands->say("nemesis");
+		}
 	}
 }
