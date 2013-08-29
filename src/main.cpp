@@ -25,12 +25,12 @@
 #include "BeforeKickOff.h"
 
 int main() {
-	Controller controller("Phoenix", 'p', "localhost");
+	Controller controller("Nemesis", 'p', "localhost");
 	controller.connect();
 	Commands *commands = controller.getCommands();
 	BeforeKickOff before_kick_off(commands);
 	int i = 0;
-	while (Game::nextCycle() && i < 200) {
+	while (Game::nextCycle() && i < 1200) {
 		before_kick_off.onPlayerExecute();
 		before_kick_off.onPostExecute();
 		i++;

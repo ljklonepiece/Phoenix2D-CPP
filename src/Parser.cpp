@@ -22,6 +22,7 @@
 #include <iostream>
 #include "Game.h"
 #include <cstdlib>
+#include "Self.h"
 
 Parser::Parser(Self *self) {
 	this->self = self;
@@ -47,6 +48,9 @@ void Parser::parseMessage(std::string message) {
 	} else if (message_type.compare("see") == 0) {
 
 	} else if (message_type.compare("hear") == 0) {
+		//(hear 0 referee play_on)
+		//(hear 432 173 opp "Phoenix")
+		//(hear 551 self "Nemesis");
 		std::cout << "Message: " << message << std::endl;
 	} else if (message_type.compare("change_player_type") == 0) {
 

@@ -19,6 +19,7 @@
  */
 
 #include "Commands.h"
+#include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <string>
@@ -63,6 +64,7 @@ void Commands::say(std::string message) {
 }
 
 int Commands::sendCommands() {
+	int commands_sent = 0;
 	if (commands_to_send.size() > 0) {
 		std::string message = "";
 		int weight = 0;
@@ -71,9 +73,12 @@ int Commands::sendCommands() {
 			if (weight < 2) {
 				message += commands_to_send.at(0).getCommand();
 				commands_to_send.erase(commands_to_send.begin());
+				commands_sent++;
 			}
 		} while (weight < 2 && commands_to_send.size() > 0);
+		std::cout << "Commands to send: " << message << std::endl;
 		connect->sendMessage(message);
 	}
-	return 0;
+	commands_to_send.clear();
+	return commands_sent;
 }

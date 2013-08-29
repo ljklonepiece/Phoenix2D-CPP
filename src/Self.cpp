@@ -147,7 +147,7 @@ Self::Self(std::string player_params, std::string team_name, int unum, std::stri
 	kick_power_rate = new double[Self::PLAYER_TYPES];
 	foul_detect_probability = new double[Self::PLAYER_TYPES];
 	catchable_area_l_stretch = new double[Self::PLAYER_TYPES];
-	sense_body = boost::regex("^\\(sense_body\\s+\\d+\\s+" +
+	sense_body = boost::regex(std::string() + "^\\(sense_body\\s+\\d+\\s+" +
 					"\\(view_mode\\s+(\\w+)\\s+(\\w+)\\)\\s*" + //group 1 group 2
 					"\\(stamina\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\)\\s*" + //\\-\\d+|\\d+\\.\\d+ //group 3 group 4 group 5
 					"\\(speed\\s+([\\d\\.\\-e]+)\\s+([\\d\\.\\-e]+)\\)\\s*" + //group 6 group 7
@@ -266,7 +266,7 @@ void Self::processSenseBody(std::string sense_body) {
 		Self::ARM_DIR = atof((std::string() + match[20]).c_str());
 		Self::ARM_COUNT = atoi((std::string() + match[21]).c_str());
 		Self::FOCUS_TARGET = match[22];
-		Self::FOCUS_COUNT = match[23];
+		Self::FOCUS_COUNT = atoi((std::string() + match[23]).c_str());
 		Self::TACKLE_EXPIRES = atoi((std::string() + match[24]).c_str());
 		Self::TACKLE_COUNT = atoi((std::string() + match[25]).c_str());
 		Self::COLLISION.clear();

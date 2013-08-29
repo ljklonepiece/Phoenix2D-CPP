@@ -106,6 +106,7 @@ void Controller::connect() {
 			message = c->receiveMessage(); //player_type
 			self->addPlayerType(message);
 		}
+		c->sendMessage("(synch_see)");
 		Parser *parser = new Parser(self);
 		reader = new Reader(c, parser);
 		reader->start();
