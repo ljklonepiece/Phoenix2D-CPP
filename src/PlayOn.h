@@ -1,4 +1,4 @@
-/*
+ /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
  * Copyright (c) 2013 Ivan Gonzalez
  *
@@ -18,32 +18,18 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GAME_H_
-#define GAME_H_
+#ifndef PLAYON_H_
+#define PLAYON_H_
 
-#include <string>
-#include <pthread.h>
-#include <boost/regex.hpp>
+#include "PlayMode.h"
 
-class Game {
-	static pthread_cond_t CYCLE_COND;
-	static pthread_mutex_t CYCLE_MUTEX;
-	static bool CYCLE_FLAG;
-	static bool ON_GAME;
-	std::string play_modes;
-	std::string events;
-	boost::regex goal_regex;
+class Commands;
+
+class PlayOn : public PlayMode {
 public:
-	static int SIMULATION_TIME;
-	static int GAME_TIME;
-	static int GOALS;
-	static int GOALS_AGAINST;
-	static std::string PLAY_MODE;
-	static bool nextCycle();
-	Game();
-	~Game();
-	void updateTime(int game_time);
-	void updatePlayMode(std::string play_mode);
+	PlayOn(Commands *commands);
+	~PlayOn();
+	void onPlayerExecute();
 };
 
-#endif /* GAME_H_ */
+#endif /* PLAYON_H_ */

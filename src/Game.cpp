@@ -20,6 +20,7 @@
 
 #include "Game.h"
 #include <iostream>
+#include "Self.h"
 
 int Game::GAME_TIME = 0;
 int Game::SIMULATION_TIME = 0;
@@ -32,7 +33,9 @@ bool Game::CYCLE_FLAG = false;
 bool Game::ON_GAME = true;
 
 Game::Game() {
-
+	play_modes = "before_kick_off corner_kick_l corner_kick_r free_kick_l free_kick_r goal_kick_l goal_kick_r kick_in_l kick_in_r kick_off_l kick_off_r play_on";
+	events     = "drop_ball goal_l goal_r offside_l offside_r time_over";
+	goal_regex = boost::regex("goal_(l|r)_(\\d+)");
 }
 
 Game::~Game() {
@@ -59,7 +62,19 @@ void Game::updateTime(int game_time) {
 }
 
 void Game::updatePlayMode(std::string play_mode) {
-
+	boost::cmatch match;
+	if (boost::regex_match(play_mode.c_str(), match, goal_regex)) {
+		int goals = atoi((std::string() + match[2]).c_str());
+		if (Self::SIDE.compare(match[1])) {
+			Game::GOALS = goals;
+		} else {
+			Game::GOALS_AGAINST = goals;
+		}
+		play_mode = std::string() + "goal_" + match[2];
+	}
+	if (play_modes.find(play_mode)) {
+		Game::PLAY_MODE = play_mode;
+	}
 }
 
 bool Game::nextCycle() {

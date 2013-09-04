@@ -281,3 +281,20 @@ void Self::processSenseBody(std::string sense_body) {
 		std::cerr << "Self::processSenseBody(string) -> failed to match sense body" << std::endl;
 	}
 }
+
+void Self::changePlayerType(int type) {
+	Self::PLAYER_SPEED_MAX = player_speed_max[type];
+	Self::STAMINA_INC_MAX = stamina_inc_max[type];
+	Self::PLAYER_DECAY = player_decay[type];
+	Self::INERTIA_MOMENT = inertia_moment[type];
+	Self::DASH_POWER_RATE = dash_power_rate[type];
+	Self::PLAYER_SIZE = player_size[type];
+	Self::KICKABLE_MARGIN = kickable_margin[type];
+	Self::KICK_RAND = kick_rand[type];
+	Self::EXTRA_STAMINA = extra_stamina[type];
+	Self::EFFORT_MAX = effort_max[type];
+	Self::EFFORT_MIN = effort_min[type];
+	Self::KICK_POWER_RATE = kick_power_rate[type];
+	Self::FOUL_DETECT_PROBABILITY = foul_detect_probability[type];
+	Self::CATCHABLE_AREA_L_STRETCH = catchable_area_l_stretch[type];
+}

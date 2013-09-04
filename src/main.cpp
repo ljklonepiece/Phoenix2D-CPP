@@ -19,21 +19,32 @@
  */
 
 #include "Controller.h"
-#include <iostream>
 #include "Game.h"
 #include "Commands.h"
 #include "BeforeKickOff.h"
+#include "PlayOn.h"
+#include <map>
+#include "PlayMode.h"
 
 int main() {
-	Controller controller("Nemesis", 'p', "localhost");
+	Controller controller("Phoenix", 'p', "localhost");
 	controller.connect();
 	Commands *commands = controller.getCommands();
-	BeforeKickOff before_kick_off(commands);
+	std::map<std::string, PlayMode*> play_modes;
+	//before_kick_off corner_kick_l corner_kick_r free_kick_l free_kick_r goal_kick_l goal_kick_r kick_in_l kick_in_r kick_off_l kick_off_r play_on
+	play_modes["before_kick_off"] = new BeforeKickOff(commands);
+	play_modes["play_on"]         = new PlayOn(commands);
 	int i = 0;
 	while (Game::nextCycle() && i < 1200) {
-		before_kick_off.onPlayerExecute();
-		before_kick_off.onPostExecute();
+		std::string play_mode = Game::PLAY_MODE;
+		play_modes[play_mode]->onPlayerExecute();
+		play_modes[play_mode]->onPostExecute();
 		i++;
+	}
+	//This must be always called in order to avoid memory leaks
+	for (std::map<std::string, PlayMode*>::iterator it = play_modes.begin(); it != play_modes.end(); it++) {
+		delete it->second;
+		play_modes.erase(it);
 	}
 	controller.disconnect();
 	return 0;

@@ -125,6 +125,7 @@ public:
 	~Self();
 	void addPlayerType(std::string player_type);
 	void processSenseBody(std::string sense_body);
+	void changePlayerType(int type);
 };
 
 #endif /* SELF_H_ */

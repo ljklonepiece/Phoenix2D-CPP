@@ -32,6 +32,7 @@ class Parser {
 	Game *game;
 	boost::regex sense_body;
 	boost::regex hear_regex;
+	boost::regex hear_player_regex;
 public:
 	Parser(Self *self);
 	~Parser();

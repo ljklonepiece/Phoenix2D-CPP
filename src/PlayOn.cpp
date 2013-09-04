@@ -18,32 +18,20 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GAME_H_
-#define GAME_H_
+#include "PlayOn.h"
+#include "Commands.h"
+#include "Game.h"
 
-#include <string>
-#include <pthread.h>
-#include <boost/regex.hpp>
+PlayOn::PlayOn(Commands *commands) : PlayMode(commands) {
 
-class Game {
-	static pthread_cond_t CYCLE_COND;
-	static pthread_mutex_t CYCLE_MUTEX;
-	static bool CYCLE_FLAG;
-	static bool ON_GAME;
-	std::string play_modes;
-	std::string events;
-	boost::regex goal_regex;
-public:
-	static int SIMULATION_TIME;
-	static int GAME_TIME;
-	static int GOALS;
-	static int GOALS_AGAINST;
-	static std::string PLAY_MODE;
-	static bool nextCycle();
-	Game();
-	~Game();
-	void updateTime(int game_time);
-	void updatePlayMode(std::string play_mode);
-};
+}
 
-#endif /* GAME_H_ */
+PlayOn::~PlayOn() {
+
+}
+
+void PlayOn::onPlayerExecute() {
+	if (Game::SIMULATION_TIME % 20 == 0) {
+		commands->dash(70.0, 0.0);
+	}
+}
