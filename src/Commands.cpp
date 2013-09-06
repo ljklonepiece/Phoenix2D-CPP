@@ -76,7 +76,6 @@ int Commands::sendCommands() {
 				commands_sent++;
 			}
 		} while (weight < 2 && commands_to_send.size() > 0);
-		std::cout << "Commands to send: " << message << std::endl;
 		connect->sendMessage(message);
 	}
 	commands_to_send.clear();

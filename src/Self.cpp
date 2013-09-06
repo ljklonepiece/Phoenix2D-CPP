@@ -22,6 +22,10 @@
 #include <cstdlib>
 #include <sstream>
 
+double Self::x     = 0.0;
+double Self::y     = 0.0;
+double Self::theta = 0.0;
+
 std::string Self::TEAM_NAME                            = "Phoenix2D";
 int         Self::UNIFORM_NUMBER                       = 1;
 std::string Self::SIDE                                 = "l";
@@ -297,4 +301,12 @@ void Self::changePlayerType(int type) {
 	Self::KICK_POWER_RATE = kick_power_rate[type];
 	Self::FOUL_DETECT_PROBABILITY = foul_detect_probability[type];
 	Self::CATCHABLE_AREA_L_STRETCH = catchable_area_l_stretch[type];
+}
+
+void Self::localize(std::map<std::string, Flag> flags) {
+
+}
+
+void Self::localize() {
+
 }

@@ -18,26 +18,26 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PARSER_H_
-#define PARSER_H_
+#include "Object.h"
 
-#include <string>
-#include <boost/regex.hpp>
+Object::Object(double distance, double direction, int simulation_time) {
+	this->distance = distance;
+	this->direction = direction;
+	this->simulation_time = simulation_time;
+}
 
-class Self;
-class Game;
+Object::~Object() {
 
-class Parser {
-	Self *self;
-	Game *game;
-	boost::regex sense_body;
-	boost::regex hear_regex;
-	boost::regex hear_player_regex;
-	boost::regex see_regex;
-public:
-	Parser(Self *self);
-	~Parser();
-	void parseMessage(std::string message);
-};
+}
 
-#endif /* PARSER_H_ */
+double Object::getDistance() {
+	return distance;
+}
+
+double Object::getDirection() {
+	return direction;
+}
+
+int Object::getSimulationTime() {
+	return simulation_time;
+}

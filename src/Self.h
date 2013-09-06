@@ -24,6 +24,8 @@
 #include <string>
 #include <vector>
 #include <boost/regex.hpp>
+#include <map>
+#include "Flag.h"
 
 class Self {
 	int    *types_id;
@@ -45,6 +47,9 @@ class Self {
 	std::string getParameter(std::string parameter);
 	std::string getParameter(std::string player_type, std::string parameter);
 	boost::regex sense_body;
+	static double x;
+	static double y;
+	static double theta;
 public:
 	static std::string TEAM_NAME;
 	static int         UNIFORM_NUMBER;
@@ -126,6 +131,8 @@ public:
 	void addPlayerType(std::string player_type);
 	void processSenseBody(std::string sense_body);
 	void changePlayerType(int type);
+	void localize(std::map<std::string, Flag> flags);
+	void localize();
 };
 
 #endif /* SELF_H_ */

@@ -18,26 +18,34 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PARSER_H_
-#define PARSER_H_
+#ifndef FLAG_H_
+#define FLAG_H_
 
 #include <string>
-#include <boost/regex.hpp>
+#include <map>
 
-class Self;
-class Game;
+typedef struct _coordinate {
+	double x;
+	double y;
+	_coordinate(double x0, double y0);
+} Coordinate;
 
-class Parser {
-	Self *self;
-	Game *game;
-	boost::regex sense_body;
-	boost::regex hear_regex;
-	boost::regex hear_player_regex;
-	boost::regex see_regex;
+class Flag {
+	std::string name;
+	double distance;
+	double direction;
+	double x;
+	double y;
+	int simulation_time;
+	std::map<std::string, Coordinate> FIELD;
 public:
-	Parser(Self *self);
-	~Parser();
-	void parseMessage(std::string message);
+	Flag(std::string name, std::string position, int simulation_time);
+	~Flag();
+	std::string getName();
+	double getDistance();
+	double getDirection();
+	double getX();
+	double getY();
 };
 
-#endif /* PARSER_H_ */
+#endif /* FLAG_H_ */
