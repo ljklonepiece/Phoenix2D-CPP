@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 #include <boost/regex.hpp>
-#include <map>
+#include <vector>
 #include "Flag.h"
 
 class Self {
@@ -131,7 +131,7 @@ public:
 	void addPlayerType(std::string player_type);
 	void processSenseBody(std::string sense_body);
 	void changePlayerType(int type);
-	void localize(std::map<std::string, Flag> flags);
+	void localize(std::vector<Flag> flags);
 	void localize();
 };
 

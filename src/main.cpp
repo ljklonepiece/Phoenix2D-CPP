@@ -25,6 +25,7 @@
 #include "PlayOn.h"
 #include <map>
 #include "PlayMode.h"
+#include <iostream>
 
 int main() {
 	Controller controller("Phoenix", 'p', "localhost");
@@ -39,7 +40,7 @@ int main() {
 		std::string play_mode = Game::PLAY_MODE;
 		play_modes[play_mode]->onPlayerExecute();
 		play_modes[play_mode]->onPostExecute();
-		i++;
+		std::cout << i++ << std::endl;
 	}
 	//This must be always called in order to avoid memory leaks
 	for (std::map<std::string, PlayMode*>::iterator it = play_modes.begin(); it != play_modes.end(); it++) {

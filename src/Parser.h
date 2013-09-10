@@ -23,17 +23,27 @@
 
 #include <string>
 #include <boost/regex.hpp>
+#include <pthread.h>
 
 class Self;
 class Game;
 
 class Parser {
-	Self *self;
-	Game *game;
-	boost::regex sense_body;
+	static Self *self;
+	static Game *game;
+	static boost::regex sense_body;
 	boost::regex hear_regex;
 	boost::regex hear_player_regex;
-	boost::regex see_regex;
+	static boost::regex see_regex;
+	static void *process_sense_body(void *arg);
+	static std::string sense_body_message;
+	static std::string see_message;
+	static void *process_see(void *arg);
+	pthread_t thread_sense_body;
+	pthread_t thread_see;
+	static bool processing_see;
+	static pthread_cond_t SEE_COND;
+	static pthread_mutex_t SEE_MUTEX;
 public:
 	Parser(Self *self);
 	~Parser();

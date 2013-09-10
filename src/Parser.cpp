@@ -23,37 +23,121 @@
 #include "Game.h"
 #include <cstdlib>
 #include "Self.h"
+#include "Flag.h"
+#include <vector>
+#include <unistd.h>
+#include "Server.h"
+
+pthread_cond_t Parser::SEE_COND = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t Parser::SEE_MUTEX = PTHREAD_MUTEX_INITIALIZER;
+
+Self *Parser::self = 0;
+Game *Parser::game = 0;
+boost::regex Parser::sense_body = boost::regex("\\(sense_body\\s+(\\d+)\\s+");
+boost::regex Parser::see_regex = boost::regex("\\(([^()]+)\\)\\s*([\\d\\.\\-etk\\s]*)");
+bool Parser::processing_see = false;
+
+std::string Parser::sense_body_message = std::string();
+std::string Parser::see_message = std::string();
 
 Parser::Parser(Self *self) {
-	this->self = self;
-	sense_body = boost::regex("\\(sense_body\\s+(\\d+)\\s+");
+	Parser::self = self;
 	hear_regex = boost::regex("\\(hear\\s+(\\d+)\\s+(self|referee|online_coach_left|online_coach_right)\\s+([\\\"\\w\\s]*)\\)");
 	hear_player_regex = boost::regex("");
-	see_regex = boost::regex("\\(([^()]+)\\)\\s*([\\d\\.\\-etk\\s]*)"); //Group 1 group 2
-	game = new Game();
+	Parser::game = new Game();
+	thread_sense_body = 0;
+	thread_see = 0;
+}
+
+void *Parser::process_sense_body(void *arg) {
+	Parser::self->processSenseBody(Parser::sense_body_message);
+	boost::cmatch match;
+	usleep(1000 * Server::SYNCH_SEE_OFFSET);
+	int success = pthread_mutex_lock(&Parser::SEE_MUTEX);
+	if (success) {
+		std::cerr << "Parser::process_sense_body(void*) -> cannot lock mutex" << std::endl;
+		return 0;
+	}
+	while(Parser::processing_see) {
+		success = pthread_cond_wait(&Parser::SEE_COND, &Parser::SEE_MUTEX);
+		if (success) {
+			std::cerr << "Parser::process_sense_body(void*) -> cannot wait for condition" << std::endl;
+			return 0;
+		}
+	}
+	success = pthread_mutex_unlock(&Parser::SEE_MUTEX);
+	if (success) {
+		std::cerr << "Parser::process_sense_body(void*) -> cannot unlock mutex" << std::endl;
+	}
+	if (boost::regex_search(Parser::sense_body_message.c_str(), match, Parser::sense_body)) {
+		Parser::game->updateTime(atoi((std::string() + match[1]).c_str()));
+	}
+	return 0;
+}
+
+void *Parser::process_see(void *arg) {
+	Parser::processing_see = true;
+	int success = pthread_mutex_lock(&Parser::SEE_MUTEX);
+	if (success) {
+		std::cerr << "Parser::process_see(void*) -> cannot lock mutex" << std::endl;
+		return 0;
+	}
+	std::vector<Flag> flags;
+	std::string::const_iterator start, end;
+	start = Parser::see_message.begin();
+	end = Parser::see_message.end();
+	boost::match_results<std::string::const_iterator> match;
+	boost::match_flag_type search_flags = boost::match_default;
+	while (boost::regex_search(start, end, match, Parser::see_regex, search_flags)) {
+		std::string name = std::string() + match[1];
+		std::string data = std::string() + match[2];
+		switch (name[0]) {
+		case 'f':
+			flags.push_back(Flag(name, data, Game::SIMULATION_TIME));
+			break;
+		case 'p':
+			break;
+		case 'b':
+			break;
+		default:
+			break;
+		}
+		start = match[0].second;
+		search_flags |= boost::match_prev_avail;
+		search_flags |= boost::match_not_bob;
+	}
+	Parser::self->localize(flags);
+	Parser::processing_see = false;
+	success = pthread_mutex_unlock(&Parser::SEE_MUTEX);
+	if (success) {
+		std::cerr << "Parser::process_see(void*) -> cannot unlock mutex" << std::endl;
+	}
+	success = pthread_cond_signal(&Parser::SEE_COND);
+	if (success) {
+		std::cerr << "Parser::process_see(void*) -> cannot signal to blocked threads" << std::endl;
+	}
+	return 0;
 }
 
 Parser::~Parser() {
-	if (game) delete game;
-	if (self) delete self;
+	if (Parser::game) delete Parser::game;
+	if (Parser::self) delete Parser::self;
 }
 
 void Parser::parseMessage(std::string message) {
 	size_t found = message.find_first_of(" ");
 	std::string message_type = message.substr(1, found - 1);
 	if (message_type.compare("sense_body") == 0) {
-		self->processSenseBody(message);
-		boost::cmatch match;
-		if (boost::regex_search(message.c_str(), match, sense_body)) {
-			game->updateTime(atoi((std::string() + match[1]).c_str()));
+		Parser::sense_body_message = message;
+		int success = pthread_create(&thread_sense_body, 0, Parser::process_sense_body, 0);
+		if (success) {
+			std::cerr << "Parser::parseMessage(string) -> error creating sense_body thread" << std::endl;
 		}
 	} else if (message_type.compare("see") == 0) {
-		std::string::const_iterator start, end;
-		start = message.begin();
-		end = message.end();
-		boost::match_results<std::string::const_iterator> match;
-		while (boost::regex_search(start, end, match, see_regex, boost::match_default)) {
-			std::cout << "Seen: " << match[1] << " at " << match[2] << std::endl;
+		Parser::see_message = message;
+		int success = pthread_create(&thread_see, 0, Parser::process_see, 0);
+		if (success) {
+			std::cerr << "Parser::parseMessage(string) -> error creating see thread" << std::endl;
 		}
 	} else if (message_type.compare("hear") == 0) {
 		//(hear 0 referee play_on)

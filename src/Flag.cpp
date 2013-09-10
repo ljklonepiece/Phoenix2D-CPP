@@ -21,74 +21,78 @@
 #include "Flag.h"
 #include <sstream>
 #include <cstdlib>
+#include "Self.h"
 
-_coordinate::_coordinate(double x0, double y0) {
+_coordinate makeCoordinate(double x, double y) {
 	if (Self::SIDE.compare("r") == 0) {
-		x = -1.0 * x0;
-		y = -1.0 * y0;
-	} else {
-		x = x0;
-		y = y0;
+		x *= -1.0;
+		y *= -1.0;
 	}
+	_coordinate c = {x , y};
+	return c;
 }
 
-std::map<std::string, Coordinate> Flag::FIELD = {
-		{"f t 0",    Coordinate(  0.0, -39.0)},
-		{"f t r 10", Coordinate( 10.0, -39.0)},
-		{"f t r 20", Coordinate( 20.0, -39.0)},
-		{"f t r 30", Coordinate( 30.0, -39.0)},
-		{"f t r 40", Coordinate( 40.0, -39.0)},
-		{"f t r 50", Coordinate( 50.0, -39.0)},
-		{"f r t 30", Coordinate( 57.5, -30.0)},
-		{"f r t 20", Coordinate( 57.5, -20.0)},
-		{"f r t 10", Coordinate( 57.5, -10.0)},
-		{"f r 0",    Coordinate( 57.5,   0.0)},
-		{"f r b 10", Coordinate( 57.5,  10.0)},
-		{"f r b 20", Coordinate( 57.5,  20.0)},
-		{"f r b 30", Coordinate( 57.5,  30.0)},
-		{"f b r 50", Coordinate( 50.0,  39.0)},
-		{"f b r 40", Coordinate( 40.0,  39.0)},
-		{"f b r 30", Coordinate( 30.0,  39.0)},
-		{"f b r 20", Coordinate( 20.0,  39.0)},
-		{"f b r 10", Coordinate( 10.0,  39.0)},
-		{"f b 0",    Coordinate(  0.0,  39.0)},
-		{"f b l 10", Coordinate(-10.0,  39.0)},
-		{"f b l 20", Coordinate(-20.0,  39.0)},
-		{"f b l 30", Coordinate(-30.0,  39.0)},
-		{"f b l 40", Coordinate(-40.0,  39.0)},
-		{"f b l 50", Coordinate(-50.0,  39.0)},
-		{"f l b 30", Coordinate(-57.5,  30.0)},
-		{"f l b 20", Coordinate(-57.5,  20.0)},
-		{"f l b 10", Coordinate(-57.5,  10.0)},
-		{"f l 0",    Coordinate(-57.5,   0.0)},
-		{"f l t 10", Coordinate(-57.5, -10.0)},
-		{"f l t 20", Coordinate(-57.5, -20.0)},
-		{"f l t 30", Coordinate(-57.5, -30.0)},
-		{"f t l 50", Coordinate(-50.0, -39.0)},
-		{"f t l 40", Coordinate(-40.0, -39.0)},
-		{"f t l 30", Coordinate(-30.0, -39.0)},
-		{"f t l 20", Coordinate(-20.0, -39.0)},
-		{"f t l 10", Coordinate(-10.0, -39.0)},
-		{"f c",      Coordinate(  0.0,   0.0)},
-		{"f c t",    Coordinate(  0.0, -34.0)},
-		{"f r t",    Coordinate( 52.5, -34.0)},
-		{"f r b",    Coordinate( 52.5,  34.0)},
-		{"f c b",    Coordinate(  0.0,  34.0)},
-		{"f l b",    Coordinate(-52.5,  34.0)},
-		{"f l t",    Coordinate(-52.5, -34.0)},
-		{"g l",      Coordinate(-52.5,   0.0)},
-		{"f g l t",  Coordinate(-52.5,  -7.0)},
-		{"f p l t",  Coordinate(-36.0, -20.0)},
-		{"f p l c",  Coordinate(-36.0,   0.0)},
-		{"f p l b",  Coordinate(-36.0,  20.0)},
-		{"f g l b",  Coordinate(-52.5,   7.0)},
-		{"g r",      Coordinate( 52.5,   0.0)},
-		{"f g r t",  Coordinate( 52.5,  -7.0)},
-		{"f p r t",  Coordinate( 52.5, -20.0)},
-		{"f p r c",  Coordinate( 36.0,   0.0)},
-		{"f p r b",  Coordinate( 36.0,  20.0)},
-		{"f g r b",  Coordinate( 52.5,   7.0)}
-};
+std::map<std::string, _coordinate> getField() {
+	std::map<std::string, _coordinate> field;
+	field["f t 0"]    = makeCoordinate( 0.0, -39.0);
+	field["f t r 10"] = makeCoordinate( 10.0, -39.0);
+	field["f t r 20"] = makeCoordinate( 20.0, -39.0);
+	field["f t r 30"] = makeCoordinate( 30.0, -39.0);
+	field["f t r 40"] = makeCoordinate( 40.0, -39.0);
+	field["f t r 50"] = makeCoordinate( 50.0, -39.0);
+	field["f r t 30"] = makeCoordinate( 57.5, -30.0);
+	field["f r t 20"] = makeCoordinate( 57.5, -20.0);
+	field["f r t 10"] = makeCoordinate( 57.5, -10.0);
+	field["f r 0"]    = makeCoordinate( 57.5,   0.0);
+	field["f r b 10"] = makeCoordinate( 57.5,  10.0);
+	field["f r b 20"] = makeCoordinate( 57.5,  20.0);
+	field["f r b 30"] = makeCoordinate( 57.5,  30.0);
+	field["f b r 50"] = makeCoordinate( 50.0,  39.0);
+	field["f b r 40"] = makeCoordinate( 40.0,  39.0);
+	field["f b r 30"] = makeCoordinate( 30.0,  39.0);
+	field["f b r 20"] = makeCoordinate( 20.0,  39.0);
+	field["f b r 10"] = makeCoordinate( 10.0,  39.0);
+	field["f b 0"]    = makeCoordinate(  0.0,  39.0);
+	field["f b l 10"] = makeCoordinate(-10.0,  39.0);
+	field["f b l 20"] = makeCoordinate(-20.0,  39.0);
+	field["f b l 30"] = makeCoordinate(-30.0,  39.0);
+	field["f b l 40"] = makeCoordinate(-40.0,  39.0);
+	field["f b l 50"] = makeCoordinate(-50.0,  39.0);
+	field["f l b 30"] = makeCoordinate(-57.5,  30.0);
+	field["f l b 20"] = makeCoordinate(-57.5,  20.0);
+	field["f l b 10"] = makeCoordinate(-57.5,  10.0);
+	field["f l 0"]    = makeCoordinate(-57.5,   0.0);
+	field["f l t 10"] = makeCoordinate(-57.5, -10.0);
+	field["f l t 20"] = makeCoordinate(-57.5, -20.0);
+	field["f l t 30"] = makeCoordinate(-57.5, -30.0);
+	field["f t l 50"] = makeCoordinate(-50.0, -39.0);
+	field["f t l 40"] = makeCoordinate(-40.0, -39.0);
+	field["f t l 30"] = makeCoordinate(-30.0, -39.0);
+	field["f t l 20"] = makeCoordinate(-20.0, -39.0);
+	field["f t l 10"] = makeCoordinate(-10.0, -39.0);
+	field["f c"]      = makeCoordinate(  0.0,   0.0);
+	field["f c t"]    = makeCoordinate(  0.0, -34.0);
+	field["f r t"]    = makeCoordinate( 52.5, -34.0);
+	field["f r b"]    = makeCoordinate( 52.5,  34.0);
+	field["f c b"]    = makeCoordinate(  0.0,  34.0);
+	field["f l b"]    = makeCoordinate(-52.5,  34.0);
+	field["f l t"]    = makeCoordinate(-52.5, -34.0);
+	field["g l"]      = makeCoordinate(-52.5,   0.0);
+	field["f g l t"]  = makeCoordinate(-52.5,  -7.0);
+	field["f p l t"]  = makeCoordinate(-36.0, -20.0);
+	field["f p l c"]  = makeCoordinate(-36.0,   0.0);
+	field["f p l b"]  = makeCoordinate(-36.0,  20.0);
+	field["f g l b"]  = makeCoordinate(-52.5,   7.0);
+	field["g r"]      = makeCoordinate( 52.5,   0.0);
+	field["f g r t"]  = makeCoordinate( 52.5,  -7.0);
+	field["f p r t"]  = makeCoordinate( 52.5, -20.0);
+	field["f p r c"]  = makeCoordinate( 36.0,   0.0);
+	field["f p r b"]  = makeCoordinate( 36.0,  20.0);
+	field["f g r b"]  = makeCoordinate( 52.5,   7.0);
+	return field;
+}
+
+std::map<std::string, _coordinate> Flag::FIELD;
 
 Flag::Flag(std::string name, std::string position, int simulation_time) {
 	this->name = name;
@@ -105,6 +109,10 @@ Flag::Flag(std::string name, std::string position, int simulation_time) {
 
 Flag::~Flag() {
 
+}
+
+void Flag::initializeField() {
+	Flag::FIELD = getField();
 }
 
 std::string Flag::getName() {

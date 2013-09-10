@@ -54,7 +54,7 @@ bool Reader::isRunning() {
 
 void Reader::start() {
 	running = true;
-	int success = pthread_create(&thread, 0, Reader::run, this);
+	int success = pthread_create(&thread, 0, Reader::run, (void *)this);
 	if (success) {
 		running = false;
 		std::cerr << "Reader::start() -> error creating thread" << std::endl;

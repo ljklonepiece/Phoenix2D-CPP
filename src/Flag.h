@@ -24,11 +24,10 @@
 #include <string>
 #include <map>
 
-typedef struct _coordinate {
+struct _coordinate {
 	double x;
 	double y;
-	_coordinate(double x0, double y0);
-} Coordinate;
+};
 
 class Flag {
 	std::string name;
@@ -37,10 +36,11 @@ class Flag {
 	double x;
 	double y;
 	int simulation_time;
-	std::map<std::string, Coordinate> FIELD;
+	static std::map<std::string, _coordinate> FIELD;
 public:
 	Flag(std::string name, std::string position, int simulation_time);
 	~Flag();
+	static void initializeField();
 	std::string getName();
 	double getDistance();
 	double getDirection();

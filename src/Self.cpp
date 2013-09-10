@@ -184,6 +184,7 @@ Self::Self(std::string player_params, std::string team_name, int unum, std::stri
 	   					"\\(card\\s+(none|yellow|red)\\)\\s*" + //group 28
 	   				"\\)\\s*" +
 			"\\)$");
+	Flag::initializeField();
 }
 
 Self::~Self() {
@@ -303,7 +304,7 @@ void Self::changePlayerType(int type) {
 	Self::CATCHABLE_AREA_L_STRETCH = catchable_area_l_stretch[type];
 }
 
-void Self::localize(std::map<std::string, Flag> flags) {
+void Self::localize(std::vector<Flag> flags) {
 
 }
 
