@@ -25,12 +25,16 @@ class Position {
 	double x;
 	double y;
 	double theta;
+	double gamma;
 public:
+	Position(double x, double y);
 	Position(double x, double y, double theta);
+	Position(double x, double y, double theta, double gamma);
 	~Position();
 	double getX();
 	double getY();
-	double getDirection();
+	double getBodyDirection();
+	double getHeadDirection();
 };
 
 #endif /* POSITION_H_ */

@@ -40,7 +40,7 @@ void Commands::move(double x, double y) {
 	ss << "(move " << std::setprecision(4) << x << " " << y << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::COMMAND_TYPE::MOVE));
+	commands_to_send.push_back(Command(command, 1, Command::MOVE));
 	Self::onMoveCommand(x, y);
 }
 
@@ -49,7 +49,7 @@ void Commands::turn(double moment) {
 	ss << "(turn " << std::setprecision(4) << moment << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::COMMAND_TYPE::TURN));
+	commands_to_send.push_back(Command(command, 1, Command::TURN));
 }
 
 void Commands::dash(double power, double direction) {
@@ -57,12 +57,12 @@ void Commands::dash(double power, double direction) {
 	ss << "(dash " << std::setprecision(4) << power << " " << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::COMMAND_TYPE::DASH));
+	commands_to_send.push_back(Command(command, 1, Command::DASH));
 }
 
 void Commands::say(std::string message) {
 	std::string command = "(say " + message + ")";
-	commands_to_send.push_back(Command(command, 1, Command::COMMAND_TYPE::SAY));
+	commands_to_send.push_back(Command(command, 1, Command::SAY));
 }
 
 int Commands::sendCommands() {
@@ -75,7 +75,7 @@ int Commands::sendCommands() {
 			if (weight < 2) {
 				message += commands_to_send.at(0).getCommand();
 				switch (commands_to_send.at(0).getCommandType()) {
-				case Command::COMMAND_TYPE::MOVE:
+				case Command::MOVE:
 					break;
 				default:
 					break;

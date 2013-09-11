@@ -20,10 +20,25 @@
 
 #include "Position.h"
 
+Position::Position(double x, double y) {
+	this->x = x;
+	this->y = y;
+	theta = 0.0;
+	gamma = 0.0;
+}
+
 Position::Position(double x, double y, double theta) {
 	this->x = x;
 	this->y = y;
 	this->theta = theta;
+	gamma = 0.0;
+}
+
+Position::Position(double x, double y, double theta, double gamma) {
+	this->x = x;
+	this->y = y;
+	this->theta = theta;
+	this->gamma = gamma;
 }
 
 Position::~Position() {
@@ -38,6 +53,10 @@ double Position::getY() {
 	return y;
 }
 
-double Position::getDirection() {
+double Position::getBodyDirection() {
 	return theta;
+}
+
+double Position::getHeadDirection() {
+	return gamma;
 }

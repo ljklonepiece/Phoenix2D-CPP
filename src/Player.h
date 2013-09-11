@@ -1,4 +1,4 @@
-/*
+ /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
  * Copyright (c) 2013 Ivan Gonzalez
  *
@@ -18,25 +18,34 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PlayOn.h"
-#include "Commands.h"
-#include "Game.h"
-#include "Self.h"
+#ifndef PLAYER_H_
+#define PLAYER_H_
+
+#include <string>
 #include "Position.h"
-#include <iostream>
 
-PlayOn::PlayOn(Commands *commands) : PlayMode(commands) {
+class Player {
+	double distance;
+	double direction;
+	double distChange;
+	double dirChange;
+	double bodyDirection;
+	double headDirection;
+	double pointDir;
+	double x;
+	double y;
+	double theta;
+	bool pointing;
+	bool kicking;
+	bool tackling;
+	std::string team;
+	int uniform_number;
+	int simulation_time;
+public:
+	Player(std::string name, std::string position, int simulation_time, Position player_position);
+	~Player();
+	Position getPosition();
+	std::string getTeam();
+};
 
-}
-
-PlayOn::~PlayOn() {
-
-}
-
-void PlayOn::onPlayerExecute() {
-	if (Game::SIMULATION_TIME % 20 == 0) {
-		commands->dash(70.0, 0.0);
-	}
-	Position pos = Self::getPosition();
-	std::cout << "I'm in x: " << pos.getX() << ", y: " << pos.getY() << ", direction: " << pos.getDirection() << std::endl;
-}
+#endif /* PLAYER_H_ */

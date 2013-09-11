@@ -34,7 +34,7 @@ _coordinate makeCoordinate(double x, double y) {
 
 std::map<std::string, _coordinate> getField() {
 	std::map<std::string, _coordinate> field;
-	field["f t 0"]    = makeCoordinate( 0.0, -39.0);
+	field["f t 0"]    = makeCoordinate(  0.0, -39.0);
 	field["f t r 10"] = makeCoordinate( 10.0, -39.0);
 	field["f t r 20"] = makeCoordinate( 20.0, -39.0);
 	field["f t r 30"] = makeCoordinate( 30.0, -39.0);

@@ -24,10 +24,11 @@
 #include <cmath>
 #include <algorithm>
 
-double Self::x     = 0.0;
-double Self::y     = 0.0;
-double Self::theta = 0.0;
-double Self::PI    = 3.14159265359;
+bool   Self::positioned = false;
+double Self::x          = 0.0;
+double Self::y          = 0.0;
+double Self::theta      = 0.0;
+double Self::PI         = 3.14159265359;
 
 std::string Self::TEAM_NAME                            = "Phoenix2D";
 int         Self::UNIFORM_NUMBER                       = 1;
@@ -315,18 +316,16 @@ void Self::localize(std::vector<Flag> flags) {
 	std::vector<double> xs;
 	std::vector<double> ys;
 	std::vector<double> thetas;
-	int amount_of_flags = flags.size();
 	for (std::vector<Flag>::iterator it = flags.begin(); it != flags.end() - 1; ++it) {
 		double k0 = pow(it->getX(), 2.0) + pow(it->getY(), 2.0) - pow(it->getDistance(), 2.0);
 		double k1 = pow((it + 1)->getX(), 2.0) + pow((it + 1)->getY(), 2.0) - pow((it + 1)->getDistance(), 2.0);
 		double x0, x1, y0, y1, B, C;
-		double discriminate = true;
 		if (it->getX() == (it + 1)->getX()) {
 			double y = (k1 - k0) / (2.0 * ((it + 1)->getY() - it->getY()));
 			y0 = y;
 			y1 = y;
 			B = -2.0 * it->getX();
-			C = pow(y, 2.0) - 2.0 * y * it->getX() + k0;
+			C = pow(y, 2.0) - 2.0 * y * it->getY() + k0;
 			if (pow(B, 2.0) - 4.0 * C > 0) {
 				x0 = (-B + sqrt(pow(B, 2.0) - 4.0 * C)) / 2.0;
 				x1 = (-B - sqrt(pow(B, 2.0) - 4.0 * C)) / 2.0;
@@ -336,7 +335,7 @@ void Self::localize(std::vector<Flag> flags) {
 		} else if (it->getY() == (it + 1)->getY()) {
 			double x = (k1 - k0) / (2.0 * ((it + 1)->getX() - it->getX()));
 			x0 = x;
-			y0 = x;
+			x1 = x;
 			B = -2.0 * it->getY();
 			C = pow(x, 2.0) - 2.0 * x * it->getX() + k0;
 			if (pow(B, 2.0) - 4.0 * C > 0) {
@@ -384,7 +383,7 @@ void Self::localize(std::vector<Flag> flags) {
 			gamma1 += 360.0;
 		}
 		double midpoint0 = (gamma0 + gamma1) / 2.0;
-		double midpoint1 = midpoint1 + 180.0;
+		double midpoint1 = midpoint0 + 180.0;
 		if (midpoint1 >= 180.0) {
 			midpoint1 -= 360.0;
 		}
@@ -404,17 +403,25 @@ void Self::localize(std::vector<Flag> flags) {
 	}
 	if (xs.size() > 0) {
 		double accum_xs = 0.0;
+		int i = xs.size();
+		double total_weight = 0.0;
 		for (std::vector<double>::iterator accum_it = xs.begin(); accum_it != xs.end(); ++accum_it) {
-			accum_xs += *accum_it;
+			double weight = sqrt(i--);
+			accum_xs += *accum_it * weight;
+			total_weight += weight;
 		}
-		Self::x = accum_xs / xs.size();
+		Self::x = accum_xs / total_weight;
 	}
 	if (ys.size() > 0) {
 		double accum_ys = 0.0;
+		int i = ys.size();
+		double total_weight = 0.0;
 		for (std::vector<double>::iterator accum_it = ys.begin(); accum_it != ys.end(); ++accum_it) {
-			accum_ys += *accum_it;
+			double weight = sqrt(i--);
+			accum_ys += *accum_it * weight;
+			total_weight += weight;
 		}
-		Self::y = accum_ys / ys.size();
+		Self::y = accum_ys / total_weight;
 	}
 	if (thetas.size() > 0) {
 		std::sort(thetas.begin(), thetas.end());
