@@ -26,6 +26,7 @@
 #include <boost/regex.hpp>
 #include <vector>
 #include "Flag.h"
+#include "Position.h"
 
 class Self {
 	int    *types_id;
@@ -47,9 +48,11 @@ class Self {
 	std::string getParameter(std::string parameter);
 	std::string getParameter(std::string player_type, std::string parameter);
 	boost::regex sense_body;
+	static bool positioned;
 	static double x;
 	static double y;
 	static double theta;
+	static double PI;
 public:
 	static std::string TEAM_NAME;
 	static int         UNIFORM_NUMBER;
@@ -133,6 +136,8 @@ public:
 	void changePlayerType(int type);
 	void localize(std::vector<Flag> flags);
 	void localize();
+	static Position getPosition();
+	static void onMoveCommand(double x, double y);
 };
 
 #endif /* SELF_H_ */

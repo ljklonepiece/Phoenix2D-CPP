@@ -21,10 +21,13 @@
 #include "Self.h"
 #include <cstdlib>
 #include <sstream>
+#include <cmath>
+#include <algorithm>
 
 double Self::x     = 0.0;
 double Self::y     = 0.0;
 double Self::theta = 0.0;
+double Self::PI    = 3.14159265359;
 
 std::string Self::TEAM_NAME                            = "Phoenix2D";
 int         Self::UNIFORM_NUMBER                       = 1;
@@ -185,6 +188,7 @@ Self::Self(std::string player_params, std::string team_name, int unum, std::stri
 	   				"\\)\\s*" +
 			"\\)$");
 	Flag::initializeField();
+	Self::positioned = false;
 }
 
 Self::~Self() {
@@ -305,9 +309,129 @@ void Self::changePlayerType(int type) {
 }
 
 void Self::localize(std::vector<Flag> flags) {
-
+	if (!Self::positioned) {
+		return;
+	}
+	std::vector<double> xs;
+	std::vector<double> ys;
+	std::vector<double> thetas;
+	int amount_of_flags = flags.size();
+	for (std::vector<Flag>::iterator it = flags.begin(); it != flags.end() - 1; ++it) {
+		double k0 = pow(it->getX(), 2.0) + pow(it->getY(), 2.0) - pow(it->getDistance(), 2.0);
+		double k1 = pow((it + 1)->getX(), 2.0) + pow((it + 1)->getY(), 2.0) - pow((it + 1)->getDistance(), 2.0);
+		double x0, x1, y0, y1, B, C;
+		double discriminate = true;
+		if (it->getX() == (it + 1)->getX()) {
+			double y = (k1 - k0) / (2.0 * ((it + 1)->getY() - it->getY()));
+			y0 = y;
+			y1 = y;
+			B = -2.0 * it->getX();
+			C = pow(y, 2.0) - 2.0 * y * it->getX() + k0;
+			if (pow(B, 2.0) - 4.0 * C > 0) {
+				x0 = (-B + sqrt(pow(B, 2.0) - 4.0 * C)) / 2.0;
+				x1 = (-B - sqrt(pow(B, 2.0) - 4.0 * C)) / 2.0;
+			} else {
+				continue;
+			}
+		} else if (it->getY() == (it + 1)->getY()) {
+			double x = (k1 - k0) / (2.0 * ((it + 1)->getX() - it->getX()));
+			x0 = x;
+			y0 = x;
+			B = -2.0 * it->getY();
+			C = pow(x, 2.0) - 2.0 * x * it->getX() + k0;
+			if (pow(B, 2.0) - 4.0 * C > 0) {
+				y0 = (-B + sqrt(pow(B, 2.0) - 4.0 * C)) / 2.0;
+				y1 = (-B - sqrt(pow(B, 2.0) - 4.0 * C)) / 2.0;
+			} else {
+				continue;
+			}
+		} else {
+			double M = (k1 - k0) / (2.0 * ((it + 1)->getX() - it->getX()));
+			double N = (it->getY() - (it + 1)->getY()) / ((it + 1)->getX() - it->getX());
+			B = (2.0 * (M * N - N * it->getX() - it->getY())) / (pow(N, 2.0) + 1.0);
+			C = (k0 + pow(M, 2.0) - 2.0 * M * it->getX()) / (pow(N, 2.0) + 1.0);
+			if (pow(B, 2.0) - 4.0 * C > 0) {
+				y0 = (-B + sqrt(pow(B, 2.0) - 4.0 * C)) / 2.0;
+				x0 = M + y0 * N;
+				y1 = (-B - sqrt(pow(B, 2.0) - 4.0 * C)) / 2.0;
+				x1 = M + y1 * N;
+			} else {
+				continue;
+			}
+		}
+		double d0 = sqrt(pow(x0 - Self::x, 2.0) + pow(y0 - Self::y, 2.0));
+		double d1 = sqrt(pow(x1 - Self::x, 2.0) + pow(y1 - Self::y, 2.0));
+		double gamma0, gamma1;
+		if (d0 < d1) {
+			xs.push_back(x0);
+			ys.push_back(y0);
+			gamma0 = 180 * atan2(it->getY() - y0, it->getX() - x0) / Self::PI - it->getDirection();
+			gamma1 = 180 * atan2((it + 1)->getY() - y0, (it + 1)->getX() - x0) / Self::PI - (it + 1)->getDirection();
+		} else {
+			xs.push_back(x1);
+			ys.push_back(y1);
+			gamma0 = 180 * atan2(it->getY() - y1, it->getX() - x1) / Self::PI - it->getDirection();
+			gamma1 = 180 * atan2((it + 1)->getY() - y1, (it + 1)->getX() - x1) / Self::PI - (it + 1)->getDirection();
+		}
+		if (gamma0 >= 180.0) {
+			gamma0 -= 360.0;
+		} else if (gamma0 < -180.0) {
+			gamma0 += 360.0;
+		}
+		if (gamma1 >= 180.0) {
+			gamma1 -= 360.0;
+		} else if (gamma1 < -180.0) {
+			gamma1 += 360.0;
+		}
+		double midpoint0 = (gamma0 + gamma1) / 2.0;
+		double midpoint1 = midpoint1 + 180.0;
+		if (midpoint1 >= 180.0) {
+			midpoint1 -= 360.0;
+		}
+		double arc0 = abs(gamma0 - midpoint0);
+		if (arc0 > 180.0) {
+			arc0 -= 360.0;
+		}
+		double arc1 = abs(gamma0 - midpoint1);
+		if (arc1 > 180.0) {
+			arc1 -= 360.0;
+		}
+		if (arc0 < arc1) {
+			thetas.push_back(midpoint0);
+		} else {
+			thetas.push_back(midpoint1);
+		}
+	}
+	if (xs.size() > 0) {
+		double accum_xs = 0.0;
+		for (std::vector<double>::iterator accum_it = xs.begin(); accum_it != xs.end(); ++accum_it) {
+			accum_xs += *accum_it;
+		}
+		Self::x = accum_xs / xs.size();
+	}
+	if (ys.size() > 0) {
+		double accum_ys = 0.0;
+		for (std::vector<double>::iterator accum_it = ys.begin(); accum_it != ys.end(); ++accum_it) {
+			accum_ys += *accum_it;
+		}
+		Self::y = accum_ys / ys.size();
+	}
+	if (thetas.size() > 0) {
+		std::sort(thetas.begin(), thetas.end());
+		Self::theta = thetas[thetas.size() / 2];
+	}
 }
 
 void Self::localize() {
 
+}
+
+Position Self::getPosition() {
+	return Position(Self::x, Self::y, Self::theta);
+}
+
+void Self::onMoveCommand(double x, double y) {
+	Self::x = x;
+	Self::y = y;
+	Self::positioned = true;
 }

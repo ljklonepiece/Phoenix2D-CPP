@@ -24,13 +24,22 @@
 #include <string>
 
 class Command {
-	std::string command;
-	int weight;
 public:
-	Command(std::string command, int weight);
+	enum COMMAND_TYPE {
+		MOVE,
+		DASH,
+		TURN,
+		SAY
+	};
+	Command(std::string command, int weight, Command::COMMAND_TYPE type);
 	~Command();
 	std::string getCommand();
 	int getWeight();
+	Command::COMMAND_TYPE getCommandType();
+private:
+	std::string command;
+	int weight;
+	Command::COMMAND_TYPE type;
 };
 
 #endif /* COMMAND_H_ */

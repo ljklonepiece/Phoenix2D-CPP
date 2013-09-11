@@ -40,10 +40,10 @@ int main() {
 		std::string play_mode = Game::PLAY_MODE;
 		play_modes[play_mode]->onPlayerExecute();
 		play_modes[play_mode]->onPostExecute();
-		std::cout << i++ << std::endl;
+		std::cout << "Iteration: " << i++ << std::endl;
 	}
 	//This must be always called in order to avoid memory leaks
-	for (std::map<std::string, PlayMode*>::iterator it = play_modes.begin(); it != play_modes.end(); it++) {
+	for (std::map<std::string, PlayMode*>::iterator it = play_modes.begin(); it != play_modes.end(); ++it) {
 		delete it->second;
 		play_modes.erase(it);
 	}

@@ -18,26 +18,19 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Command.h"
+#ifndef POSITION_H_
+#define POSITION_H_
 
-Command::Command(std::string command, int weight, Command::COMMAND_TYPE type) {
-	this->command = command;
-	this->weight = weight;
-	this->type = type;
-}
+class Position {
+	double x;
+	double y;
+	double theta;
+public:
+	Position(double x, double y, double theta);
+	~Position();
+	double getX();
+	double getY();
+	double getDirection();
+};
 
-Command::~Command() {
-
-}
-
-std::string Command::getCommand() {
-	return command;
-}
-
-int Command::getWeight() {
-	return weight;
-}
-
-Command::COMMAND_TYPE Command::getCommandType() {
-	return type;
-}
+#endif /* POSITION_H_ */

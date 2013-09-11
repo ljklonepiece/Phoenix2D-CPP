@@ -21,6 +21,8 @@
 #include "PlayOn.h"
 #include "Commands.h"
 #include "Game.h"
+#include "Position.h"
+#include <iostream>
 
 PlayOn::PlayOn(Commands *commands) : PlayMode(commands) {
 
@@ -34,4 +36,6 @@ void PlayOn::onPlayerExecute() {
 	if (Game::SIMULATION_TIME % 20 == 0) {
 		commands->dash(70.0, 0.0);
 	}
+	Position pos = Self::getPosition();
+	std::cout << "I'm in x: " << pos.getX() << ", y: " << pos.getY() << ", direction: " << pos.getDirection() << std::endl;
 }

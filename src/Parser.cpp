@@ -27,6 +27,7 @@
 #include <vector>
 #include <unistd.h>
 #include "Server.h"
+#include <algorithm>
 
 pthread_cond_t Parser::SEE_COND = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t Parser::SEE_MUTEX = PTHREAD_MUTEX_INITIALIZER;
@@ -39,6 +40,10 @@ bool Parser::processing_see = false;
 
 std::string Parser::sense_body_message = std::string();
 std::string Parser::see_message = std::string();
+
+bool compareFlags(Flag f0, Flag f1) {
+	return f0.getDistance() < f1.getDistance();
+}
 
 Parser::Parser(Self *self) {
 	Parser::self = self;
@@ -106,6 +111,7 @@ void *Parser::process_see(void *arg) {
 		search_flags |= boost::match_prev_avail;
 		search_flags |= boost::match_not_bob;
 	}
+	std::sort(flags.begin(), flags.end(), compareFlags);
 	Parser::self->localize(flags);
 	Parser::processing_see = false;
 	success = pthread_mutex_unlock(&Parser::SEE_MUTEX);
