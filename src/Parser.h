@@ -27,10 +27,12 @@
 
 class Self;
 class Game;
+class World;
 
 class Parser {
 	static Self *self;
 	static Game *game;
+	static World *world;
 	static boost::regex sense_body;
 	boost::regex hear_regex;
 	boost::regex hear_player_regex;
@@ -45,7 +47,7 @@ class Parser {
 	static pthread_cond_t SEE_COND;
 	static pthread_mutex_t SEE_MUTEX;
 public:
-	Parser(Self *self);
+	Parser(Self *self, World *world);
 	~Parser();
 	void parseMessage(std::string message);
 };

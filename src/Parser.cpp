@@ -24,16 +24,20 @@
 #include <cstdlib>
 #include "Self.h"
 #include "Flag.h"
+#include "Player.h"
 #include <vector>
 #include <unistd.h>
 #include "Server.h"
 #include <algorithm>
+#include "Position.h"
+#include "World.h"
 
 pthread_cond_t Parser::SEE_COND = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t Parser::SEE_MUTEX = PTHREAD_MUTEX_INITIALIZER;
 
 Self *Parser::self = 0;
 Game *Parser::game = 0;
+World *Parser::world = 0;
 boost::regex Parser::sense_body = boost::regex("\\(sense_body\\s+(\\d+)\\s+");
 boost::regex Parser::see_regex = boost::regex("\\(([^()]+)\\)\\s*([\\d\\.\\-etk\\s]*)");
 bool Parser::processing_see = false;
@@ -45,8 +49,9 @@ bool compareFlags(Flag f0, Flag f1) {
 	return f0.getDistance() < f1.getDistance();
 }
 
-Parser::Parser(Self *self) {
+Parser::Parser(Self *self, World *world) {
 	Parser::self = self;
+	Parser::world = world;
 	hear_regex = boost::regex("\\(hear\\s+(\\d+)\\s+(self|referee|online_coach_left|online_coach_right)\\s+([\\\"\\w\\s]*)\\)");
 	hear_player_regex = boost::regex("");
 	Parser::game = new Game();
@@ -82,12 +87,15 @@ void *Parser::process_sense_body(void *arg) {
 
 void *Parser::process_see(void *arg) {
 	Parser::processing_see = true;
+	int simulation_time = Game::SIMULATION_TIME;
+	Position player_position = Self::getPosition();
 	int success = pthread_mutex_lock(&Parser::SEE_MUTEX);
 	if (success) {
 		std::cerr << "Parser::process_see(void*) -> cannot lock mutex" << std::endl;
 		return 0;
 	}
 	std::vector<Flag> flags;
+	std::vector<Player> players;
 	std::string::const_iterator start, end;
 	start = Parser::see_message.begin();
 	end = Parser::see_message.end();
@@ -98,9 +106,10 @@ void *Parser::process_see(void *arg) {
 		std::string data = std::string() + match[2];
 		switch (name[0]) {
 		case 'f':
-			flags.push_back(Flag(name, data, Game::SIMULATION_TIME));
+			flags.push_back(Flag(name, data, simulation_time));
 			break;
 		case 'p':
+			players.push_back(Player(name, data, simulation_time, player_position));
 			break;
 		case 'b':
 			break;
@@ -113,6 +122,7 @@ void *Parser::process_see(void *arg) {
 	}
 	std::sort(flags.begin(), flags.end(), compareFlags);
 	Parser::self->localize(flags);
+	Parser::world->updateWorld(players);
 	Parser::processing_see = false;
 	success = pthread_mutex_unlock(&Parser::SEE_MUTEX);
 	if (success) {

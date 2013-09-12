@@ -28,6 +28,7 @@
 #include "Server.h"
 #include "Parser.h"
 #include "Commands.h"
+#include "World.h"
 
 char Controller::AGENT_TYPE = 'p';
 
@@ -40,9 +41,11 @@ Controller::Controller(const char *teamName, char agentType, const char *hostnam
 	reader = 0;
 	server = 0;
 	commands = 0;
+	world = 0;
 }
 
 Controller::~Controller() {
+	if (world) delete world;
 	if (commands) delete commands;
 	if (reader) delete reader;
 	if (server) delete server;
@@ -107,7 +110,8 @@ void Controller::connect() {
 			self->addPlayerType(message);
 		}
 		c->sendMessage("(synch_see)");
-		Parser *parser = new Parser(self);
+		world = new World();
+		Parser *parser = new Parser(self, world);
 		reader = new Reader(c, parser);
 		reader->start();
 		connected = true;
@@ -135,4 +139,8 @@ Commands *Controller::getCommands() {
 		commands = new Commands(c);
 	}
 	return commands;
+}
+
+World *Controller::getWorld() {
+	return world;
 }

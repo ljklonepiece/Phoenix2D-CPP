@@ -1,4 +1,4 @@
-/*
+ /*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
  * Copyright (c) 2013 Ivan Gonzalez
  *
@@ -18,37 +18,20 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONTROLLER_H_
-#define CONTROLLER_H_
+#ifndef WORLDMODEL_H_
+#define WORLDMODEL_H_
 
-#include <string>
+#include <vector>
 
-class Connect;
-class Reader;
-class Server;
-class Parser;
-class Commands;
-class World;
-
-class Controller {
-	Connect *c;
-	Reader *reader;
-	Server *server;
-	Commands *commands;
-	World *world;
-	bool connected;
-	std::string team_name;
-	std::string hostname;
+class WorldModel {
+	std::vector<Player> players;
 public:
-	static char AGENT_TYPE;
-	Controller(const char *teamName, char agentType, const char *hostname);
-	~Controller();
-	void connect();
-	bool isConnected();
-	void reconnect();
-	void disconnect();
-	Commands *getCommands();
-	World *getWorld();
+	WorldModel(std::vector<Player> players);
+	~WorldModel();
+	std::vector<Player> getPlayers();
+	std::vector<Player> getOurPlayers();
+	std::vector<Player> getOppPlayers();
+	std::vector<Player> getUndPlayers();
 };
 
-#endif /* CONTROLLER_H_ */
+#endif /* WORLDMODEL_H_ */

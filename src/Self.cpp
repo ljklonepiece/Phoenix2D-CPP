@@ -193,20 +193,20 @@ Self::Self(std::string player_params, std::string team_name, int unum, std::stri
 }
 
 Self::~Self() {
-	if (types_id) delete[] types_id;
-	if (player_speed_max) delete[] player_speed_max;
-	if (stamina_inc_max) delete[] stamina_inc_max;
-	if (player_decay) delete[] player_decay;
-	if (inertia_moment) delete[] inertia_moment;
-	if (dash_power_rate) delete[] dash_power_rate;
-	if (player_size) delete[] player_size;
-	if (kickable_margin) delete[] kickable_margin;
-	if (kick_rand) delete[] kick_rand;
-	if (extra_stamina) delete[] extra_stamina;
-	if (effort_max) delete[] effort_max;
-	if (effort_min) delete[] effort_min;
-	if (kick_power_rate) delete[] kick_power_rate;
-	if (foul_detect_probability) delete[] foul_detect_probability;
+	if (types_id)                 delete[] types_id;
+	if (player_speed_max)         delete[] player_speed_max;
+	if (stamina_inc_max)          delete[] stamina_inc_max;
+	if (player_decay)             delete[] player_decay;
+	if (inertia_moment)           delete[] inertia_moment;
+	if (dash_power_rate)          delete[] dash_power_rate;
+	if (player_size)              delete[] player_size;
+	if (kickable_margin)          delete[] kickable_margin;
+	if (kick_rand)                delete[] kick_rand;
+	if (extra_stamina)            delete[] extra_stamina;
+	if (effort_max)               delete[] effort_max;
+	if (effort_min)               delete[] effort_min;
+	if (kick_power_rate)          delete[] kick_power_rate;
+	if (foul_detect_probability)  delete[] foul_detect_probability;
 	if (catchable_area_l_stretch) delete[] catchable_area_l_stretch;
 }
 
@@ -293,19 +293,19 @@ void Self::processSenseBody(std::string sense_body) {
 }
 
 void Self::changePlayerType(int type) {
-	Self::PLAYER_SPEED_MAX = player_speed_max[type];
-	Self::STAMINA_INC_MAX = stamina_inc_max[type];
-	Self::PLAYER_DECAY = player_decay[type];
-	Self::INERTIA_MOMENT = inertia_moment[type];
-	Self::DASH_POWER_RATE = dash_power_rate[type];
-	Self::PLAYER_SIZE = player_size[type];
-	Self::KICKABLE_MARGIN = kickable_margin[type];
-	Self::KICK_RAND = kick_rand[type];
-	Self::EXTRA_STAMINA = extra_stamina[type];
-	Self::EFFORT_MAX = effort_max[type];
-	Self::EFFORT_MIN = effort_min[type];
-	Self::KICK_POWER_RATE = kick_power_rate[type];
-	Self::FOUL_DETECT_PROBABILITY = foul_detect_probability[type];
+	Self::PLAYER_SPEED_MAX         = player_speed_max[type];
+	Self::STAMINA_INC_MAX          = stamina_inc_max[type];
+	Self::PLAYER_DECAY             = player_decay[type];
+	Self::INERTIA_MOMENT           = inertia_moment[type];
+	Self::DASH_POWER_RATE          = dash_power_rate[type];
+	Self::PLAYER_SIZE              = player_size[type];
+	Self::KICKABLE_MARGIN          = kickable_margin[type];
+	Self::KICK_RAND                = kick_rand[type];
+	Self::EXTRA_STAMINA            = extra_stamina[type];
+	Self::EFFORT_MAX               = effort_max[type];
+	Self::EFFORT_MIN               = effort_min[type];
+	Self::KICK_POWER_RATE          = kick_power_rate[type];
+	Self::FOUL_DETECT_PROBABILITY  = foul_detect_probability[type];
 	Self::CATCHABLE_AREA_L_STRETCH = catchable_area_l_stretch[type];
 }
 

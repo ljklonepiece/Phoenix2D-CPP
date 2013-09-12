@@ -21,10 +21,20 @@
 #ifndef WORLD_H_
 #define WORLD_H_
 
+#include "Player.h"
+#include <list>
+#include <map>
+#include "WorldModel.h"
+
 class World {
+	int player_id;
+	int max_history;
+	std::list<std::map<int, Player>> players_history;
 public:
 	World();
 	~World();
+	void updateWorld(std::vector<Player> players);
+	WorldModel getWorldModel();
 };
 
 #endif /* WORLD_H_ */

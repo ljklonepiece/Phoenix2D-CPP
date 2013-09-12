@@ -21,9 +21,30 @@
 #include "World.h"
 
 World::World() {
-
+	player_id = 0;
+	max_history = 32;
 }
 
 World::~World() {
 
+}
+
+void World::updateWorld(std::vector<Player> players) {
+	if (players_history.size() == max_history) {
+		players_history.pop_back();
+	}
+	std::map<int, Player> new_players;
+	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
+		new_players[player_id++] = *it;
+	}
+	players_history.push_front(new_players);
+}
+
+WorldModel World::getWorldModel() {
+	std::vector<Player> players;
+	std::map<int, Player> current_players = players_history.front();
+	for (std::map<int, Player>::iterator it = current_players.begin(); it != current_players.end(); ++it) {
+		players.push_back(it->second);
+	}
+	return WorldModel(players);
 }
