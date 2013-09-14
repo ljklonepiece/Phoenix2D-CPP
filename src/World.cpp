@@ -35,7 +35,8 @@ void World::updateWorld(std::vector<Player> players) {
 	}
 	std::map<int, Player> new_players;
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		new_players[player_id++] = *it;
+		new_players.insert(std::pair<int, Player>(player_id++, *it));
+		//new_players[player_id++] = (Player)(*it);
 	}
 	players_history.push_front(new_players);
 }

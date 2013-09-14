@@ -28,8 +28,8 @@
 
 class World {
 	int player_id;
-	int max_history;
-	std::list<std::map<int, Player>> players_history;
+	unsigned int max_history;
+	std::list<std::map<int, Player> > players_history;
 public:
 	World();
 	~World();

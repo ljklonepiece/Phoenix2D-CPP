@@ -89,7 +89,7 @@ void Controller::connect() {
 			side = "trainer";
 			break;
 		case 'c': //Especial case, we need to consider the regex for this case
-			side = 0;
+			unum = 0;
 			if (boost::regex_match(message.c_str(), match, coach_response)) {
 				side = match[1];
 			} else {

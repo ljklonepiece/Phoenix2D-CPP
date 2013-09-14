@@ -20,6 +20,7 @@
 
 #include "Vector2D.h"
 #include <cmath>
+#include "Self.h"
 
 Vector2D::Vector2D(double magnitude, double direction) {
 	dx = magnitude * cos(Self::PI * direction / 180.0);

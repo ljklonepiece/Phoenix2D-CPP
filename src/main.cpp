@@ -28,8 +28,18 @@
 #include "World.h"
 
 int main(int argc, char **argv) {
-	if (argc < 3) return 0;
-	Controller controller(argv[1], argv[2][0], "localhost");
+	const char *team_name, *hostname;
+	char agent_type;
+	if (argc < 4) {
+		team_name = "Phoenix2D";
+		agent_type = 'c';
+		hostname = "localhost";
+	} else {
+		team_name = argv[1];
+		agent_type = argv[2][0];
+		hostname = argv[3];
+	}
+	Controller controller(team_name, agent_type, hostname);
 	controller.connect();
 	Commands *commands = controller.getCommands();
 	World *world = controller.getWorld();
@@ -38,7 +48,7 @@ int main(int argc, char **argv) {
 	play_modes["before_kick_off"] = new BeforeKickOff(commands);
 	play_modes["play_on"]         = new PlayOn(commands);
 	int i = 0;
-	while (Game::nextCycle() && i < 1200) {
+	while (Game::nextCycle() && i < 2400) {
 		std::string play_mode = Game::PLAY_MODE;
 		switch (Controller::AGENT_TYPE) {
 		case 'p':

@@ -44,9 +44,9 @@ Player::Player(std::string name, std::string position, int simulation_time) {
 	kicking = false;
 	tackling = false;
 	std::vector<std::string> tokens;
-	std::stringstream ss = std::stringstream(name);
+	std::stringstream ss_name(name); // = std::stringstream(name);
 	std::string token;
-	while (std::getline(ss, token, ' ')) {
+	while (std::getline(ss_name, token, ' ')) {
 		tokens.push_back(token);
 	}
 	if (tokens[1].compare(Self::TEAM_NAME) == 0) {
@@ -57,8 +57,8 @@ Player::Player(std::string name, std::string position, int simulation_time) {
 	uniform_number = atoi(tokens[2].c_str());
 	this->simulation_time = simulation_time;
 	tokens.clear();
-	ss = std::stringstream(position);
-	while (std::getline(ss, token, ' ')) {
+	std::stringstream ss_position(position); // = std::stringstream(position);
+	while (std::getline(ss_position, token, ' ')) {
 		if (token.compare("k") == 0) {
 			kicking = true;
 		} else if (token.compare("t") == 0) {
@@ -110,9 +110,9 @@ Player::Player(std::string name, std::string position, int simulation_time, Posi
 	kicking = false;
 	tackling = false;
 	std::vector<std::string> tokens;
-	std::stringstream ss = std::stringstream(name);
+	std::stringstream ss_name(name); // = std::stringstream(name);
 	std::string token;
-	while (std::getline(ss, token, ' ')) {
+	while (std::getline(ss_name, token, ' ')) {
 		tokens.push_back(token);
 	}
 	switch (tokens.size()) {
@@ -137,8 +137,8 @@ Player::Player(std::string name, std::string position, int simulation_time, Posi
 		break;
 	}
 	tokens.clear();
-	ss = std::stringstream(position);
-	while (std::getline(ss, token, ' ')) {
+	std::stringstream ss_position(position); // = std::stringstream(position);
+	while (std::getline(ss_position, token, ' ')) {
 		if (token.compare("k") == 0) {
 			kicking = true;
 		} else if (token.compare("t") == 0) {

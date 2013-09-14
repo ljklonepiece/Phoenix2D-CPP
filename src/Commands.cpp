@@ -49,7 +49,7 @@ void Commands::turn(double moment) {
 	ss << "(turn " << std::setprecision(4) << moment << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::TURN, (void *)&moment));
+	commands_to_send.push_back(Command(command, 1, Command::TURN, (void *)&moment, 0));
 }
 
 void Commands::dash(double power, double direction) {
@@ -62,7 +62,7 @@ void Commands::dash(double power, double direction) {
 
 void Commands::say(std::string message) {
 	std::string command = "(say " + message + ")";
-	commands_to_send.push_back(Command(command, 1, Command::SAY, (void *)&message));
+	commands_to_send.push_back(Command(command, 1, Command::SAY, (void *)&message, 0));
 }
 
 int Commands::sendCommands() {

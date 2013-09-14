@@ -52,8 +52,8 @@ class Self {
 	static double x;
 	static double y;
 	static double theta;
-	static double PI;
 public:
+	static double PI;
 	static std::string TEAM_NAME;
 	static int         UNIFORM_NUMBER;
 	static std::string SIDE;
