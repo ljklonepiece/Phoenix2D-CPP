@@ -22,6 +22,7 @@
 #define BEFOREKICKOFF_H_
 
 #include "PlayMode.h"
+#include "WorldModel.h"
 
 class Commands;
 
@@ -29,7 +30,9 @@ class BeforeKickOff : public PlayMode {
 public:
 	BeforeKickOff(Commands *commands);
 	~BeforeKickOff();
-	void onPlayerExecute();
+	void onPlayerExecute(WorldModel world);
+	void onGoalieExecute(WorldModel world);
+	void onCoachExecute(WorldModel world);
 };
 
 #endif /* BEFOREKICKOFF_H_ */

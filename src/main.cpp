@@ -25,12 +25,14 @@
 #include "PlayOn.h"
 #include <map>
 #include "PlayMode.h"
-#include <iostream>
+#include "World.h"
 
-int main() {
-	Controller controller("Phoenix", 'p', "localhost");
+int main(int argc, char **argv) {
+	if (argc < 3) return 0;
+	Controller controller(argv[1], argv[2][0], "localhost");
 	controller.connect();
 	Commands *commands = controller.getCommands();
+	World *world = controller.getWorld();
 	std::map<std::string, PlayMode*> play_modes;
 	//before_kick_off corner_kick_l corner_kick_r free_kick_l free_kick_r goal_kick_l goal_kick_r kick_in_l kick_in_r kick_off_l kick_off_r play_on
 	play_modes["before_kick_off"] = new BeforeKickOff(commands);
@@ -38,9 +40,20 @@ int main() {
 	int i = 0;
 	while (Game::nextCycle() && i < 1200) {
 		std::string play_mode = Game::PLAY_MODE;
-		play_modes[play_mode]->onPlayerExecute();
+		switch (Controller::AGENT_TYPE) {
+		case 'p':
+			play_modes[play_mode]->onPlayerExecute(world->getWorldModel());
+			break;
+		case 'g':
+			play_modes[play_mode]->onGoalieExecute(world->getWorldModel());
+			break;
+		case 'c':
+			play_modes[play_mode]->onCoachExecute(world->getWorldModel());
+			break;
+		default:
+			break;
+		}
 		play_modes[play_mode]->onPostExecute();
-		std::cout << "Iteration: " << i++ << std::endl;
 	}
 	//This must be always called in order to avoid memory leaks
 	for (std::map<std::string, PlayMode*>::iterator it = play_modes.begin(); it != play_modes.end(); ++it) {

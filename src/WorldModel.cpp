@@ -28,36 +28,40 @@ WorldModel::~WorldModel() {
 
 }
 
-std::vector<Player> WorldModel::getPlayers() {
-	return players;
+std::vector<Player*> WorldModel::getPlayers() {
+	std::vector<Player*> all_players;
+	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
+		all_players.push_back(&(*it));
+	}
+	return all_players;
 }
 
-std::vector<Player> WorldModel::getOurPlayers() {
-	std::vector<Player> ourPlayers;
+std::vector<Player*> WorldModel::getOurPlayers() {
+	std::vector<Player*> our_players;
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		if ((*it).getTeam().compare("our") == 0) {
-			ourPlayers.push_back(*it);
+		if (it->getTeam().compare("our") == 0) {
+			our_players.push_back(&(*it));
 		}
 	}
-	return ourPlayers;
+	return our_players;
 }
 
-std::vector<Player> WorldModel::getOppPlayers() {
-	std::vector<Player> oppPlayers;
+std::vector<Player*> WorldModel::getOppPlayers() {
+	std::vector<Player*> opp_players;
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		if ((*it).getTeam().compare("opp") == 0) {
-			oppPlayers.push_back(*it);
+		if (it->getTeam().compare("opp") == 0) {
+			opp_players.push_back(&(*it));
 		}
 	}
-	return oppPlayers;
+	return opp_players;
 }
 
-std::vector<Player> WorldModel::getUndPlayers() {
-	std::vector<Player> undPlayers;
+std::vector<Player*> WorldModel::getUndPlayers() {
+	std::vector<Player*> und_players;
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		if ((*it).getTeam().compare("undefined") == 0) {
-			undPlayers.push_back(*it);
+		if (it->getTeam().compare("undefined") == 0) {
+			und_players.push_back(&(*it));
 		}
 	}
-	return undPlayers;
+	return und_players;
 }

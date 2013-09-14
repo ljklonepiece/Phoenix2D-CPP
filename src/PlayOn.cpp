@@ -33,10 +33,18 @@ PlayOn::~PlayOn() {
 
 }
 
-void PlayOn::onPlayerExecute() {
+void PlayOn::onPlayerExecute(WorldModel world) {
 	if (Game::SIMULATION_TIME % 20 == 0) {
 		commands->dash(70.0, 0.0);
 	}
 	Position pos = Self::getPosition();
-	std::cout << "I'm in x: " << pos.getX() << ", y: " << pos.getY() << ", direction: " << pos.getDirection() << std::endl;
+	std::cout << "I'm in x: " << pos.getX() << ", y: " << pos.getY() << ", direction: " << pos.getBodyDirection() << std::endl;
+}
+
+void PlayOn::onGoalieExecute(WorldModel world) {
+
+}
+
+void PlayOn::onCoachExecute(WorldModel world) {
+
 }

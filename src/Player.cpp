@@ -25,6 +25,72 @@
 #include "Self.h"
 #include <cmath>
 
+Player::Player(std::string name, std::string position, int simulation_time) {
+	distance = 100.0;
+	direction = 0.0;
+	distChange = 0.0;
+	dirChange = 0.0;
+	bodyDirection = 0.0;
+	x = 0.0;
+	y = 0.0;
+	vx = 0.0;
+	vy = 0.0;
+	theta = 0.0;
+	headDirection = 0.0;
+	pointDir = 0.0;
+	team = "undefined";
+	uniform_number = 0;
+	pointing = false;
+	kicking = false;
+	tackling = false;
+	std::vector<std::string> tokens;
+	std::stringstream ss = std::stringstream(name);
+	std::string token;
+	while (std::getline(ss, token, ' ')) {
+		tokens.push_back(token);
+	}
+	if (tokens[1].compare(Self::TEAM_NAME) == 0) {
+		team = "our";
+	} else {
+		team = "opp";
+	}
+	uniform_number = atoi(tokens[2].c_str());
+	this->simulation_time = simulation_time;
+	tokens.clear();
+	ss = std::stringstream(position);
+	while (std::getline(ss, token, ' ')) {
+		if (token.compare("k") == 0) {
+			kicking = true;
+		} else if (token.compare("t") == 0) {
+			tackling = true;
+		} else {
+			tokens.push_back(token);
+		}
+	}
+	switch (tokens.size()) {
+	case 6:
+		x = atof(tokens[0].c_str());
+		y = atof(tokens[1].c_str());
+		vx = atof(tokens[2].c_str());
+		vy = atof(tokens[3].c_str());
+		theta = atof(tokens[4].c_str());
+		headDirection = atof(tokens[5].c_str());
+		break;
+	case 7:
+		x = atof(tokens[0].c_str());
+		y = atof(tokens[1].c_str());
+		vx = atof(tokens[2].c_str());
+		vy = atof(tokens[3].c_str());
+		theta = atof(tokens[4].c_str());
+		headDirection = atof(tokens[5].c_str());
+		pointDir = atof(tokens[6].c_str());
+		pointing = true;
+		break;
+	default:
+		break;
+	}
+}
+
 Player::Player(std::string name, std::string position, int simulation_time, Position player_position) {
 	distance = 100.0;
 	direction = 0.0;
@@ -35,6 +101,8 @@ Player::Player(std::string name, std::string position, int simulation_time, Posi
 	pointDir = 0.0;
 	x = 0.0;
 	y = 0.0;
+	vx = 0.0;
+	vy = 0.0;
 	theta = 0.0;
 	team = "undefined";
 	uniform_number = 0;
@@ -157,4 +225,8 @@ Position Player::getPosition() {
 
 std::string Player::getTeam() {
 	return team;
+}
+
+Vector2D Player::getVelocity() {
+	return Vector2D::getVector2DWithXAndY(vx, vy);
 }

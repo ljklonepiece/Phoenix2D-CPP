@@ -45,7 +45,6 @@ void Reader::execute() {
 	while (running) {
 		parser->parseMessage(connect->receiveMessage());
 	}
-	std::cout << "Reader::read() -> thread stopped" << std::endl;
 }
 
 bool Reader::isRunning() {

@@ -80,25 +80,32 @@ void Controller::connect() {
 		std::cerr << "Controller::connect() -> " << match[1] << std::endl; //Error
 		return;
 	} else {
-		boost::regex response("\\(init\\s+(l|r)\\s+(\\d+)\\s+([\\w\\_]+)\\)"); //i.e (init l 1 before_kick_off)
+		boost::regex player_response("\\(init\\s+(l|r)\\s+(\\d+)\\s+([\\w\\_]+)\\)"); //i.e (init l 1 before_kick_off)
+		boost::regex coach_response("\\(init\\s+(l|r)\\s+ok\\)");
 		std::string side;
 		int unum;
-		if (boost::regex_match(message.c_str(), match, response)) {
-			side = match[1];
-			std::string unum_str = std::string() + match[2];
-			unum = atoi(unum_str.c_str()); //C++11: use std::stoi()
-		} else {
-			side = "undefined";
-			unum = 0;
-			std::cerr << "Controller::connect() -> Does not match response" << std::endl;
-		}
 		switch (Controller::AGENT_TYPE) {
 		case 't':
 			side = "trainer";
 			break;
 		case 'c': //Especial case, we need to consider the regex for this case
+			side = 0;
+			if (boost::regex_match(message.c_str(), match, coach_response)) {
+				side = match[1];
+			} else {
+				side = "undefined";
+				std::cerr << "Controller::connect() -> Does not match response for coach" << std::endl;
+			}
 			break;
 		default:
+			if (boost::regex_match(message.c_str(), match, player_response)) {
+				side = match[1];
+				unum = atoi((std::string() + match[2]).c_str()); //C++11: use std::stoi()
+			} else {
+				side = "undefined";
+				unum = 0;
+				std::cerr << "Controller::connect() -> Does not match response for player" << std::endl;
+			}
 			break;
 		}
 		message = c->receiveMessage(); //server_params
@@ -109,7 +116,19 @@ void Controller::connect() {
 			message = c->receiveMessage(); //player_type
 			self->addPlayerType(message);
 		}
-		c->sendMessage("(synch_see)");
+		switch (Controller::AGENT_TYPE) {
+		case 'p':
+			c->sendMessage("(synch_see)");
+			break;
+		case 'g':
+			c->sendMessage("(synch_see)");
+			break;
+		case 'c':
+			c->sendMessage("(eye on)");
+			break;
+		default:
+			break;
+		}
 		world = new World();
 		Parser *parser = new Parser(self, world);
 		reader = new Reader(c, parser);
@@ -128,7 +147,6 @@ void Controller::reconnect() {
 
 void Controller::disconnect() {
 	if (isConnected()) {
-		std::cout << "Controller::disconnect() -> waiting for reader" << std::endl;
 		reader->stop();
 	}
 	connected = false;

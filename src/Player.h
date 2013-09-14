@@ -23,6 +23,7 @@
 
 #include <string>
 #include "Position.h"
+#include "Vector2D.h"
 
 class Player {
 	double distance;
@@ -34,6 +35,8 @@ class Player {
 	double pointDir;
 	double x;
 	double y;
+	double vx;
+	double vy;
 	double theta;
 	bool pointing;
 	bool kicking;
@@ -42,10 +45,12 @@ class Player {
 	int uniform_number;
 	int simulation_time;
 public:
+	Player(std::string name, std::string position, int simulation_time);
 	Player(std::string name, std::string position, int simulation_time, Position player_position);
 	~Player();
 	Position getPosition();
 	std::string getTeam();
+	Vector2D getVelocity();
 };
 
 #endif /* PLAYER_H_ */

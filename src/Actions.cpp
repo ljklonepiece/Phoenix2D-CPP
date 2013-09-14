@@ -18,37 +18,12 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMAND_H_
-#define COMMAND_H_
+#include "Actions.h"
 
-#include <string>
+Actions::Actions(Commands *commands) {
+	this->commands = commands;
+}
 
-class Command {
-public:
-	enum COMMAND_TYPE {
-		MOVE,
-		DASH,
-		TURN,
-		SAY
-	};
-	Command(std::string command, int weight, Command::COMMAND_TYPE type, void *arg_0, void *arg_1);
-	~Command();
-	std::string getCommand();
-	int getWeight();
-	Command::COMMAND_TYPE getCommandType();
-	double getDashPower();
-	double getDashDirection();
-	double getTurnMoment();
-	double getMoveX();
-	double getMoveY();
-	std::string getSayMessage();
-private:
-	std::string command;
-	int weight;
-	Command::COMMAND_TYPE type;
-	double double_arg_0;
-	double double_arg_1;
-	std::string string_arg_0;
-};
+Actions::~Actions() {
 
-#endif /* COMMAND_H_ */
+}

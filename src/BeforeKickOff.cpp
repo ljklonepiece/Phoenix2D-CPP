@@ -31,7 +31,7 @@ BeforeKickOff::~BeforeKickOff() {
 
 }
 
-void BeforeKickOff::onPlayerExecute() {
+void BeforeKickOff::onPlayerExecute(WorldModel world) {
 	if (Game::SIMULATION_TIME == 10) {
 		commands->move(-10.0, 0.0);
 	} else if (Game::SIMULATION_TIME % 20 == 0) {
@@ -43,4 +43,12 @@ void BeforeKickOff::onPlayerExecute() {
 			commands->say("nemesis");
 		}
 	}
+}
+
+void BeforeKickOff::onGoalieExecute(WorldModel world) {
+
+}
+
+void BeforeKickOff::onCoachExecute(WorldModel world) {
+
 }

@@ -22,6 +22,7 @@
 #define PLAYON_H_
 
 #include "PlayMode.h"
+#include "WorldModel.h"
 
 class Commands;
 
@@ -29,7 +30,9 @@ class PlayOn : public PlayMode {
 public:
 	PlayOn(Commands *commands);
 	~PlayOn();
-	void onPlayerExecute();
+	void onPlayerExecute(WorldModel world);
+	void onGoalieExecute(WorldModel world);
+	void onCoachExecute(WorldModel world);
 };
 
 #endif /* PLAYON_H_ */

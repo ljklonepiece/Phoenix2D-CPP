@@ -168,6 +168,8 @@ void Parser::parseMessage(std::string message) {
 		}
 	} else if (message_type.compare("change_player_type") == 0) {
 
+	} else if (message_type.compare("see_global") == 0){
+		std::cout << "Coach see: " << message << std::endl;
 	} else {
 		std::cerr << "Parse::parseMessage(string) -> message " << message << " not recognized" << std::endl;
 	}

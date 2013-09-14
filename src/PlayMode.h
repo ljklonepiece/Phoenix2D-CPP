@@ -21,6 +21,8 @@
 #ifndef PLAYMODE_H_
 #define PLAYMODE_H_
 
+#include "WorldModel.h"
+
 class Commands;
 
 class PlayMode {
@@ -30,7 +32,9 @@ public:
 	PlayMode(Commands *commands);
 	virtual ~PlayMode();
 	void onStart();
-	virtual void onPlayerExecute() = 0;
+	virtual void onPlayerExecute(WorldModel world) = 0;
+	virtual void onGoalieExecute(WorldModel world) = 0;
+	virtual void onCoachExecute(WorldModel world) = 0;
 	void onPostExecute();
 	void onEnd();
 };

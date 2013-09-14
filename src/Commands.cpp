@@ -40,7 +40,7 @@ void Commands::move(double x, double y) {
 	ss << "(move " << std::setprecision(4) << x << " " << y << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::MOVE));
+	commands_to_send.push_back(Command(command, 1, Command::MOVE, (void *)&x, (void *)&y));
 	Self::onMoveCommand(x, y);
 }
 
@@ -49,7 +49,7 @@ void Commands::turn(double moment) {
 	ss << "(turn " << std::setprecision(4) << moment << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::TURN));
+	commands_to_send.push_back(Command(command, 1, Command::TURN, (void *)&moment));
 }
 
 void Commands::dash(double power, double direction) {
@@ -57,12 +57,12 @@ void Commands::dash(double power, double direction) {
 	ss << "(dash " << std::setprecision(4) << power << " " << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::DASH));
+	commands_to_send.push_back(Command(command, 1, Command::DASH, (void *)&power, (void *)&direction));
 }
 
 void Commands::say(std::string message) {
 	std::string command = "(say " + message + ")";
-	commands_to_send.push_back(Command(command, 1, Command::SAY));
+	commands_to_send.push_back(Command(command, 1, Command::SAY, (void *)&message));
 }
 
 int Commands::sendCommands() {
@@ -71,11 +71,13 @@ int Commands::sendCommands() {
 		std::string message = "";
 		int weight = 0;
 		do {
-			weight += commands_to_send.at(0).getWeight();
+			Command *command_to_send = &commands_to_send.at(0);
+			weight += command_to_send->getWeight();
 			if (weight < 2) {
-				message += commands_to_send.at(0).getCommand();
-				switch (commands_to_send.at(0).getCommandType()) {
+				message += command_to_send->getCommand();
+				switch (command_to_send->getCommandType()) {
 				case Command::MOVE:
+					Self::onMoveCommand(command_to_send->getMoveX(), command_to_send->getMoveY());
 					break;
 				default:
 					break;

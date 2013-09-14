@@ -22,16 +22,17 @@
 #define WORLDMODEL_H_
 
 #include <vector>
+#include "Player.h"
 
 class WorldModel {
 	std::vector<Player> players;
 public:
 	WorldModel(std::vector<Player> players);
 	~WorldModel();
-	std::vector<Player> getPlayers();
-	std::vector<Player> getOurPlayers();
-	std::vector<Player> getOppPlayers();
-	std::vector<Player> getUndPlayers();
+	std::vector<Player*> getPlayers();
+	std::vector<Player*> getOurPlayers();
+	std::vector<Player*> getOppPlayers();
+	std::vector<Player*> getUndPlayers();
 };
 
 #endif /* WORLDMODEL_H_ */
