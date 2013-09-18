@@ -22,6 +22,7 @@
 #define WORLD_H_
 
 #include "Player.h"
+#include "Ball.h"
 #include <list>
 #include <map>
 #include "WorldModel.h"
@@ -30,10 +31,11 @@ class World {
 	int player_id;
 	unsigned int max_history;
 	std::list<std::map<int, Player> > players_history;
+	std::list<Ball> ball_history;
 public:
 	World();
 	~World();
-	void updateWorld(std::vector<Player> players);
+	void updateWorld(std::vector<Player> players, std::vector<Ball> ball);
 	WorldModel getWorldModel();
 };
 

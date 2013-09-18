@@ -1,4 +1,4 @@
- /*
+/*
  * Phoenix2D (RoboCup Soccer Simulation 2D League)
  * Copyright (c) 2013 Ivan Gonzalez
  *
@@ -18,24 +18,32 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WORLDMODEL_H_
-#define WORLDMODEL_H_
+#ifndef BALL_H_
+#define BALL_H_
 
-#include <vector>
-#include "Player.h"
-#include "Ball.h"
+#include <string>
+#include "Position.h"
+#include "Vector2D.h"
 
-class WorldModel {
-	std::vector<Player> players;
-	Ball ball;
+class Ball {
+	double distance;
+	double direction;
+	double distChange;
+	double dirChange;
+	double x;
+	double y;
+	double vx;
+	double vy;
+	int simulation_time;
+	bool inSightRange;
 public:
-	WorldModel(std::vector<Player> players, Ball ball);
-	~WorldModel();
-	std::vector<Player*> getPlayers();
-	std::vector<Player*> getOurPlayers();
-	std::vector<Player*> getOppPlayers();
-	std::vector<Player*> getUndPlayers();
-	Ball* getBall();
+	Ball(int simulation_time);
+	Ball(std::string position, int simulation_time);
+	Ball(std::string position, int simulation_time, Position player_position, Vector2D player_velocity);
+	~Ball();
+	Position getPosition();
+	Vector2D getVelocity();
+	bool isInSightRange();
 };
 
-#endif /* WORLDMODEL_H_ */
+#endif /* BALL_H_ */

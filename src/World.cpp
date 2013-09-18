@@ -19,6 +19,7 @@
  */
 
 #include "World.h"
+#include "Game.h"
 
 World::World() {
 	player_id = 0;
@@ -29,14 +30,26 @@ World::~World() {
 
 }
 
-void World::updateWorld(std::vector<Player> players) {
+void World::updateWorld(std::vector<Player> players, std::vector<Ball> ball) {
 	if (players_history.size() == max_history) {
 		players_history.pop_back();
+	}
+	if (ball_history.size() == max_history) {
+		ball_history.pop_back();
 	}
 	std::map<int, Player> new_players;
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
 		new_players.insert(std::pair<int, Player>(player_id++, *it));
 		//new_players[player_id++] = (Player)(*it);
+	}
+	if (ball.size() == 0) {
+		if (ball_history.size() > 0) {
+			ball_history.push_front(Ball(Game::SIMULATION_TIME));
+		} else {
+
+		}
+	} else {
+		ball_history.push_front(ball.front());
 	}
 	players_history.push_front(new_players);
 }

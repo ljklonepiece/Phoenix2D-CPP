@@ -31,6 +31,7 @@
 #include <algorithm>
 #include "Position.h"
 #include "World.h"
+#include "Ball.h"
 
 pthread_cond_t Parser::SEE_COND = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t Parser::SEE_MUTEX = PTHREAD_MUTEX_INITIALIZER;
@@ -96,6 +97,7 @@ void *Parser::process_see(void *arg) {
 	}
 	std::vector<Flag> flags;
 	std::vector<Player> players;
+	std::vector<Ball> ball;
 	std::string::const_iterator start, end;
 	start = Parser::see_message.begin();
 	end = Parser::see_message.end();
@@ -114,6 +116,7 @@ void *Parser::process_see(void *arg) {
 			players.push_back(Player(name, data, simulation_time, player_position));
 			break;
 		case 'b':
+			ball.push_back(Ball(data, simulation_time, player_position));
 			break;
 		default:
 			break;
@@ -124,7 +127,7 @@ void *Parser::process_see(void *arg) {
 	}
 	std::sort(flags.begin(), flags.end(), compareFlags);
 	Parser::self->localize(flags);
-	Parser::world->updateWorld(players);
+	Parser::world->updateWorld(players, ball);
 	Parser::processing_see = false;
 	success = pthread_mutex_unlock(&Parser::SEE_MUTEX);
 	if (success) {
@@ -173,6 +176,7 @@ void Parser::parseMessage(std::string message) {
 	} else if (message_type.compare("see_global") == 0){
 		int simulation_time = Game::SIMULATION_TIME;
 		std::vector<Player> players;
+		std::vector<Ball> ball;
 		std::string::const_iterator start, end;
 		start = Parser::see_message.begin();
 		end = Parser::see_message.end();
@@ -188,6 +192,7 @@ void Parser::parseMessage(std::string message) {
 				players.push_back(Player(name, data, simulation_time));
 				break;
 			case 'b':
+				ball.push_back(Ball(data, simulation_time));
 				break;
 			default:
 				break;
@@ -196,7 +201,7 @@ void Parser::parseMessage(std::string message) {
 			search_flags |= boost::match_prev_avail;
 			search_flags |= boost::match_not_bob;
 		}
-		Parser::world->updateWorld(players);
+		Parser::world->updateWorld(players, ball);
 	} else if (message_type.compare("ok") == 0) {
 
 	} else {

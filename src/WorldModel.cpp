@@ -20,8 +20,9 @@
 
 #include "WorldModel.h"
 
-WorldModel::WorldModel(std::vector<Player> players) {
+WorldModel::WorldModel(std::vector<Player> players, Ball ball) {
 	this->players = players;
+	this->ball = ball;
 }
 
 WorldModel::~WorldModel() {
@@ -64,4 +65,8 @@ std::vector<Player*> WorldModel::getUndPlayers() {
 		}
 	}
 	return und_players;
+}
+
+Ball* WorldModel::getBall() {
+	return &ball;
 }
