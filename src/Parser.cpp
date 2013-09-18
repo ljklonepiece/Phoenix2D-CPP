@@ -105,6 +105,8 @@ void *Parser::process_see(void *arg) {
 		std::string name = std::string() + match[1];
 		std::string data = std::string() + match[2];
 		switch (name[0]) {
+		case 'g':
+			break;
 		case 'f':
 			flags.push_back(Flag(name, data, simulation_time));
 			break;
@@ -169,7 +171,34 @@ void Parser::parseMessage(std::string message) {
 	} else if (message_type.compare("change_player_type") == 0) {
 
 	} else if (message_type.compare("see_global") == 0){
-		std::cout << "Coach see: " << message << std::endl;
+		int simulation_time = Game::SIMULATION_TIME;
+		std::vector<Player> players;
+		std::string::const_iterator start, end;
+		start = Parser::see_message.begin();
+		end = Parser::see_message.end();
+		boost::match_results<std::string::const_iterator> match;
+		boost::match_flag_type search_flags = boost::match_default;
+		while (boost::regex_search(start, end, match, Parser::see_regex, search_flags)) {
+			std::string name = std::string() + match[1];
+			std::string data = std::string() + match[2];
+			switch (name[0]) {
+			case 'g':
+				break;
+			case 'p':
+				players.push_back(Player(name, data, simulation_time));
+				break;
+			case 'b':
+				break;
+			default:
+				break;
+			}
+			start = match[0].second;
+			search_flags |= boost::match_prev_avail;
+			search_flags |= boost::match_not_bob;
+		}
+		Parser::world->updateWorld(players);
+	} else if (message_type.compare("ok") == 0) {
+
 	} else {
 		std::cerr << "Parse::parseMessage(string) -> message " << message << " not recognized" << std::endl;
 	}

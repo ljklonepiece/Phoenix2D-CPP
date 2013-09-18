@@ -22,7 +22,6 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
-#include <string>
 #include "Command.h"
 #include "Connect.h"
 #include "Self.h"
@@ -52,6 +51,14 @@ void Commands::turn(double moment) {
 	commands_to_send.push_back(Command(command, 1, Command::TURN, (void *)&moment, 0));
 }
 
+void Commands::turnNeck(double moment) {
+	std::stringstream ss;
+	ss << "(turn_neck " << std::setprecision(4) << moment << ")" << std::endl;
+	std::string command;
+	std::getline(ss, command);
+	commands_to_send.push_back(Command(command, 0, Command::TURN_NECK, (void *)&moment, 0));
+}
+
 void Commands::dash(double power, double direction) {
 	std::stringstream ss;
 	ss << "(dash " << std::setprecision(4) << power << " " << direction << ")" << std::endl;
@@ -63,6 +70,66 @@ void Commands::dash(double power, double direction) {
 void Commands::say(std::string message) {
 	std::string command = "(say " + message + ")";
 	commands_to_send.push_back(Command(command, 1, Command::SAY, (void *)&message, 0));
+}
+
+void Commands::catchBall(double direction) {
+	std::stringstream ss;
+	ss << "(catch " << std::setprecision(4) << direction << ")" << std::endl;
+	std::string command;
+	std::getline(ss, command);
+	commands_to_send.push_back(Command(command, 1, Command::CATCH, (void *)&direction, 0));
+}
+
+void Commands::kick(double power, double direction) {
+	std::stringstream ss;
+	ss << "(kick " << std::setprecision(4) << power << " " << direction << ")" << std::endl;
+	std::string command;
+	std::getline(ss, command);
+	commands_to_send.push_back(Command(command, 1, Command::KICK, (void *)&power, (void *)&direction));
+}
+
+void Commands::tackle(double power, bool willToFoul) {
+	std::stringstream ss;
+	ss << "(tackle " << std::setprecision(4) << power << (willToFoul ? " true" : " false") << std::endl;
+	std::string command;
+	std::getline(ss, command);
+	commands_to_send.push_back(Command(command, 1, Command::TACKLE, (void *)&power, (void *)willToFoul));
+}
+
+void Commands::pointTo(double distance, double direction) {
+	std::stringstream ss;
+	ss << "(pointto " << std::setprecision(4) << distance << " " << direction << ")" << std::endl;
+	std::string command;
+	std::getline(ss, command);
+	commands_to_send.push_back(Command(command, 1, Command::POINT, (void *)&distance, (void *)&direction));
+}
+
+void Commands::changeView(std::string width) {
+	std::string command = "(change_view " + width + ")";
+	commands_to_send.push_back(Command(command, 1, Command::CHANGE_VIEW, (void *)&width, 0));
+}
+
+void Commands::moveObject(std::string object, double x, double y) {
+	std::stringstream ss;
+	ss << "(move " << object << " " << std::setprecision(4) << x << " " << y << ")" << std::endl;
+	std::string command;
+	std::getline(ss, command);
+	commands_to_send.push_back(Command(command, 1, Command::MOVE_OBJECT, 0, 0));
+}
+
+void Commands::changeMode(std::string mode) {
+	std::string command = "(change_mode " + mode + ")";
+	commands_to_send.push_back(Command(command, 1, Command::CHANGE_MODE, (void *)&mode, 0));
+}
+
+void Commands::start() {
+	std::string command = "(start)";
+	commands_to_send.push_back(Command(command, 1, Command::START, 0, 0));
+}
+
+void Commands::recover() {
+	std::string command = "(recover)";
+	commands_to_send.push_back(Command(command, 1, Command::RECOVER, 0, 0));
 }
 
 int Commands::sendCommands() {

@@ -18,24 +18,21 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "KickOffL.h"
+#ifndef TRAINER_H_
+#define TRAINER_H_
 
-KickOffL::KickOffL(Commands *commands) : PlayMode(commands) {
+#include "WorldModel.h"
 
-}
+class Commands;
 
-KickOffL::~KickOffL() {
+class Trainer {
+	Commands *commands;
+	bool newExecution;
+public:
+	Trainer(Commands *commands);
+	~Trainer();
+	void execute(WorldModel world);
+	bool continueExecution();
+};
 
-}
-
-void KickOffL::onPlayerExecute(WorldModel world) {
-
-}
-
-void KickOffL::onGoalieExecute(WorldModel world) {
-
-}
-
-void KickOffL::onCoachExecute(WorldModel world) {
-
-}
+#endif /* TRAINER_H_ */

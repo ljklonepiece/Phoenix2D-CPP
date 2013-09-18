@@ -19,6 +19,7 @@
  */
 
 #include "Position.h"
+#include <cmath>
 
 Position::Position(double x, double y) {
 	this->x = x;
@@ -59,4 +60,16 @@ double Position::getBodyDirection() {
 
 double Position::getHeadDirection() {
 	return gamma;
+}
+
+double Position::getDistanceTo(Position* position) {
+	double distance = sqrt(pow(position->getX() - x, 2.0) + pow(position->getY() - y, 2.0));
+	return distance;
+}
+
+double Position::getDirectionTo(Position* position) {
+	double direction = 180.0 * (atan2(position->getY() - y, position->getX() - x)) / Self::PI - (theta + gamma);
+	if      (direction >= 180.0) { direction -= 360.0; }
+	else if (direction < 180.0)  { direction += 360.0; }
+	return direction;
 }

@@ -35,6 +35,8 @@ public:
 	double getY();
 	double getBodyDirection();
 	double getHeadDirection();
+	double getDistanceTo(Position* position);
+	double getDirectionTo(Position* position);
 };
 
 #endif /* POSITION_H_ */

@@ -46,7 +46,7 @@ class Player {
 	int simulation_time;
 public:
 	Player(std::string name, std::string position, int simulation_time);
-	Player(std::string name, std::string position, int simulation_time, Position player_position);
+	Player(std::string name, std::string position, int simulation_time, Position player_position, Vector2D player_velocity);
 	~Player();
 	Position getPosition();
 	std::string getTeam();

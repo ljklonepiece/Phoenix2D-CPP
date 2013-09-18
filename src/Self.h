@@ -27,6 +27,7 @@
 #include <vector>
 #include "Flag.h"
 #include "Position.h"
+#include "Vector2D.h"
 
 class Self {
 	int    *types_id;
@@ -137,6 +138,7 @@ public:
 	void localize(std::vector<Flag> flags);
 	void localize();
 	static Position getPosition();
+	static Vector2D getVelocity();
 	static void onMoveCommand(double x, double y);
 };
 

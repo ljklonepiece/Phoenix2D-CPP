@@ -22,6 +22,7 @@
 #define COMMANDS_H_
 
 #include <vector>
+#include <string>
 #include "Command.h"
 
 class Connect;
@@ -34,9 +35,19 @@ public:
 	~Commands();
 	void move(double x, double y);
 	void turn(double moment);
-	void turnNeck(double angle);
+	void turnNeck(double moment);
 	void dash(double power, double direction);
 	void say(std::string message);
+	void catchBall(double direction);
+	void kick(double power, double direction);
+	void tackle(double power, bool willToFoul);
+	void pointTo(double distance, double direction);
+	void changeView(std::string width);
+	void moveObject(std::string object, double x, double y);
+	void changeMode(std::string mode);
+	void start();
+	void recover();
+	//void changePlayerType()
 	int sendCommands();
 };
 

@@ -26,24 +26,50 @@ Command::Command(std::string command, int weight, Command::COMMAND_TYPE type, vo
 	this->type = type;
 	switch(type) {
 	case MOVE:
-		double_arg_0 = *((double *)arg_0);
-		double_arg_1 = *((double *)arg_1);
-		string_arg_0 = "";
-		break;
 	case DASH:
+	case KICK:
+	case POINT:
 		double_arg_0 = *((double *)arg_0);
 		double_arg_1 = *((double *)arg_1);
 		string_arg_0 = "";
+		string_arg_1 = "";
+		bool_arg_0 = false;
+		bool_arg_1 = false;
 		break;
 	case TURN:
+	case CATCH:
+	case TURN_NECK:
 		double_arg_0 = *((double *)arg_0);
 		double_arg_1 = 0.0;
 		string_arg_0 = "";
+		string_arg_1 = "";
+		bool_arg_0 = false;
+		bool_arg_1 = false;
 		break;
 	case SAY:
+	case CHANGE_VIEW:
 		double_arg_0 = 0.0;
 		double_arg_1 = 0.0;
 		string_arg_0 = *((std::string *)arg_0);
+		string_arg_1 = "";
+		bool_arg_0 = false;
+		bool_arg_1 = false;
+		break;
+	case TACKLE:
+		double_arg_0 = *((double *)arg_0);
+		double_arg_1 = 0.0;
+		string_arg_0 = "";
+		string_arg_1 = "";
+		bool_arg_0 = false;
+		bool_arg_1 = *((bool *)arg_1);
+		break;
+	default:
+		double_arg_0 = 0.0;
+		double_arg_1 = 0.0;
+		string_arg_0 = "";
+		string_arg_1 = "";
+		bool_arg_0 = false;
+		bool_arg_1 = false;
 		break;
 	}
 }
@@ -85,5 +111,41 @@ double Command::getMoveY() {
 }
 
 std::string Command::getSayMessage() {
+	return string_arg_0;
+}
+
+double Command::getCatchDirection() {
+	return double_arg_0;
+}
+
+double Command::getKickPower() {
+	return double_arg_0;
+}
+
+double Command::getKickDirection() {
+	return double_arg_1;
+}
+
+double Command::getTacklePower() {
+	return double_arg_0;
+}
+
+bool Command::getTackleWillToFoul() {
+	return bool_arg_1;
+}
+
+double Command::getTurnNeckMoment() {
+	return double_arg_0;
+}
+
+double Command::getPointDistance() {
+	return double_arg_0;
+}
+
+double Command::getPointDirection() {
+	return double_arg_1;
+}
+
+std::string Command::getChangeViewWidth() {
 	return string_arg_0;
 }

@@ -437,6 +437,10 @@ Position Self::getPosition() {
 	return Position(Self::x, Self::y, Self::theta);
 }
 
+Vector2D Self::getVelocity() {
+	return Vector2D::getVector2DWithMagnitudeAndDirection(Self::AMOUNT_OF_SPEED, Self::DIRECTION_OF_SPEED);
+}
+
 void Self::onMoveCommand(double x, double y) {
 	Self::x = x;
 	Self::y = y;

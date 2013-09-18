@@ -91,7 +91,7 @@ Player::Player(std::string name, std::string position, int simulation_time) {
 	}
 }
 
-Player::Player(std::string name, std::string position, int simulation_time, Position player_position) {
+Player::Player(std::string name, std::string position, int simulation_time, Position player_position, Vector2D player_velocity) {
 	distance = 100.0;
 	direction = 0.0;
 	distChange = 0.0;
@@ -212,6 +212,12 @@ Player::Player(std::string name, std::string position, int simulation_time, Posi
 	double ery = sin(Self::PI * source_direction / 180.0);
 	x = player_position.getX() + erx * distance;
 	y = player_position.getY() + ery * distance;
+	double erxm = (180.0 * erx) / (Self::PI * distance);
+	double erym = (180.0 * ery) / (Self::PI * distance);
+	double vry = (distChange * erym + dirChange * erx) / (ery * erym + erx * erxm);
+	double vrx = (distChange - ery * vry) / erx;
+	vx = player_velocity.getXComponent() + vrx;
+	vy = player_velocity.getYComponent() + vry;
 	this->simulation_time = simulation_time;
 }
 

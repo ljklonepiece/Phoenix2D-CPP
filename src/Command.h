@@ -26,10 +26,24 @@
 class Command {
 public:
 	enum COMMAND_TYPE {
+		//commands used by players and goalies
 		MOVE,
 		DASH,
 		TURN,
-		SAY
+		SAY,
+		CATCH,
+		KICK,
+		TACKLE,
+		TURN_NECK,
+		POINT,
+		CHANGE_VIEW,
+		//commands used by trainer
+		MOVE_OBJECT,
+		CHANGE_MODE,
+		START,
+		RECOVER,
+		//commands used by trainer and/or coach
+		CHANGE_PLAYER_TYPE
 	};
 	Command(std::string command, int weight, Command::COMMAND_TYPE type, void *arg_0, void *arg_1);
 	~Command();
@@ -42,6 +56,15 @@ public:
 	double getMoveX();
 	double getMoveY();
 	std::string getSayMessage();
+	double getCatchDirection();
+	double getKickPower();
+	double getKickDirection();
+	double getTacklePower();
+	bool getTackleWillToFoul();
+	double getTurnNeckMoment();
+	double getPointDistance();
+	double getPointDirection();
+	std::string getChangeViewWidth();
 private:
 	std::string command;
 	int weight;
@@ -49,6 +72,9 @@ private:
 	double double_arg_0;
 	double double_arg_1;
 	std::string string_arg_0;
+	std::string string_arg_1;
+	bool bool_arg_0;
+	bool bool_arg_1;
 };
 
 #endif /* COMMAND_H_ */

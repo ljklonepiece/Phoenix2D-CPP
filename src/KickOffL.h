@@ -22,6 +22,7 @@
 #define KICKOFFL_H_
 
 #include "PlayMode.h"
+#include "WorldModel.h"
 
 class Commands;
 
@@ -29,7 +30,9 @@ class KickOffL : public PlayMode {
 public:
 	KickOffL(Commands *commands);
 	~KickOffL();
-	void onPlayerExecute();
+	void onPlayerExecute(WorldModel world);
+	void onGoalieExecute(WorldModel world);
+	void onCoachExecute(WorldModel world);
 };
 
 #endif /* KICKOFFL_H_ */
