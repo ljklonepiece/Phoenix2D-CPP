@@ -44,13 +44,20 @@ class Player {
 	std::string team;
 	int uniform_number;
 	int simulation_time;
+	bool goalie;
 public:
 	Player(std::string name, std::string position, int simulation_time);
 	Player(std::string name, std::string position, int simulation_time, Position player_position, Vector2D player_velocity);
 	~Player();
 	Position getPosition();
 	std::string getTeam();
+	int getUniformNumber();
 	Vector2D getVelocity();
+	bool isGoalie();
+	bool isPointing();
+	double getPointingDirection();
+	bool isKicking();
+	bool isTackling();
 };
 
 #endif /* PLAYER_H_ */

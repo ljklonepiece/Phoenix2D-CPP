@@ -43,16 +43,22 @@ Player::Player(std::string name, std::string position, int simulation_time) {
 	pointing = false;
 	kicking = false;
 	tackling = false;
+	goalie = false;
 	std::vector<std::string> tokens;
 	std::stringstream ss_name(name); // = std::stringstream(name);
 	std::string token;
 	while (std::getline(ss_name, token, ' ')) {
 		tokens.push_back(token);
 	}
-	if (tokens[1].compare(Self::TEAM_NAME) == 0) {
+	if (Controller::AGENT_TYPE == 't') {
+		team = tokens[1];
+	} else if (tokens[1].compare(Self::TEAM_NAME) == 0) {
 		team = "our";
 	} else {
 		team = "opp";
+	}
+	if (tokens.size() > 3) {
+		goalie = true;
 	}
 	uniform_number = atoi(tokens[2].c_str());
 	this->simulation_time = simulation_time;
@@ -109,6 +115,7 @@ Player::Player(std::string name, std::string position, int simulation_time, Posi
 	pointing = false;
 	kicking = false;
 	tackling = false;
+	goalie = false;
 	std::vector<std::string> tokens;
 	std::stringstream ss_name(name); // = std::stringstream(name);
 	std::string token;
@@ -132,6 +139,15 @@ Player::Player(std::string name, std::string position, int simulation_time, Posi
 			team = "opp";
 		}
 		uniform_number = atoi(tokens[2].c_str());
+		break;
+	case 4: //goalie
+		if (tokens[1].compare(Self::TEAM_NAME) == 0) {
+			team = "our";
+		} else {
+			team = "opp";
+		}
+		uniform_number = atoi(tokens[2].c_str());
+		goalie = true;
 		break;
 	default:
 		break;
@@ -233,6 +249,30 @@ std::string Player::getTeam() {
 	return team;
 }
 
+int Player::getUniformNumber() {
+	return uniform_number;
+}
+
 Vector2D Player::getVelocity() {
 	return Vector2D::getVector2DWithXAndY(vx, vy);
+}
+
+bool Player::isGoalie() {
+	return goalie;
+}
+
+bool Player::isPointing() {
+	return pointing;
+}
+
+double Player::getPointingDirection() {
+	return pointDir;
+}
+
+bool Player::isKicking() {
+	return kicking;
+}
+
+bool Player::isTackling() {
+	return tackling;
 }

@@ -22,6 +22,16 @@
 #include "Game.h"
 #include "Commands.h"
 #include "BeforeKickOff.h"
+#include "CornerKickL.h"
+#include "CornerKickR.h"
+#include "FreeKickL.h"
+#include "FreeKickR.h"
+#include "GoalKickL.h"
+#include "GoalKickR.h"
+#include "KickInL.h"
+#include "KickInR.h"
+#include "KickOffL.h"
+#include "KickOffR.h"
 #include "PlayOn.h"
 #include <map>
 #include "PlayMode.h"
@@ -53,6 +63,16 @@ int main(int argc, char **argv) {
 		}
 	} else {
 		play_modes["before_kick_off"] = new BeforeKickOff(commands);
+		play_modes["corner_kick_l"]   = new CornerKickL(commands);
+		play_modes["corner_kick_r"]   = new CornerKickR(commands);
+		play_modes["free_kick_l"]     = new FreeKickL(commands);
+		play_modes["free_kick_r"]     = new FreeKickR(commands);
+		play_modes["goal_kick_l"]     = new GoalKickL(commands);
+		play_modes["goal_kick_r"]     = new GoalKickR(commands);
+		play_modes["kick_in_l"]       = new KickInL(commands);
+		play_modes["kick_in_r"]       = new KickInR(commands);
+		play_modes["kick_off_l"]      = new KickOffL(commands);
+		play_modes["kick_off_r"]      = new KickOffR(commands);
 		play_modes["play_on"]         = new PlayOn(commands);
 		int i = 0;
 		while (Game::nextCycle() && i < 2400) {
