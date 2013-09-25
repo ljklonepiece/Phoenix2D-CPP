@@ -32,9 +32,13 @@ public:
 	WorldModel(std::vector<Player> players, Ball ball);
 	~WorldModel();
 	std::vector<Player*> getPlayers();
+	std::vector<Player*> getPlayersOrderedByDistanceTo(Position position);
 	std::vector<Player*> getOurPlayers();
+	std::vector<Player*> getOurPlayersOrderedByDistanceTo(Position position);
 	std::vector<Player*> getOppPlayers();
+	std::vector<Player*> getOppPlayersOrderedByDistanceTo(Position position);
 	std::vector<Player*> getUndPlayers();
+	std::vector<Player*> getUndPlayersOrderedByDistanceTo(Position position);
 	Ball* getBall();
 };
 

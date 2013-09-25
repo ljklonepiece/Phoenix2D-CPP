@@ -18,26 +18,13 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Object.h"
+#ifndef LOGGER_H_
+#define LOGGER_H_
 
-Object::Object(double distance, double direction, int simulation_time) {
-	this->distance = distance;
-	this->direction = direction;
-	this->simulation_time = simulation_time;
-}
+class Logger {
+public:
+	Logger();
+	~Logger();
+};
 
-Object::~Object() {
-
-}
-
-double Object::getDistance() {
-	return distance;
-}
-
-double Object::getDirection() {
-	return direction;
-}
-
-int Object::getSimulationTime() {
-	return simulation_time;
-}
+#endif /* LOGGER_H_ */

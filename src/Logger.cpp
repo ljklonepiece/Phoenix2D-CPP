@@ -18,20 +18,4 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OBJECT_H_
-#define OBJECT_H_
-
-class Object {
-protected:
-	double distance;
-	double direction;
-	int simulation_time;
-public:
-	Object(double distance, double direction, int simulation_time);
-	~Object();
-	double getDistance();
-	double getDirection();
-	int getSimulationTime();
-};
-
-#endif /* OBJECT_H_ */
+#include "Logger.h"
