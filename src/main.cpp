@@ -37,6 +37,7 @@
 #include "PlayMode.h"
 #include "World.h"
 #include "Trainer.h"
+#include "Self.h"
 
 int main(int argc, char **argv) {
 	const char *team_name, *hostname;
@@ -52,8 +53,8 @@ int main(int argc, char **argv) {
 	}
 	Controller controller(team_name, agent_type, hostname);
 	controller.connect();
-	Commands *commands = controller.getCommands();
-	World *world = controller.getWorld();
+	Commands* commands = controller.getCommands();
+	World* world = controller.getWorld();
 	std::map<std::string, PlayMode*> play_modes;
 	//before_kick_off corner_kick_l corner_kick_r free_kick_l free_kick_r goal_kick_l goal_kick_r kick_in_l kick_in_r kick_off_l kick_off_r play_on
 	if (Controller::AGENT_TYPE == 't') {

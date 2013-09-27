@@ -20,7 +20,7 @@
 
 #include "Command.h"
 
-Command::Command(std::string command, int weight, Command::COMMAND_TYPE type, void *arg_0, void *arg_1) {
+Command::Command(std::string command, int weight, Command::COMMAND_TYPE type, void* ... args) {
 	this->command = command;
 	this->weight = weight;
 	this->type = type;
@@ -29,8 +29,8 @@ Command::Command(std::string command, int weight, Command::COMMAND_TYPE type, vo
 	case DASH:
 	case KICK:
 	case POINT:
-		double_arg_0 = *((double *)arg_0);
-		double_arg_1 = *((double *)arg_1);
+		double_arg_0 = *((double *)args[0]);
+		double_arg_1 = *((double *)args[1]);
 		string_arg_0 = "";
 		string_arg_1 = "";
 		bool_arg_0 = false;
@@ -39,7 +39,7 @@ Command::Command(std::string command, int weight, Command::COMMAND_TYPE type, vo
 	case TURN:
 	case CATCH:
 	case TURN_NECK:
-		double_arg_0 = *((double *)arg_0);
+		double_arg_0 = *((double *)args[0]);
 		double_arg_1 = 0.0;
 		string_arg_0 = "";
 		string_arg_1 = "";
@@ -50,18 +50,18 @@ Command::Command(std::string command, int weight, Command::COMMAND_TYPE type, vo
 	case CHANGE_VIEW:
 		double_arg_0 = 0.0;
 		double_arg_1 = 0.0;
-		string_arg_0 = *((std::string *)arg_0);
+		string_arg_0 = *((std::string *)args[0]);
 		string_arg_1 = "";
 		bool_arg_0 = false;
 		bool_arg_1 = false;
 		break;
 	case TACKLE:
-		double_arg_0 = *((double *)arg_0);
+		double_arg_0 = *((double *)args[0]);
 		double_arg_1 = 0.0;
 		string_arg_0 = "";
 		string_arg_1 = "";
 		bool_arg_0 = false;
-		bool_arg_1 = *((bool *)arg_1);
+		bool_arg_1 = *((bool *)args[1]);
 		break;
 	default:
 		double_arg_0 = 0.0;

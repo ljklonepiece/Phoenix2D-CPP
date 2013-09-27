@@ -39,6 +39,7 @@ void World::updateWorld(std::vector<Player> players, std::vector<Ball> ball) {
 	}
 	std::map<int, Player> new_players;
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
+		//int id = player_id++;
 		new_players.insert(std::pair<int, Player>(player_id++, *it));
 		//new_players[player_id++] = (Player)(*it);
 	}

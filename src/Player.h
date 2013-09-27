@@ -45,6 +45,8 @@ class Player {
 	int uniform_number;
 	int simulation_time;
 	bool goalie;
+	Player* bound;
+	int player_id;
 public:
 	Player(std::string name, std::string position, int simulation_time);
 	Player(std::string name, std::string position, int simulation_time, Position player_position, Vector2D player_velocity);
@@ -58,6 +60,10 @@ public:
 	double getPointingDirection();
 	bool isKicking();
 	bool isTackling();
+	void boundTo(Player* player);
+	Player* getBound();
+	void setPlayerId(int player_id);
+	int getPlayerId();
 };
 
 #endif /* PLAYER_H_ */

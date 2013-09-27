@@ -95,6 +95,8 @@ Player::Player(std::string name, std::string position, int simulation_time) {
 	default:
 		break;
 	}
+	player_id = -1;
+	bound = 0;
 }
 
 Player::Player(std::string name, std::string position, int simulation_time, Position player_position, Vector2D player_velocity) {
@@ -235,6 +237,8 @@ Player::Player(std::string name, std::string position, int simulation_time, Posi
 	vx = player_velocity.getXComponent() + vrx;
 	vy = player_velocity.getYComponent() + vry;
 	this->simulation_time = simulation_time;
+	player_id = -1;
+	bound = 0;
 }
 
 Player::~Player() {
@@ -275,4 +279,20 @@ bool Player::isKicking() {
 
 bool Player::isTackling() {
 	return tackling;
+}
+
+void Player::boundTo(Player* player) {
+	bound = player;
+}
+
+Player* Player::getBound() {
+	return bound;
+}
+
+void Player::setPlayerId(int player_id) {
+	this->player_id = player_id;
+}
+
+int Player::getPlayerId() {
+	return player_id;
 }

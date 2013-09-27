@@ -36,6 +36,7 @@ class Ball {
 	double vy;
 	int simulation_time;
 	bool inSightRange;
+	Ball* bound;
 public:
 	Ball(int simulation_time);
 	Ball(std::string position, int simulation_time);
@@ -44,6 +45,8 @@ public:
 	Position getPosition();
 	Vector2D getVelocity();
 	bool isInSightRange();
+	void boundTo(Ball* ball);
+	Ball* getBound();
 };
 
 #endif /* BALL_H_ */

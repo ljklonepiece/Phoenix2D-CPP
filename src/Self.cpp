@@ -28,6 +28,8 @@ bool   Self::positioned = false;
 double Self::x          = 0.0;
 double Self::y          = 0.0;
 double Self::theta      = 0.0;
+std::vector<Command*> Self::last_commands_sent;
+
 double Self::PI         = 3.14159265359;
 
 std::string Self::TEAM_NAME                            = "Phoenix2D";
@@ -310,6 +312,17 @@ void Self::changePlayerType(int type) {
 }
 
 void Self::localize(std::vector<Flag> flags) {
+	for (std::vector<Command*>::iterator it = Self::last_commands_sent.begin(); it != Self::last_commands_sent.end(); ++it) {
+		switch ((*it)->getCommandType()) {
+		case Command::MOVE:
+			Self::x = (*it)->getMoveX();
+			Self::y = (*it)->getMoveY();
+			Self::positioned = true;
+			break;
+		default:
+			break;
+		}
+	}
 	if (!Self::positioned) {
 		return;
 	}
@@ -430,7 +443,21 @@ void Self::localize(std::vector<Flag> flags) {
 }
 
 void Self::localize() {
-
+	for (std::vector<Command*>::iterator it = Self::last_commands_sent.begin(); it != Self::last_commands_sent.end(); ++it) {
+		switch ((*it)->getCommandType()) {
+		case Command::MOVE:
+			Self::x = (*it)->getMoveX();
+			Self::y = (*it)->getMoveY();
+			Self::positioned = true;
+			break;
+		case Command::TURN:
+			break;
+		case Command::DASH:
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 Position Self::getPosition() {
@@ -441,8 +468,6 @@ Vector2D Self::getVelocity() {
 	return Vector2D::getVector2DWithMagnitudeAndDirection(Self::AMOUNT_OF_SPEED, Self::DIRECTION_OF_SPEED);
 }
 
-void Self::onMoveCommand(double x, double y) {
-	Self::x = x;
-	Self::y = y;
-	Self::positioned = true;
+void Self::setLastCommandsSet(std::vector<Command*> last_commands_sent) {
+	Self::last_commands_sent = last_commands_sent;
 }

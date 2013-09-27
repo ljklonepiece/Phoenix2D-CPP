@@ -39,8 +39,9 @@ void Commands::move(double x, double y) {
 	ss << "(move " << std::setprecision(4) << x << " " << y << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::MOVE, (void *)&x, (void *)&y));
-	Self::onMoveCommand(x, y);
+	Command new_command(command, 1, Command::MOVE, (void *)&x, (void *)&y);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::turn(double moment) {
@@ -48,7 +49,9 @@ void Commands::turn(double moment) {
 	ss << "(turn " << std::setprecision(4) << moment << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::TURN, (void *)&moment, 0));
+	Command new_command(command, 1, Command::TURN, (void *)&moment);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::turnNeck(double moment) {
@@ -56,7 +59,9 @@ void Commands::turnNeck(double moment) {
 	ss << "(turn_neck " << std::setprecision(4) << moment << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 0, Command::TURN_NECK, (void *)&moment, 0));
+	Command new_command(command, 1, Command::TURN_NECK, (void *)&moment);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::dash(double power, double direction) {
@@ -64,12 +69,16 @@ void Commands::dash(double power, double direction) {
 	ss << "(dash " << std::setprecision(4) << power << " " << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::DASH, (void *)&power, (void *)&direction));
+	Command new_command(command, 1, Command::DASH, (void *)&power);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::say(std::string message) {
 	std::string command = "(say " + message + ")";
-	commands_to_send.push_back(Command(command, 1, Command::SAY, (void *)&message, 0));
+	Command new_command(command, 1, Command::SAY, (void *)&message);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::catchBall(double direction) {
@@ -77,7 +86,9 @@ void Commands::catchBall(double direction) {
 	ss << "(catch " << std::setprecision(4) << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::CATCH, (void *)&direction, 0));
+	Command new_command(command, 1, Command::CATCH, (void *)&direction);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::kick(double power, double direction) {
@@ -85,7 +96,9 @@ void Commands::kick(double power, double direction) {
 	ss << "(kick " << std::setprecision(4) << power << " " << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::KICK, (void *)&power, (void *)&direction));
+	Command new_command(command, 1, Command::KICK, (void *)&power, (void *)&direction);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::tackle(double power, bool willToFoul) {
@@ -93,7 +106,9 @@ void Commands::tackle(double power, bool willToFoul) {
 	ss << "(tackle " << std::setprecision(4) << power << (willToFoul ? " true" : " false") << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::TACKLE, (void *)&power, (void *)willToFoul));
+	Command new_command(command, 1, Command::TACKLE, (void *)&power, (void *)willToFoul);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::pointTo(double distance, double direction) {
@@ -101,12 +116,16 @@ void Commands::pointTo(double distance, double direction) {
 	ss << "(pointto " << std::setprecision(4) << distance << " " << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::POINT, (void *)&distance, (void *)&direction));
+	Command new_command(command, 1, Command::POINT, (void *)&distance, (void *)&direction);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::changeView(std::string width) {
 	std::string command = "(change_view " + width + ")";
-	commands_to_send.push_back(Command(command, 1, Command::CHANGE_VIEW, (void *)&width, 0));
+	Command new_command(command, 1, Command::CHANGE_VIEW, (void *)&width);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::moveObject(std::string object, double x, double y) {
@@ -114,47 +133,54 @@ void Commands::moveObject(std::string object, double x, double y) {
 	ss << "(move " << object << " " << std::setprecision(4) << x << " " << y << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	commands_to_send.push_back(Command(command, 1, Command::MOVE_OBJECT, 0, 0));
+	Command new_command(command, 1, Command::MOVE_OBJECT);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::changeMode(std::string mode) {
 	std::string command = "(change_mode " + mode + ")";
-	commands_to_send.push_back(Command(command, 1, Command::CHANGE_MODE, (void *)&mode, 0));
+	Command new_command(command, 1, Command::CHANGE_MODE, (void *)&mode);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::start() {
 	std::string command = "(start)";
-	commands_to_send.push_back(Command(command, 1, Command::START, 0, 0));
+	Command new_command(command, 1, Command::START);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 void Commands::recover() {
 	std::string command = "(recover)";
-	commands_to_send.push_back(Command(command, 1, Command::RECOVER, 0, 0));
+	Command new_command(command, 1, Command::RECOVER);
+	commands_to_send.push_back(&new_command);
+	commands_history.push_back(new_command);
 }
 
 int Commands::sendCommands() {
-	int commands_sent = 0;
+	int commands_sent_counter = 0;
+	commands_sent.clear();
 	if (commands_to_send.size() > 0) {
 		std::string message = "";
 		int weight = 0;
 		do {
-			Command *command_to_send = &commands_to_send.at(0);
+			Command* command_to_send = commands_to_send.front();
 			weight += command_to_send->getWeight();
 			if (weight < 2) {
 				message += command_to_send->getCommand();
-				switch (command_to_send->getCommandType()) {
-				case Command::MOVE:
-					Self::onMoveCommand(command_to_send->getMoveX(), command_to_send->getMoveY());
-					break;
-				default:
-					break;
-				}
+				commands_sent.push_back(command_to_send);
 				commands_to_send.erase(commands_to_send.begin());
-				commands_sent++;
+				commands_sent_counter++;
 			}
 		} while (weight < 2 && commands_to_send.size() > 0);
 		connect->sendMessage(message);
 	}
 	commands_to_send.clear();
+	return commands_sent_counter;
+}
+
+std::vector<Command*> Commands::getCommandsSent() {
 	return commands_sent;
 }

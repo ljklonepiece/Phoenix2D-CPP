@@ -36,6 +36,7 @@ Ball::Ball(int simulation_time) {
 	vy = 0.0;
 	this->simulation_time = simulation_time;
 	inSightRange = false;
+	bound = 0;
 }
 
 Ball::Ball(std::string position, int simulation_time) {
@@ -65,6 +66,7 @@ Ball::Ball(std::string position, int simulation_time) {
 	}
 	this->simulation_time = simulation_time;
 	inSightRange = true;
+	bound = 0;
 }
 
 Ball::Ball(std::string position, int simulation_time, Position player_position, Vector2D player_velocity) {
@@ -119,6 +121,7 @@ Ball::Ball(std::string position, int simulation_time, Position player_position, 
 	vy = player_velocity.getYComponent() + vry;
 	this->simulation_time = simulation_time;
 	inSightRange = true;
+	bound = 0;
 }
 
 Ball::~Ball() {
@@ -135,4 +138,12 @@ Vector2D Ball::getVelocity() {
 
 bool Ball::isInSightRange() {
 	return inSightRange;
+}
+
+void Ball::boundTo(Ball* ball) {
+	bound = ball;
+}
+
+Ball* Ball::getBound() {
+	return bound;
 }

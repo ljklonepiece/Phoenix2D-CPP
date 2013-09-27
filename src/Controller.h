@@ -29,13 +29,15 @@ class Server;
 class Parser;
 class Commands;
 class World;
+class Self;
 
 class Controller {
-	Connect *c;
-	Reader *reader;
-	Server *server;
-	Commands *commands;
-	World *world;
+	Connect* c;
+	Reader* reader;
+	Server* server;
+	Commands* commands;
+	World* world;
+	Self* self;
 	bool connected;
 	std::string team_name;
 	std::string hostname;
@@ -47,8 +49,9 @@ public:
 	bool isConnected();
 	void reconnect();
 	void disconnect();
-	Commands *getCommands();
-	World *getWorld();
+	Commands* getCommands();
+	World* getWorld();
+	Self* getSelf();
 };
 
 #endif /* CONTROLLER_H_ */

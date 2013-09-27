@@ -29,7 +29,9 @@ class Connect;
 
 class Commands {
 	Connect *connect;
-	std::vector<Command> commands_to_send;
+	std::vector<Command> commands_history;
+	std::vector<Command*> commands_to_send;
+	std::vector<Command*> commands_sent;
 public:
 	Commands(Connect *connect);
 	~Commands();
@@ -49,6 +51,7 @@ public:
 	void recover();
 	//void changePlayerType()
 	int sendCommands();
+	std::vector<Command*> getCommandsSent();
 };
 
 #endif /* COMMANDS_H_ */

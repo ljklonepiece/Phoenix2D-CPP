@@ -42,12 +42,14 @@ Controller::Controller(const char *teamName, char agentType, const char *hostnam
 	server = 0;
 	commands = 0;
 	world = 0;
+	self = 0;
 }
 
 Controller::~Controller() {
 	if (world) delete world;
 	if (commands) delete commands;
 	if (reader) delete reader;
+	if (self) delete self;
 	if (server) delete server;
 	if (c) delete c;
 }
@@ -111,7 +113,7 @@ void Controller::connect() {
 		message = c->receiveMessage(); //server_params
 		server = new Server(message);
 		message = c->receiveMessage(); //player_params
-		Self *self = new Self(message, team_name, unum, side);
+		self = new Self(message, team_name, unum, side);
 		for (int i = 0; i < Self::PLAYER_TYPES; i++) {
 			message = c->receiveMessage(); //player_type
 			self->addPlayerType(message);
@@ -152,13 +154,17 @@ void Controller::disconnect() {
 	connected = false;
 }
 
-Commands *Controller::getCommands() {
+Commands* Controller::getCommands() {
 	if (!commands) {
 		commands = new Commands(c);
 	}
 	return commands;
 }
 
-World *Controller::getWorld() {
+World* Controller::getWorld() {
 	return world;
+}
+
+Self* Controller::getSelf() {
+	return self;
 }

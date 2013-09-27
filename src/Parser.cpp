@@ -33,6 +33,8 @@
 #include "World.h"
 #include "Ball.h"
 
+bool see_received = false;
+
 pthread_cond_t Parser::SEE_COND = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t Parser::SEE_MUTEX = PTHREAD_MUTEX_INITIALIZER;
 
@@ -77,6 +79,10 @@ void *Parser::process_sense_body(void *arg) {
 		}
 	}
 	success = pthread_mutex_unlock(&Parser::SEE_MUTEX);
+	if (!see_received) {
+		Parser::self->localize();
+		see_received = false;
+	}
 	if (success) {
 		std::cerr << "Parser::process_sense_body(void*) -> cannot unlock mutex" << std::endl;
 	}
@@ -88,6 +94,7 @@ void *Parser::process_sense_body(void *arg) {
 
 void *Parser::process_see(void *arg) {
 	Parser::processing_see = true;
+	see_received = true;
 	int simulation_time = Game::SIMULATION_TIME;
 	Position player_position = Self::getPosition();
 	int success = pthread_mutex_lock(&Parser::SEE_MUTEX);
@@ -142,7 +149,6 @@ void *Parser::process_see(void *arg) {
 
 Parser::~Parser() {
 	if (Parser::game) delete Parser::game;
-	if (Parser::self) delete Parser::self;
 }
 
 void Parser::parseMessage(std::string message) {

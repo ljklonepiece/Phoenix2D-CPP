@@ -29,6 +29,8 @@
 #include "Position.h"
 #include "Vector2D.h"
 
+class Command;
+
 class Self {
 	int    *types_id;
 	double *player_speed_max;
@@ -53,6 +55,7 @@ class Self {
 	static double x;
 	static double y;
 	static double theta;
+	static std::vector<Command*> last_commands_sent;
 public:
 	static double PI;
 	static std::string TEAM_NAME;
@@ -139,7 +142,7 @@ public:
 	void localize();
 	static Position getPosition();
 	static Vector2D getVelocity();
-	static void onMoveCommand(double x, double y);
+	static void setLastCommandsSet(std::vector<Command*> last_commands_sent);
 };
 
 #endif /* SELF_H_ */
