@@ -1,0 +1,15 @@
+[0.5]
+
+  * Trainer automatic runs: a script interpreter is added to Trainer class.
+    The syntaxis of the script is:
+    - DO <int>: repeats <int> times the next commands until the corresponding
+      END_DO
+    - END_DO: closes the corresponding DO block.
+    - WAIT <int>: the trainer does nothing for the next <int> cycles
+    - CHANGE_TO <string>: changes the current play mode to <string> play mode
+    - RECOVER: performs the (recover) command on the simulator
+    
+  * Added buffers to sense body data.  By default the buffer maximum size is
+    8, and it can be accessed by Self::getStaminaAtTime(int time), where time
+    is the offset in time.  For example, to access the stamina 2 cycles before
+    the current cycle you must call Self::getStaminaAtTime(2);

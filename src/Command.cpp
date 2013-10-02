@@ -72,6 +72,7 @@ Command::Command(std::string command, int weight, Command::COMMAND_TYPE type, vo
 		bool_arg_1 = false;
 		break;
 	}
+	status = CREATED;
 }
 
 Command::~Command() {
@@ -148,4 +149,12 @@ double Command::getPointDirection() {
 
 std::string Command::getChangeViewWidth() {
 	return string_arg_0;
+}
+
+void Command::changeStatusTo(Command::STATUS status) {
+	this->status = status;
+}
+
+Command::STATUS Command::getCommandStatus() {
+	return status;
 }

@@ -25,6 +25,11 @@
 
 class Command {
 public:
+	enum STATUS {
+		CREATED,
+		SENT,
+		EXECUTED
+	};
 	enum COMMAND_TYPE {
 		//commands used by players and goalies
 		MOVE,
@@ -50,6 +55,7 @@ public:
 	std::string getCommand();
 	int getWeight();
 	Command::COMMAND_TYPE getCommandType();
+	Command::STATUS getCommandStatus();
 	double getDashPower();
 	double getDashDirection();
 	double getTurnMoment();
@@ -65,10 +71,12 @@ public:
 	double getPointDistance();
 	double getPointDirection();
 	std::string getChangeViewWidth();
+	void changeStatusTo(Command::STATUS status);
 private:
 	std::string command;
 	int weight;
 	Command::COMMAND_TYPE type;
+	Command::STATUS status;
 	double double_arg_0;
 	double double_arg_1;
 	std::string string_arg_0;

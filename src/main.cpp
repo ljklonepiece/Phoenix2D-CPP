@@ -62,6 +62,7 @@ int main(int argc, char **argv) {
 		while (Game::nextCycle() && trainer.continueExecution()) {
 			trainer.execute(world->getWorldModel());
 		}
+		std::cout << "Trainer out" << std::endl;
 	} else {
 		play_modes["before_kick_off"] = new BeforeKickOff(commands);
 		play_modes["corner_kick_l"]   = new CornerKickL(commands);
@@ -98,6 +99,7 @@ int main(int argc, char **argv) {
 			delete it->second;
 			play_modes.erase(it);
 		}
+		std::cout << "Agent bye" << std::endl;
 	}
 	controller.disconnect();
 	return 0;

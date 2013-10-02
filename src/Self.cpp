@@ -23,12 +23,43 @@
 #include <sstream>
 #include <cmath>
 #include <algorithm>
+#include "Command.h"
+
+int buffer_max_capacity = 8;
 
 bool   Self::positioned = false;
 double Self::x          = 0.0;
 double Self::y          = 0.0;
 double Self::theta      = 0.0;
-std::vector<Command*> Self::last_commands_sent;
+std::vector<Command*>   Self::last_commands_sent;
+std::deque<std::string> Self::view_mode_width_deque;
+std::deque<std::string> Self::view_mode_quality_deque;
+std::deque<double>      Self::stamina_deque;
+std::deque<double>      Self::effort_deque;
+std::deque<double>      Self::stamina_capacity_deque;
+std::deque<double>      Self::amount_of_speed_deque;
+std::deque<double>      Self::direction_of_speed_deque;
+std::deque<double>      Self::head_angle_deque;
+std::deque<int>         Self::kick_count_deque;
+std::deque<int>         Self::dash_count_deque;
+std::deque<int>         Self::turn_count_deque;
+std::deque<int>         Self::say_count_deque;
+std::deque<int>         Self::turn_neck_count_deque;
+std::deque<int>         Self::catch_count_deque;
+std::deque<int>         Self::move_count_deque;
+std::deque<int>         Self::change_view_count_deque;
+std::deque<int>         Self::arm_movable_deque;
+std::deque<int>         Self::arm_expires_deque;
+std::deque<double>      Self::arm_dist_deque;
+std::deque<double>      Self::arm_dir_deque;
+std::deque<int>         Self::arm_count_deque;
+std::deque<std::string> Self::focus_target_deque;
+std::deque<int>         Self::focus_count_deque;
+std::deque<int>         Self::tackle_expires_deque;
+std::deque<int>         Self::tackle_count_deque;
+std::deque<std::vector<std::string> > Self::collisions_deque;
+std::deque<int>         Self::foul_charged_deque;
+std::deque<std::string> Self::foul_card_deque;
 
 double Self::PI         = 3.14159265359;
 
@@ -256,39 +287,203 @@ std::string Self::getParameter(std::string parameter) {
 void Self::processSenseBody(std::string sense_body) {
 	boost::cmatch match;
 	if (boost::regex_match(sense_body.c_str(), match, this->sense_body)) {
+		//view_mode_quality
 		Self::VIEW_MODE_QUALITY = match[1];
+		if (Self::view_mode_quality_deque.size() == buffer_max_capacity) Self::view_mode_quality_deque.pop_back();
+		Self::view_mode_quality_deque.push_front(Self::VIEW_MODE_QUALITY);
+		//view_mode_width
 		Self::VIEW_MODE_WIDTH = match[2];
+		if (Self::view_mode_width_deque.size() == buffer_max_capacity) Self::view_mode_width_deque.pop_back();
+		Self::view_mode_width_deque.push_front(Self::VIEW_MODE_WIDTH);
+		//stamina
 		Self::STAMINA = atof((std::string() + match[3]).c_str());
+		if (Self::stamina_deque.size() == buffer_max_capacity) Self::stamina_deque.pop_back();
+		Self::stamina_deque.push_front(Self::STAMINA);
+		//effort
 		Self::EFFORT = atof((std::string() + match[4]).c_str());
+		if (Self::effort_deque.size() == buffer_max_capacity) Self::effort_deque.pop_back();
+		Self::effort_deque.push_front(Self::EFFORT);
+		//stamina_capacity
 		Self::STAMINA_CAPACITY = atof((std::string() + match[5]).c_str());
+		if (Self::stamina_capacity_deque.size() == buffer_max_capacity) Self::stamina_capacity_deque.pop_back();
+		Self::stamina_capacity_deque.push_front(Self::STAMINA_CAPACITY);
+		//amount_of_speed
 		Self::AMOUNT_OF_SPEED = atof((std::string() + match[6]).c_str());
+		if (Self::amount_of_speed_deque.size() == buffer_max_capacity) Self::amount_of_speed_deque.pop_back();
+		Self::amount_of_speed_deque.push_front(Self::AMOUNT_OF_SPEED);
+		//direction_of_speed
 		Self::DIRECTION_OF_SPEED = atof((std::string() + match[7]).c_str());
+		if (Self::direction_of_speed_deque.size() == buffer_max_capacity) Self::direction_of_speed_deque.pop_back();
+		Self::direction_of_speed_deque.push_front(Self::DIRECTION_OF_SPEED);
+		//head_angle
 		Self::HEAD_ANGLE = atof((std::string() + match[8]).c_str());
+		if (Self::head_angle_deque.size() == buffer_max_capacity) Self::head_angle_deque.pop_back();
+		Self::head_angle_deque.push_front(Self::HEAD_ANGLE);
+		//kick_count
 		Self::KICK_COUNT = atoi((std::string() + match[9]).c_str());
+		if (Self::KICK_COUNT > Self::getKickCountAtTime(0)) {
+			for (std::vector<Command*>::iterator it = Self::last_commands_sent.begin(); it != Self::last_commands_sent.end(); ++it) {
+				if ((*it)->getCommandType() == Command::KICK) {
+					(*it)->changeStatusTo(Command::EXECUTED);
+					break;
+				}
+			}
+		}
+		if (Self::kick_count_deque.size() == buffer_max_capacity) Self::kick_count_deque.pop_back();
+		Self::kick_count_deque.push_front(Self::KICK_COUNT);
+		//dash_count
 		Self::DASH_COUNT = atoi((std::string() + match[10]).c_str());
+		if (Self::DASH_COUNT > Self::getDashCountAtTime(0)) {
+			for (std::vector<Command*>::iterator it = Self::last_commands_sent.begin(); it != Self::last_commands_sent.end(); ++it) {
+				if ((*it)->getCommandType() == Command::DASH) {
+					(*it)->changeStatusTo(Command::EXECUTED);
+					break;
+				}
+			}
+		}
+		if (Self::dash_count_deque.size() == buffer_max_capacity) Self::dash_count_deque.pop_back();
+		Self::dash_count_deque.push_front(Self::DASH_COUNT);
+		//turn_count
 		Self::TURN_COUNT = atoi((std::string() + match[11]).c_str());
+		if (Self::TURN_COUNT > Self::getTurnCountAtTime(0)) {
+			for (std::vector<Command*>::iterator it = Self::last_commands_sent.begin(); it != Self::last_commands_sent.end(); ++it) {
+				if ((*it)->getCommandType() == Command::TURN) {
+					(*it)->changeStatusTo(Command::EXECUTED);
+					break;
+				}
+			}
+		}
+		if (Self::turn_count_deque.size() == buffer_max_capacity) Self::turn_count_deque.pop_back();
+		Self::turn_count_deque.push_front(Self::TURN_COUNT);
+		//say_count
 		Self::SAY_COUNT = atoi((std::string() + match[12]).c_str());
+		if (Self::SAY_COUNT > Self::getSayCountAtTime(0)) {
+			for (std::vector<Command*>::iterator it = Self::last_commands_sent.begin(); it != Self::last_commands_sent.end(); ++it) {
+				if ((*it)->getCommandType() == Command::SAY) {
+					(*it)->changeStatusTo(Command::EXECUTED);
+					break;
+				}
+			}
+		}
+		if (Self::say_count_deque.size() == buffer_max_capacity) Self::say_count_deque.pop_back();
+		Self::say_count_deque.push_front(Self::SAY_COUNT);
+		//turn_neck_count
 		Self::TURN_NECK_COUNT = atoi((std::string() + match[13]).c_str());
+		if (Self::TURN_NECK_COUNT > Self::getTurnNeckCountAtTime(0)) {
+			for (std::vector<Command*>::iterator it = Self::last_commands_sent.begin(); it != Self::last_commands_sent.end(); ++it) {
+				if ((*it)->getCommandType() == Command::TURN_NECK) {
+					(*it)->changeStatusTo(Command::EXECUTED);
+					break;
+				}
+			}
+		}
+		if (Self::turn_neck_count_deque.size() == buffer_max_capacity) Self::turn_neck_count_deque.pop_back();
+		Self::turn_neck_count_deque.push_front(Self::TURN_NECK_COUNT);
+		//catch_count
 		Self::CATCH_COUNT = atoi((std::string() + match[14]).c_str());
+		if (Self::CATCH_COUNT > Self::getCatchCountAtTime(0)) {
+			for (std::vector<Command*>::iterator it = Self::last_commands_sent.begin(); it != Self::last_commands_sent.end(); ++it) {
+				if ((*it)->getCommandType() == Command::CATCH) {
+					(*it)->changeStatusTo(Command::EXECUTED);
+					break;
+				}
+			}
+		}
+		if (Self::catch_count_deque.size() == buffer_max_capacity) Self::catch_count_deque.pop_back();
+		Self::catch_count_deque.push_front(Self::CATCH_COUNT);
+		//move_count
 		Self::MOVE_COUNT = atoi((std::string() + match[15]).c_str());
+		if (Self::MOVE_COUNT > Self::getMoveCountAtTime(0)) {
+			for (std::vector<Command*>::iterator it = Self::last_commands_sent.begin(); it != Self::last_commands_sent.end(); ++it) {
+				if ((*it)->getCommandType() == Command::MOVE) {
+					(*it)->changeStatusTo(Command::EXECUTED);
+					break;
+				}
+			}
+		}
+		if (Self::move_count_deque.size() == buffer_max_capacity) Self::move_count_deque.pop_back();
+		Self::move_count_deque.push_front(Self::MOVE_COUNT);
+		//change_view_count
 		Self::CHANGE_VIEW_COUNT = atoi((std::string() + match[16]).c_str());
+		if (Self::CHANGE_VIEW_COUNT > Self::getChangeViewCountAtTime(0)) {
+			for (std::vector<Command*>::iterator it = Self::last_commands_sent.begin(); it != Self::last_commands_sent.end(); ++it) {
+				if ((*it)->getCommandType() == Command::CHANGE_VIEW) {
+					(*it)->changeStatusTo(Command::EXECUTED);
+					break;
+				}
+			}
+		}
+		if (Self::change_view_count_deque.size() == buffer_max_capacity) Self::change_view_count_deque.pop_back();
+		Self::change_view_count_deque.push_front(Self::CHANGE_VIEW_COUNT);
+		//arm_movable
 		Self::ARM_MOVABLE = atoi((std::string() + match[17]).c_str());
+		if (Self::arm_movable_deque.size() == buffer_max_capacity) Self::arm_movable_deque.pop_back();
+		Self::arm_movable_deque.push_front(Self::ARM_MOVABLE);
+		//arm_expires
 		Self::ARM_EXPIRES = atoi((std::string() + match[18]).c_str());
+		if (Self::arm_expires_deque.size() == buffer_max_capacity) Self::arm_expires_deque.pop_back();
+		Self::arm_expires_deque.push_front(Self::ARM_EXPIRES);
+		//arm_dist
 		Self::ARM_DIST = atof((std::string() + match[19]).c_str());
+		if (Self::arm_dist_deque.size() == buffer_max_capacity) Self::arm_dist_deque.pop_back();
+		Self::arm_dist_deque.push_front(Self::ARM_DIST);
+		//arm_dir
 		Self::ARM_DIR = atof((std::string() + match[20]).c_str());
+		if (Self::arm_dir_deque.size() == buffer_max_capacity) Self::arm_dir_deque.pop_back();
+		Self::arm_dir_deque.push_front(Self::ARM_DIR);
+		//arm_count
 		Self::ARM_COUNT = atoi((std::string() + match[21]).c_str());
+		if (Self::ARM_COUNT > Self::getArmCountAtTime(0)) {
+			for (std::vector<Command*>::iterator it = Self::last_commands_sent.begin(); it != Self::last_commands_sent.end(); ++it) {
+				if ((*it)->getCommandType() == Command::POINT) {
+					(*it)->changeStatusTo(Command::EXECUTED);
+					break;
+				}
+			}
+		}
+		if (Self::arm_count_deque.size() == buffer_max_capacity) Self::arm_count_deque.pop_back();
+		Self::arm_count_deque.push_front(Self::ARM_COUNT);
+		//focus_target
 		Self::FOCUS_TARGET = match[22];
+		if (Self::focus_target_deque.size() == buffer_max_capacity) Self::focus_target_deque.pop_back();
+		Self::focus_target_deque.push_front(Self::FOCUS_TARGET);
+		//focus_count
 		Self::FOCUS_COUNT = atoi((std::string() + match[23]).c_str());
+		if (Self::focus_count_deque.size() == buffer_max_capacity) Self::focus_count_deque.pop_back();
+		Self::focus_count_deque.push_front(Self::FOCUS_COUNT);
+		//tackle_expires
 		Self::TACKLE_EXPIRES = atoi((std::string() + match[24]).c_str());
+		if (Self::tackle_expires_deque.size() == buffer_max_capacity) Self::tackle_expires_deque.pop_back();
+		Self::tackle_expires_deque.push_front(Self::TACKLE_EXPIRES);
+		//tackle_count
 		Self::TACKLE_COUNT = atoi((std::string() + match[25]).c_str());
+		if (Self::TACKLE_COUNT > Self::getTackleCountAtTime(0)) {
+			for (std::vector<Command*>::iterator it = Self::last_commands_sent.begin(); it != Self::last_commands_sent.end(); ++it) {
+				if ((*it)->getCommandType() == Command::TACKLE) {
+					(*it)->changeStatusTo(Command::EXECUTED);
+					break;
+				}
+			}
+		}
+		if (Self::tackle_count_deque.size() == buffer_max_capacity) Self::tackle_count_deque.pop_back();
+		Self::tackle_count_deque.push_front(Self::TACKLE_COUNT);
+		//collisions
 		Self::COLLISION.clear();
 		std::stringstream ss(std::string() + match[26]);
 		std::string token;
 		while(std::getline(ss, token, ' ')) {
 			Self::COLLISION.push_back(token);
 		}
+		if (Self::collisions_deque.size() == buffer_max_capacity) Self::collisions_deque.pop_back();
+		Self::collisions_deque.push_front(Self::COLLISION);
+		//foul_charged
 		Self::FOUL_CHARGED = atoi((std::string() + match[27]).c_str());
+		if (Self::foul_charged_deque.size() == buffer_max_capacity) Self::foul_charged_deque.pop_back();
+		Self::foul_charged_deque.push_front(Self::FOUL_CHARGED);
+		//foul_card
 		Self::FOUL_CARD = match[28];
+		if (Self::foul_card_deque.size() == buffer_max_capacity) Self::foul_card_deque.pop_back();
+		Self::foul_card_deque.push_front(Self::FOUL_CARD);
 	} else {
 		std::cerr << "Self::processSenseBody(string) -> failed to match sense body" << std::endl;
 	}
@@ -323,9 +518,7 @@ void Self::localize(std::vector<Flag> flags) {
 			break;
 		}
 	}
-	if (!Self::positioned) {
-		return;
-	}
+	if (!Self::positioned) return;
 	std::vector<double> xs;
 	std::vector<double> ys;
 	std::vector<double> thetas;
@@ -385,34 +578,19 @@ void Self::localize(std::vector<Flag> flags) {
 			gamma0 = 180 * atan2(it->getY() - y1, it->getX() - x1) / Self::PI - it->getDirection();
 			gamma1 = 180 * atan2((it + 1)->getY() - y1, (it + 1)->getX() - x1) / Self::PI - (it + 1)->getDirection();
 		}
-		if (gamma0 >= 180.0) {
-			gamma0 -= 360.0;
-		} else if (gamma0 < -180.0) {
-			gamma0 += 360.0;
-		}
-		if (gamma1 >= 180.0) {
-			gamma1 -= 360.0;
-		} else if (gamma1 < -180.0) {
-			gamma1 += 360.0;
-		}
+		if (gamma0 >= 180.0)      gamma0 -= 360.0;
+		else if (gamma0 < -180.0) gamma0 += 360.0;
+		if (gamma1 >= 180.0)      gamma1 -= 360.0;
+		else if (gamma1 < -180.0) gamma1 += 360.0;
 		double midpoint0 = (gamma0 + gamma1) / 2.0;
 		double midpoint1 = midpoint0 + 180.0;
-		if (midpoint1 >= 180.0) {
-			midpoint1 -= 360.0;
-		}
+		if (midpoint1 >= 180.0) midpoint1 -= 360.0;
 		double arc0 = abs(gamma0 - midpoint0);
-		if (arc0 > 180.0) {
-			arc0 -= 360.0;
-		}
+		if (arc0 > 180.0) arc0 -= 360.0;
 		double arc1 = abs(gamma0 - midpoint1);
-		if (arc1 > 180.0) {
-			arc1 -= 360.0;
-		}
-		if (arc0 < arc1) {
-			thetas.push_back(midpoint0);
-		} else {
-			thetas.push_back(midpoint1);
-		}
+		if (arc1 > 180.0) arc1 -= 360.0;
+		if (arc0 < arc1) thetas.push_back(midpoint0);
+		else thetas.push_back(midpoint1);
 	}
 	if (xs.size() > 0) {
 		double accum_xs = 0.0;
@@ -470,4 +648,113 @@ Vector2D Self::getVelocity() {
 
 void Self::setLastCommandsSet(std::vector<Command*> last_commands_sent) {
 	Self::last_commands_sent = last_commands_sent;
+}
+
+std::string Self::getViewModeWidthAtTime(int time) {
+	return (time < Self::view_mode_width_deque.size()) ? Self::view_mode_width_deque.at(time) : "";
+}
+
+std::string Self::getViewModeQualityAtTime(int time) {
+	return (time < Self::view_mode_quality_deque.size()) ? Self::view_mode_quality_deque.at(time) : "";
+}
+
+double Self::getStaminaAtTime(int time) {
+	return (time < Self::stamina_deque.size()) ? Self::stamina_deque.at(time) : 0.0;
+}
+
+double Self::getEffortAtTime(int time) {
+	return (time < Self::effort_deque.size()) ? Self::effort_deque.at(time) : 0.0;
+}
+
+double Self::getStaminaCapacityAtTime(int time) {
+	return (time < Self::stamina_capacity_deque.size()) ? Self::stamina_capacity_deque.at(time) : 0.0;
+}
+
+double Self::getAmountOfSpeedAtTime(int time) {
+	return (time < Self::amount_of_speed_deque.size()) ? Self::amount_of_speed_deque.at(time) : 0.0;
+}
+
+double Self::getDirectionOfSpeedAtTime(int time) {
+	return (time < Self::direction_of_speed_deque.size()) ? Self::direction_of_speed_deque.at(time) : 0.0;
+}
+
+int Self::getKickCountAtTime(int time) {
+	return (time < Self::kick_count_deque.size()) ? Self::kick_count_deque.at(time) : 0;
+}
+
+int Self::getDashCountAtTime(int time) {
+	return (time < Self::dash_count_deque.size()) ? Self::dash_count_deque.at(time) : 0;
+}
+
+int Self::getTurnCountAtTime(int time) {
+	return (time < Self::turn_count_deque.size()) ? Self::turn_count_deque.at(time) : 0;
+}
+
+int Self::getSayCountAtTime(int time) {
+	return (time < Self::say_count_deque.size()) ? Self::say_count_deque.at(time) : 0;
+}
+
+int Self::getTurnNeckCountAtTime(int time) {
+	return (time < Self::turn_neck_count_deque.size()) ? Self::turn_neck_count_deque.at(time) : 0;
+}
+
+int Self::getCatchCountAtTime(int time) {
+	return (time < Self::catch_count_deque.size()) ? Self::catch_count_deque.at(time) : 0;
+}
+
+int Self::getMoveCountAtTime(int time) {
+	return (time < Self::move_count_deque.size()) ? Self::move_count_deque.at(time) : 0;
+}
+
+int Self::getChangeViewCountAtTime(int time) {
+	return (time < Self::change_view_count_deque.size()) ? Self::change_view_count_deque.at(time) : 0;
+}
+
+int Self::getArmMovableAtTime(int time) {
+	return (time < Self::arm_movable_deque.size()) ? Self::arm_movable_deque.at(time) : 0;
+}
+
+int Self::getArmExpiresAtTime(int time) {
+	return (time < Self::arm_expires_deque.size()) ? Self::arm_expires_deque.at(time) : 0;
+}
+
+double Self::getArmDistAtTime(int time) {
+	return (time < Self::arm_dist_deque.size()) ? Self::arm_dist_deque.at(time) : 0.0;
+}
+
+double Self::getArmDirAtTime(int time) {
+	return (time < Self::arm_dir_deque.size()) ? Self::arm_dir_deque.at(time) : 0.0;
+}
+
+int Self::getArmCountAtTime(int time) {
+	return (time < Self::arm_count_deque.size()) ? Self::arm_count_deque.at(time) : 0;
+}
+
+std::string Self::getFocusTargetAtTime(int time) {
+	return (time < Self::focus_target_deque.size()) ? Self::focus_target_deque.at(time) : "";
+}
+
+int Self::getFocusCountAtTime(int time) {
+	return (time < Self::focus_count_deque.size()) ? Self::focus_count_deque.at(time) : 0;
+}
+
+int Self::getTackleExpiresAtTime(int time) {
+	return (time < Self::tackle_expires_deque.size()) ? Self::tackle_expires_deque.at(time) : 0;
+}
+
+int Self::getTackleCountAtTime(int time) {
+	return (time < Self::tackle_count_deque.size()) ? Self::tackle_count_deque.at(time) : 0;
+}
+
+std::vector<std::string> getCollisionsAtTime(int time) {
+	std::vector<std::string> empty_vector;
+	return (time < Self::collisions_deque.size()) ? Self::collisions_deque.at(time) : empty_vector;
+}
+
+int Self::getFoulChargedAtTime(int time) {
+	return (time < Self::foul_charged_deque.size()) ? Self::foul_charged_deque.at(time) : 0;
+}
+
+std::string Self::getFoulCardAtTime(int time) {
+	return (time < Self::foul_card_deque.size()) ? Self::foul_card_deque.at(time) : "";
 }

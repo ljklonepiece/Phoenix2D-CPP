@@ -23,8 +23,8 @@
 
 #include <string>
 #include <vector>
+#include <deque>
 #include <boost/regex.hpp>
-#include <vector>
 #include "Flag.h"
 #include "Position.h"
 #include "Vector2D.h"
@@ -56,6 +56,34 @@ class Self {
 	static double y;
 	static double theta;
 	static std::vector<Command*> last_commands_sent;
+	static std::deque<std::string> view_mode_width_deque;
+	static std::deque<std::string> view_mode_quality_deque;
+	static std::deque<double>      stamina_deque;
+	static std::deque<double>      effort_deque;
+	static std::deque<double>      stamina_capacity_deque;
+	static std::deque<double>      amount_of_speed_deque;
+	static std::deque<double>      direction_of_speed_deque;
+	static std::deque<double>      head_angle_deque;
+	static std::deque<int>         kick_count_deque;
+	static std::deque<int>         dash_count_deque;
+	static std::deque<int>         turn_count_deque;
+	static std::deque<int>         say_count_deque;
+	static std::deque<int>         turn_neck_count_deque;
+	static std::deque<int>         catch_count_deque;
+	static std::deque<int>         move_count_deque;
+	static std::deque<int>         change_view_count_deque;
+	static std::deque<int>         arm_movable_deque;
+	static std::deque<int>         arm_expires_deque;
+	static std::deque<double>      arm_dist_deque;
+	static std::deque<double>      arm_dir_deque;
+	static std::deque<int>         arm_count_deque;
+	static std::deque<std::string> focus_target_deque;
+	static std::deque<int>         focus_count_deque;
+	static std::deque<int>         tackle_expires_deque;
+	static std::deque<int>         tackle_count_deque;
+	static std::deque<std::vector<std::string> > collisions_deque;
+	static std::deque<int>         foul_charged_deque;
+	static std::deque<std::string> foul_card_deque;
 public:
 	static double PI;
 	static std::string TEAM_NAME;
@@ -106,33 +134,61 @@ public:
 	static double      FOUL_DETECT_PROBABILITY;
 	static double      CATCHABLE_AREA_L_STRETCH;
 	static std::string VIEW_MODE_WIDTH;
+	static std::string getViewModeWidthAtTime(int time);
 	static std::string VIEW_MODE_QUALITY;
+	static std::string getViewModeQualityAtTime(int time);
 	static double      STAMINA;
+	static double      getStaminaAtTime(int time);
 	static double      EFFORT;
+	static double      getEffortAtTime(int time);
 	static double      STAMINA_CAPACITY;
+	static double      getStaminaCapacityAtTime(int time);
 	static double      AMOUNT_OF_SPEED;
+	static double      getAmountOfSpeedAtTime(int time);
 	static double      DIRECTION_OF_SPEED;
+	static double      getDirectionOfSpeedAtTime(int time);
 	static double      HEAD_ANGLE;
+	static double      getHeadAngleAtTime(int time);
 	static int         KICK_COUNT;
+	static int         getKickCountAtTime(int time);
 	static int         DASH_COUNT;
+	static int         getDashCountAtTime(int time);
 	static int         TURN_COUNT;
+	static int         getTurnCountAtTime(int time);
 	static int         SAY_COUNT;
+	static int         getSayCountAtTime(int time);
 	static int         TURN_NECK_COUNT;
+	static int         getTurnNeckCountAtTime(int time);
 	static int         CATCH_COUNT;
+	static int         getCatchCountAtTime(int time);
 	static int         MOVE_COUNT;
+	static int         getMoveCountAtTime(int time);
 	static int         CHANGE_VIEW_COUNT;
+	static int         getChangeViewCountAtTime(int time);
 	static int         ARM_MOVABLE;
+	static int         getArmMovableAtTime(int time);
 	static int         ARM_EXPIRES;
+	static int         getArmExpiresAtTime(int time);
 	static double      ARM_DIST;
+	static double      getArmDistAtTime(int time);
 	static double      ARM_DIR;
+	static double      getArmDirAtTime(int time);
 	static int         ARM_COUNT;
+	static int         getArmCountAtTime(int time);
 	static std::string FOCUS_TARGET;
+	static std::string getFocusTargetAtTime(int time);
 	static int         FOCUS_COUNT;
+	static int         getFocusCountAtTime(int time);
 	static int         TACKLE_EXPIRES;
+	static int         getTackleExpiresAtTime(int time);
 	static int         TACKLE_COUNT;
+	static int         getTackleCountAtTime(int time);
 	static std::vector<std::string> COLLISION;
+	static std::vector<std::string> getCollisionsAtTime(int time);
 	static int         FOUL_CHARGED;
+	static int         getFoulChargedAtTime(int time);
 	static std::string FOUL_CARD;
+	static std::string getFoulCardAtTime(int time);
 	Self(std::string player_params, std::string team_name, int unum, std::string side);
 	~Self();
 	void addPlayerType(std::string player_type);
