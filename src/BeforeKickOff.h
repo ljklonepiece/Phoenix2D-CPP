@@ -23,6 +23,7 @@
 
 #include "PlayMode.h"
 #include "WorldModel.h"
+#include <string>
 
 class Commands;
 
@@ -30,9 +31,11 @@ class BeforeKickOff : public PlayMode {
 public:
 	BeforeKickOff(Commands *commands);
 	~BeforeKickOff();
+	void onStart();
 	void onPlayerExecute(WorldModel world);
 	void onGoalieExecute(WorldModel world);
 	void onCoachExecute(WorldModel world);
+	void onMessageReceived(std::string message, int sender);
 };
 
 #endif /* BEFOREKICKOFF_H_ */

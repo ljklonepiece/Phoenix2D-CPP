@@ -20,6 +20,7 @@
 
 #include "PlayMode.h"
 #include "Commands.h"
+#include "Parser.h"
 
 PlayMode::PlayMode(Commands *commands) {
 	this->commands = commands;
@@ -30,7 +31,7 @@ PlayMode::~PlayMode() {
 }
 
 void PlayMode::onStart() {
-
+	Parser::registerPlayMode(this);
 }
 
 void PlayMode::onPostExecute() {

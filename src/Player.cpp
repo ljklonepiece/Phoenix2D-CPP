@@ -25,6 +25,30 @@
 #include "Self.h"
 #include <cmath>
 
+Player::Player() {
+	distance = 100.0;
+	direction = 0.0;
+	distChange = 0.0;
+	dirChange = 0.0;
+	bodyDirection = 0.0;
+	x = 0.0;
+	y = 0.0;
+	vx = 0.0;
+	vy = 0.0;
+	theta = 0.0;
+	headDirection = 0.0;
+	pointDir = 0.0;
+	team = "undefined";
+	uniform_number = 0;
+	pointing = false;
+	kicking = false;
+	tackling = false;
+	goalie = false;
+	bound = 0;
+	simulation_time = -1;
+	player_id = -1;
+}
+
 Player::Player(std::string name, std::string position, int simulation_time) {
 	distance = 100.0;
 	direction = 0.0;

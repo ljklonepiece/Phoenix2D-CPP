@@ -23,6 +23,7 @@
 
 #include "PlayMode.h"
 #include "WorldModel.h"
+#include <string>
 
 class Commands;
 
@@ -33,6 +34,7 @@ public:
 	void onPlayerExecute(WorldModel world);
 	void onGoalieExecute(WorldModel world);
 	void onCoachExecute(WorldModel world);
+	void onMessageReceived(std::string message, int sender);
 };
 
 #endif /* KICKINL_H_ */

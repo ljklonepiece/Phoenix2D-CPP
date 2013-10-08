@@ -28,6 +28,7 @@
 class Self;
 class Game;
 class World;
+class PlayMode;
 
 class Parser {
 	static Self *self;
@@ -46,10 +47,12 @@ class Parser {
 	static bool processing_see;
 	static pthread_cond_t SEE_COND;
 	static pthread_mutex_t SEE_MUTEX;
+	static PlayMode* active_play_mode;
 public:
 	Parser(Self *self, World *world);
 	~Parser();
 	void parseMessage(std::string message);
+	static void registerPlayMode(PlayMode* play_mode);
 };
 
 #endif /* PARSER_H_ */

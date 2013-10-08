@@ -40,3 +40,7 @@ void CornerKickL::onGoalieExecute(WorldModel world) {
 void CornerKickL::onCoachExecute(WorldModel world) {
 
 }
+
+void CornerKickL::onMessageReceived(std::string message, int sender) {
+
+}

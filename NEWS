@@ -1,7 +1,7 @@
 [0.5]
 
   * Trainer automatic runs: a script interpreter is added to Trainer class.
-    The syntaxis of the script is:
+    The script must have the name trainer.phx and the next syntaxis:
     - DO <int>: repeats <int> times the next commands until the corresponding
       END_DO
     - END_DO: closes the corresponding DO block.
@@ -13,3 +13,16 @@
     8, and it can be accessed by Self::getStaminaAtTime(int time), where time
     is the offset in time.  For example, to access the stamina 2 cycles before
     the current cycle you must call Self::getStaminaAtTime(2);
+    
+  * Added config class.  This class loads positions from the file config.phx.
+    If the file does not exist, it loads the defaults positions from the class.
+    
+  * Each play mode now has a onMessageReceived(string,int) callback to process
+    the messages received.  The first argument is the message and the second
+    argument is the uniform number of the sender.  Currently it only implements
+    the mate messages.
+    
+  * Added logging class through std::clog stream.  Example:
+    std::clog << "Logging example" << std::endl; will log "Logging example"
+    string to player_<int>.log file, where <int> is the player uniform number.
+    This logging will only work if Config::LOGGING is set to true.

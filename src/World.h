@@ -29,7 +29,6 @@
 
 class World {
 	int player_id;
-	unsigned int max_history;
 	std::list<std::map<int, Player> > players_history;
 	std::list<Ball> ball_history;
 public:

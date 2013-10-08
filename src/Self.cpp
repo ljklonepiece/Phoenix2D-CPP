@@ -629,6 +629,7 @@ void Self::localize() {
 			Self::positioned = true;
 			break;
 		case Command::TURN:
+			Self::theta += (*it)->getTurnMoment() / (1.0 + Self::getAmountOfSpeedAtTime(1) * Self::INERTIA_MOMENT);
 			break;
 		case Command::DASH:
 			break;

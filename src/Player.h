@@ -48,6 +48,7 @@ class Player {
 	Player* bound;
 	int player_id;
 public:
+	Player();
 	Player(std::string name, std::string position, int simulation_time);
 	Player(std::string name, std::string position, int simulation_time, Position player_position, Vector2D player_velocity);
 	~Player();

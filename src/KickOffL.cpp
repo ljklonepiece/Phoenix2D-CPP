@@ -39,3 +39,7 @@ void KickOffL::onGoalieExecute(WorldModel world) {
 void KickOffL::onCoachExecute(WorldModel world) {
 
 }
+
+void KickOffL::onMessageReceived(std::string message, int sender) {
+
+}

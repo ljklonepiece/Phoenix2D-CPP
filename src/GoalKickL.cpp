@@ -40,3 +40,7 @@ void GoalKickL::onGoalieExecute(WorldModel world) {
 void GoalKickL::onCoachExecute(WorldModel world) {
 
 }
+
+void GoalKickL::onMessageReceived(std::string message, int sender) {
+
+}

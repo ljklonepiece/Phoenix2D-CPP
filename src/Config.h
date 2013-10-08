@@ -18,29 +18,18 @@
  * along with Phoenix2D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "KickOffR.h"
-#include "Commands.h"
+#ifndef CONFIG_H_
+#define CONFIG_H_
 
-KickOffR::KickOffR(Commands *commands) : PlayMode(commands) {
+class Config {
+public:
+	Config();
+	~Config();
+	static int POSITIONS[11];
+	static int BUFFER_MAX_HISTORY;
+	static int PLAYER_MAX_HISTORY;
+	static int BALL_MAX_HISTORY;
+	static bool LOGGING;
+};
 
-}
-
-KickOffR::~KickOffR() {
-
-}
-
-void KickOffR::onPlayerExecute(WorldModel world) {
-
-}
-
-void KickOffR::onGoalieExecute(WorldModel world) {
-
-}
-
-void KickOffR::onCoachExecute(WorldModel world) {
-
-}
-
-void KickOffR::onMessageReceived(std::string message, int sender) {
-
-}
+#endif /* CONFIG_H_ */

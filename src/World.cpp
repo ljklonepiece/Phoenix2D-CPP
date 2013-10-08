@@ -20,10 +20,10 @@
 
 #include "World.h"
 #include "Game.h"
+#include "Config.h"
 
 World::World() {
 	player_id = 0;
-	max_history = 32;
 }
 
 World::~World() {
@@ -31,17 +31,29 @@ World::~World() {
 }
 
 void World::updateWorld(std::vector<Player> players, std::vector<Ball> ball) {
-	if (players_history.size() == max_history) {
+	if (players_history.size() == Config::PLAYER_MAX_HISTORY) {
 		players_history.pop_back();
 	}
-	if (ball_history.size() == max_history) {
+	if (ball_history.size() == Config::BALL_MAX_HISTORY) {
 		ball_history.pop_back();
 	}
 	std::map<int, Player> new_players;
 	for (std::vector<Player>::iterator it = players.begin(); it != players.end(); ++it) {
-		//int id = player_id++;
-		new_players.insert(std::pair<int, Player>(player_id++, *it));
-		//new_players[player_id++] = (Player)(*it);
+		int id = player_id++;
+		it->setPlayerId(id);
+		//new_players.insert(std::pair<int, Player>(player_id++, *it));
+		new_players[id] = *it;
+	}
+	for (std::vector<Player>::iterator it = players_history.front().begin(); it != players_history.front().end(); ++it) {
+		double vision_angle = 180.0;
+		if (Self::VIEW_MODE_WIDTH.compare("narrow") == 0) {
+			vision_angle = 60.0;
+		} else if (Self::VIEW_MODE_WIDTH.compare("normal")) {
+			vision_angle = 120.0;
+		}
+		if (Self::getPosition().getDirectionTo(&(it->getPosition())) > vision_angle) {
+			new_players[it->getPlayerId()] == *it;
+		}
 	}
 	if (ball.size() == 0) {
 		if (ball_history.size() > 0) {

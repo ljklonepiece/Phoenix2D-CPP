@@ -41,3 +41,7 @@ void PlayOn::onGoalieExecute(WorldModel world) {
 void PlayOn::onCoachExecute(WorldModel world) {
 
 }
+
+void PlayOn::onMessageReceived(std::string message, int sender) {
+
+}

@@ -38,8 +38,11 @@
 #include "World.h"
 #include "Trainer.h"
 #include "Self.h"
+#include "Config.h"
+#include "Logger.h"
 
 int main(int argc, char **argv) {
+	Config config;
 	const char *team_name, *hostname;
 	char agent_type;
 	if (argc < 4) {
@@ -64,6 +67,8 @@ int main(int argc, char **argv) {
 		}
 		std::cout << "Trainer out" << std::endl;
 	} else {
+		Logger logger;
+		if (Config::LOGGING) logger.log();
 		play_modes["before_kick_off"] = new BeforeKickOff(commands);
 		play_modes["corner_kick_l"]   = new CornerKickL(commands);
 		play_modes["corner_kick_r"]   = new CornerKickR(commands);
@@ -77,22 +82,27 @@ int main(int argc, char **argv) {
 		play_modes["kick_off_r"]      = new KickOffR(commands);
 		play_modes["play_on"]         = new PlayOn(commands);
 		int i = 0;
+		std::string current_play_mode = Game::PLAY_MODE;
+		play_modes[current_play_mode]->onStart();
 		while (Game::nextCycle() && i < 2400) {
-			std::string play_mode = Game::PLAY_MODE;
+			if (current_play_mode.compare(Game::PLAY_MODE) != 0) {
+				current_play_mode = Game::PLAY_MODE;
+				play_modes[current_play_mode]->onStart();
+			}
 			switch (Controller::AGENT_TYPE) {
 			case 'p':
-				play_modes[play_mode]->onPlayerExecute(world->getWorldModel());
+				play_modes[current_play_mode]->onPlayerExecute(world->getWorldModel());
 				break;
 			case 'g':
-				play_modes[play_mode]->onGoalieExecute(world->getWorldModel());
+				play_modes[current_play_mode]->onGoalieExecute(world->getWorldModel());
 				break;
 			case 'c':
-				play_modes[play_mode]->onCoachExecute(world->getWorldModel());
+				play_modes[current_play_mode]->onCoachExecute(world->getWorldModel());
 				break;
 			default:
 				break;
 			}
-			play_modes[play_mode]->onPostExecute();
+			play_modes[current_play_mode]->onPostExecute();
 		}
 		//This must be always called in order to avoid memory leaks
 		for (std::map<std::string, PlayMode*>::iterator it = play_modes.begin(); it != play_modes.end(); ++it) {

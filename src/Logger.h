@@ -21,10 +21,14 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
+#include <string>
+
 class Logger {
+	bool logging;
 public:
 	Logger();
 	~Logger();
+	void log();
 };
 
 #endif /* LOGGER_H_ */

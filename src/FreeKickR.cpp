@@ -40,3 +40,7 @@ void FreeKickR::onGoalieExecute(WorldModel world) {
 void FreeKickR::onCoachExecute(WorldModel world) {
 
 }
+
+void FreeKickR::onMessageReceived(std::string message, int sender) {
+
+}

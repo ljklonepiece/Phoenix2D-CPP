@@ -38,11 +38,13 @@ bool see_received = false;
 pthread_cond_t Parser::SEE_COND = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t Parser::SEE_MUTEX = PTHREAD_MUTEX_INITIALIZER;
 
-Self *Parser::self = 0;
-Game *Parser::game = 0;
-World *Parser::world = 0;
+Self* Parser::self = 0;
+Game* Parser::game = 0;
+World* Parser::world = 0;
+PlayMode* Parser::active_play_mode = 0;
 boost::regex Parser::sense_body = boost::regex("\\(sense_body\\s+(\\d+)\\s+");
 boost::regex Parser::see_regex = boost::regex("\\(([^()]+)\\)\\s*([\\d\\.\\-etk\\s]*)");
+boost::regex hear_player_regex = boost::regex("\\(hear\\s+(\\d+)\\s+([\\d\\.\\-e]+)\\s+our\\s+(\\d+)\\s+([\\\"\\w\\s]+)\\)");
 bool Parser::processing_see = false;
 
 std::string Parser::sense_body_message = std::string();
@@ -176,6 +178,10 @@ void Parser::parseMessage(std::string message) {
 			if (sender.compare("referee") == 0) {
 				game->updatePlayMode(std::string() + match[3]);
 			}
+		} else if (boost::regex_match(message.c_str(), match, hear_player_regex)) {
+			int unum = atoi((std::string() + match[3]).c_str());
+			std::string message = std::string() + match[4];
+			Parser::active_play_mode->onMessageReceived(message, unum);
 		}
 	} else if (message_type.compare("change_player_type") == 0) {
 
@@ -213,4 +219,8 @@ void Parser::parseMessage(std::string message) {
 	} else {
 		std::cerr << "Parse::parseMessage(string) -> message " << message << " not recognized" << std::endl;
 	}
+}
+
+void Parser::registerPlayMode(PlayMode* play_mode) {
+	Parser::active_play_mode = play_mode;
 }

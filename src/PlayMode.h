@@ -35,6 +35,7 @@ public:
 	virtual void onPlayerExecute(WorldModel world) = 0;
 	virtual void onGoalieExecute(WorldModel world) = 0;
 	virtual void onCoachExecute(WorldModel world) = 0;
+	virtual void onMessageReceived(std::string message, int sender) = 0;
 	void onPostExecute();
 	void onEnd();
 };

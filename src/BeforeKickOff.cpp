@@ -30,6 +30,12 @@ BeforeKickOff::~BeforeKickOff() {
 
 }
 
+void BeforeKickOff::onStart() {
+	PlayMode::onStart();
+	Position myPosition = Config::POSITIONS[Self::UNIFORM_NUMBER];
+	commands->move(myPosition.getX(), myPosition.getY());
+}
+
 void BeforeKickOff::onPlayerExecute(WorldModel world) {
 
 }
@@ -39,5 +45,9 @@ void BeforeKickOff::onGoalieExecute(WorldModel world) {
 }
 
 void BeforeKickOff::onCoachExecute(WorldModel world) {
+
+}
+
+void BeforeKickOff::onMessageReceived(std::string message, int sender) {
 
 }

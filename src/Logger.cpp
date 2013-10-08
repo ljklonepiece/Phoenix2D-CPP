@@ -19,3 +19,31 @@
  */
 
 #include "Logger.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include "Self.h"
+
+std::filebuf buf;
+std::streambuf* oldbuf;
+
+Logger::Logger() {
+	logging = false;
+}
+
+Logger::~Logger() {
+	if (logging) {
+		std::clog.rdbuf(oldbuf);
+		buf.close();
+	}
+}
+
+void Logger::log() {
+	logging = true;
+	std::stringstream ss;
+	ss << "player_" << Self::UNIFORM_NUMBER << ".log" << std::endl;
+	std::string filename;
+	std::getline(ss, filename);
+	buf.open(filename.c_str(), std::ios::out);
+	oldbuf = std::clog.rdbuf(&buf);
+}
