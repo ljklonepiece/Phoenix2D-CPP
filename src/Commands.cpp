@@ -39,7 +39,8 @@ void Commands::move(double x, double y) {
 	ss << "(move " << std::setprecision(4) << x << " " << y << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	Command new_command(command, 1, Command::MOVE, (void *)&x, (void *)&y);
+	Command new_command(command, 1, Command::MOVE); //, (void *)&x, (void *)&y);
+	new_command.setArgs((void *)&x, (void *)&y, 0);
 	commands_to_send.push_back(&new_command);
 	commands_history.push_back(new_command);
 }
@@ -49,7 +50,8 @@ void Commands::turn(double moment) {
 	ss << "(turn " << std::setprecision(4) << moment << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	Command new_command(command, 1, Command::TURN, (void *)&moment);
+	Command new_command(command, 1, Command::TURN); //, (void *)&moment);
+	new_command.setArgs((void *)&moment, 0, 0);
 	commands_to_send.push_back(&new_command);
 	commands_history.push_back(new_command);
 }
@@ -59,7 +61,8 @@ void Commands::turnNeck(double moment) {
 	ss << "(turn_neck " << std::setprecision(4) << moment << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	Command new_command(command, 1, Command::TURN_NECK, (void *)&moment);
+	Command new_command(command, 1, Command::TURN_NECK); //, (void *)&moment);
+	new_command.setArgs((void *)&moment, 0, 0);
 	commands_to_send.push_back(&new_command);
 	commands_history.push_back(new_command);
 }
@@ -69,14 +72,16 @@ void Commands::dash(double power, double direction) {
 	ss << "(dash " << std::setprecision(4) << power << " " << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	Command new_command(command, 1, Command::DASH, (void *)&power);
+	Command new_command(command, 1, Command::DASH); //, (void *)&power);
+	new_command.setArgs((void *)&power, (void *)&direction, 0);
 	commands_to_send.push_back(&new_command);
 	commands_history.push_back(new_command);
 }
 
 void Commands::say(std::string message) {
 	std::string command = "(say " + message + ")";
-	Command new_command(command, 1, Command::SAY, (void *)&message);
+	Command new_command(command, 1, Command::SAY); //, (void *)&message);
+	new_command.setArgs((void *)&message, 0, 0);
 	commands_to_send.push_back(&new_command);
 	commands_history.push_back(new_command);
 }
@@ -86,7 +91,8 @@ void Commands::catchBall(double direction) {
 	ss << "(catch " << std::setprecision(4) << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	Command new_command(command, 1, Command::CATCH, (void *)&direction);
+	Command new_command(command, 1, Command::CATCH); //, (void *)&direction);
+	new_command.setArgs((void *)&direction, 0, 0);
 	commands_to_send.push_back(&new_command);
 	commands_history.push_back(new_command);
 }
@@ -96,7 +102,8 @@ void Commands::kick(double power, double direction) {
 	ss << "(kick " << std::setprecision(4) << power << " " << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	Command new_command(command, 1, Command::KICK, (void *)&power, (void *)&direction);
+	Command new_command(command, 1, Command::KICK); //, (void *)&power, (void *)&direction);
+	new_command.setArgs((void *)&power, (void *)&direction, 0);
 	commands_to_send.push_back(&new_command);
 	commands_history.push_back(new_command);
 }
@@ -106,7 +113,8 @@ void Commands::tackle(double power, bool willToFoul) {
 	ss << "(tackle " << std::setprecision(4) << power << (willToFoul ? " true" : " false") << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	Command new_command(command, 1, Command::TACKLE, (void *)&power, (void *)willToFoul);
+	Command new_command(command, 1, Command::TACKLE); //, (void *)&power, (void *)willToFoul);
+	new_command.setArgs((void *)&power, (void *)&willToFoul, 0);
 	commands_to_send.push_back(&new_command);
 	commands_history.push_back(new_command);
 }
@@ -116,14 +124,16 @@ void Commands::pointTo(double distance, double direction) {
 	ss << "(pointto " << std::setprecision(4) << distance << " " << direction << ")" << std::endl;
 	std::string command;
 	std::getline(ss, command);
-	Command new_command(command, 1, Command::POINT, (void *)&distance, (void *)&direction);
+	Command new_command(command, 1, Command::POINT); //, (void *)&distance, (void *)&direction);
+	new_command.setArgs((void *)&distance, (void *)&direction, 0);
 	commands_to_send.push_back(&new_command);
 	commands_history.push_back(new_command);
 }
 
 void Commands::changeView(std::string width) {
 	std::string command = "(change_view " + width + ")";
-	Command new_command(command, 1, Command::CHANGE_VIEW, (void *)&width);
+	Command new_command(command, 1, Command::CHANGE_VIEW); //, (void *)&width);
+	new_command.setArgs((void *)&width, 0, 0);
 	commands_to_send.push_back(&new_command);
 	commands_history.push_back(new_command);
 }
@@ -140,7 +150,8 @@ void Commands::moveObject(std::string object, double x, double y) {
 
 void Commands::changeMode(std::string mode) {
 	std::string command = "(change_mode " + mode + ")";
-	Command new_command(command, 1, Command::CHANGE_MODE, (void *)&mode);
+	Command new_command(command, 1, Command::CHANGE_MODE); //, (void *)&mode);
+	new_command.setArgs((void *)&mode, 0, 0);
 	commands_to_send.push_back(&new_command);
 	commands_history.push_back(new_command);
 }

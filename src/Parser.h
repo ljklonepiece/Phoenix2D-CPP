@@ -34,14 +34,12 @@ class Parser {
 	static Self *self;
 	static Game *game;
 	static World *world;
-	static boost::regex sense_body;
-	boost::regex hear_regex;
-	boost::regex hear_player_regex;
+	//static boost::regex sense_body;
 	static boost::regex see_regex;
-	static void *process_sense_body(void *arg);
+	static void* process_sense_body(void *arg);
 	static std::string sense_body_message;
 	static std::string see_message;
-	static void *process_see(void *arg);
+	static void* process_see(void *arg);
 	pthread_t thread_sense_body;
 	pthread_t thread_see;
 	static bool processing_see;

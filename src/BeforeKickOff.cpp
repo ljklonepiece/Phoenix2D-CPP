@@ -21,6 +21,8 @@
 #include "BeforeKickOff.h"
 #include "Game.h"
 #include "Commands.h"
+#include "Config.h"
+#include "Self.h"
 
 BeforeKickOff::BeforeKickOff(Commands *commands) : PlayMode(commands) {
 

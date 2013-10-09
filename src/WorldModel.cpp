@@ -24,8 +24,8 @@
 Position positionToCompare;
 
 bool compareDistances(Player* player0, Player* player1) {
-	double distance0 = player0->getPosition().getDistanceTo(&positionToCompare);
-	double distance1 = player1->getPosition().getDistanceTo(&positionToCompare);
+	double distance0 = player0->getPosition().getDistanceTo(positionToCompare);
+	double distance1 = player1->getPosition().getDistanceTo(positionToCompare);
 	return (distance0 < distance1);
 }
 

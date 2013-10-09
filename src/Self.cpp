@@ -747,7 +747,7 @@ int Self::getTackleCountAtTime(int time) {
 	return (time < Self::tackle_count_deque.size()) ? Self::tackle_count_deque.at(time) : 0;
 }
 
-std::vector<std::string> getCollisionsAtTime(int time) {
+std::vector<std::string> Self::getCollisionsAtTime(int time) {
 	std::vector<std::string> empty_vector;
 	return (time < Self::collisions_deque.size()) ? Self::collisions_deque.at(time) : empty_vector;
 }

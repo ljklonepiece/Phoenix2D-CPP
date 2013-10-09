@@ -20,63 +20,48 @@
 
 #include "Command.h"
 
-Command::Command(std::string command, int weight, Command::COMMAND_TYPE type, void* ... args) {
+Command::Command(std::string command, int weight, Command::COMMAND_TYPE type) { //, void* ... args) {
 	this->command = command;
 	this->weight = weight;
 	this->type = type;
-	switch(type) {
-	case MOVE:
-	case DASH:
-	case KICK:
-	case POINT:
-		double_arg_0 = *((double *)args[0]);
-		double_arg_1 = *((double *)args[1]);
-		string_arg_0 = "";
-		string_arg_1 = "";
-		bool_arg_0 = false;
-		bool_arg_1 = false;
-		break;
-	case TURN:
-	case CATCH:
-	case TURN_NECK:
-		double_arg_0 = *((double *)args[0]);
-		double_arg_1 = 0.0;
-		string_arg_0 = "";
-		string_arg_1 = "";
-		bool_arg_0 = false;
-		bool_arg_1 = false;
-		break;
-	case SAY:
-	case CHANGE_VIEW:
-		double_arg_0 = 0.0;
-		double_arg_1 = 0.0;
-		string_arg_0 = *((std::string *)args[0]);
-		string_arg_1 = "";
-		bool_arg_0 = false;
-		bool_arg_1 = false;
-		break;
-	case TACKLE:
-		double_arg_0 = *((double *)args[0]);
-		double_arg_1 = 0.0;
-		string_arg_0 = "";
-		string_arg_1 = "";
-		bool_arg_0 = false;
-		bool_arg_1 = *((bool *)args[1]);
-		break;
-	default:
-		double_arg_0 = 0.0;
-		double_arg_1 = 0.0;
-		string_arg_0 = "";
-		string_arg_1 = "";
-		bool_arg_0 = false;
-		bool_arg_1 = false;
-		break;
-	}
+	double_arg_0 = 0.0;
+	double_arg_1 = 0.0;
+	string_arg_0 = "";
+	string_arg_1 = "";
+	bool_arg_0 = false;
+	bool_arg_1 = false;
 	status = CREATED;
 }
 
 Command::~Command() {
 
+}
+
+void Command::setArgs(void* arg0, void* arg1, void* arg2) {
+	switch(type) {
+	case MOVE:
+	case DASH:
+	case KICK:
+	case POINT:
+		double_arg_0 = *((double *)arg0);
+		double_arg_1 = *((double *)arg1);
+		break;
+	case TURN:
+	case CATCH:
+	case TURN_NECK:
+		double_arg_0 = *((double *)arg0);
+		break;
+	case SAY:
+	case CHANGE_VIEW:
+		string_arg_0 = *((std::string *)arg0);
+		break;
+	case TACKLE:
+		double_arg_0 = *((double *)arg0);
+		bool_arg_1 = *((bool *)arg1);
+		break;
+	default:
+		break;
+	}
 }
 
 std::string Command::getCommand() {

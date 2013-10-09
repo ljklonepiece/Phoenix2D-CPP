@@ -50,8 +50,9 @@ public:
 		//commands used by trainer and/or coach
 		CHANGE_PLAYER_TYPE
 	};
-	Command(std::string command, int weight, Command::COMMAND_TYPE type, void* ... args);
+	Command(std::string command, int weight, Command::COMMAND_TYPE type);
 	~Command();
+	void setArgs(void* arg0, void* arg1, void* arg2);
 	std::string getCommand();
 	int getWeight();
 	Command::COMMAND_TYPE getCommandType();

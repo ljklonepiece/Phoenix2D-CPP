@@ -20,6 +20,14 @@
 
 #include "Position.h"
 #include <cmath>
+#include "Self.h"
+
+Position::Position() {
+	x = 0.0;
+	y = 0.0;
+	theta = 0.0;
+	gamma = 0.0;
+}
 
 Position::Position(double x, double y) {
 	this->x = x;
@@ -62,13 +70,13 @@ double Position::getHeadDirection() {
 	return gamma;
 }
 
-double Position::getDistanceTo(Position* position) {
-	double distance = sqrt(pow(position->getX() - x, 2.0) + pow(position->getY() - y, 2.0));
+double Position::getDistanceTo(Position position) {
+	double distance = sqrt(pow(position.getX() - x, 2.0) + pow(position.getY() - y, 2.0));
 	return distance;
 }
 
-double Position::getDirectionTo(Position* position) {
-	double direction = 180.0 * (atan2(position->getY() - y, position->getX() - x)) / Self::PI - (theta + gamma);
+double Position::getDirectionTo(Position position) {
+	double direction = 180.0 * (atan2(position.getY() - y, position.getX() - x)) / Self::PI - (theta + gamma);
 	if      (direction >= 180.0) { direction -= 360.0; }
 	else if (direction < 180.0)  { direction += 360.0; }
 	return direction;

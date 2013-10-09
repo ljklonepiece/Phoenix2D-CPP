@@ -24,6 +24,7 @@
 #include <cstdlib>
 #include "Self.h"
 #include <cmath>
+#include "Controller.h"
 
 Player::Player() {
 	distance = 100.0;

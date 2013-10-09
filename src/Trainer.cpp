@@ -25,6 +25,7 @@
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
+#include "Commands.h"
 
 std::vector<std::string> code;
 

@@ -27,6 +27,7 @@ class Position {
 	double theta;
 	double gamma;
 public:
+	Position();
 	Position(double x, double y);
 	Position(double x, double y, double theta);
 	Position(double x, double y, double theta, double gamma);
@@ -35,8 +36,8 @@ public:
 	double getY();
 	double getBodyDirection();
 	double getHeadDirection();
-	double getDistanceTo(Position* position);
-	double getDirectionTo(Position* position);
+	double getDistanceTo(Position position);
+	double getDirectionTo(Position position);
 };
 
 #endif /* POSITION_H_ */

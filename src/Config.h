@@ -21,14 +21,17 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
+#include "Position.h"
+
 class Config {
 public:
 	Config();
 	~Config();
-	static int POSITIONS[11];
+	static Position* POSITIONS;
 	static int BUFFER_MAX_HISTORY;
 	static int PLAYER_MAX_HISTORY;
 	static int BALL_MAX_HISTORY;
+	static int COMMAND_PRECISION;
 	static bool LOGGING;
 };
 

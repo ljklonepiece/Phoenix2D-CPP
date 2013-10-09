@@ -21,6 +21,7 @@
 #include "World.h"
 #include "Game.h"
 #include "Config.h"
+#include "Self.h"
 
 World::World() {
 	player_id = 0;
@@ -44,15 +45,15 @@ void World::updateWorld(std::vector<Player> players, std::vector<Ball> ball) {
 		//new_players.insert(std::pair<int, Player>(player_id++, *it));
 		new_players[id] = *it;
 	}
-	for (std::vector<Player>::iterator it = players_history.front().begin(); it != players_history.front().end(); ++it) {
+	for (std::map<int, Player>::iterator it = players_history.front().begin(); it != players_history.front().end(); ++it) {
 		double vision_angle = 180.0;
 		if (Self::VIEW_MODE_WIDTH.compare("narrow") == 0) {
 			vision_angle = 60.0;
 		} else if (Self::VIEW_MODE_WIDTH.compare("normal")) {
 			vision_angle = 120.0;
 		}
-		if (Self::getPosition().getDirectionTo(&(it->getPosition())) > vision_angle) {
-			new_players[it->getPlayerId()] == *it;
+		if (Self::getPosition().getDirectionTo(it->second.getPosition()) > vision_angle) {
+			new_players[it->first] = it->second;
 		}
 	}
 	if (ball.size() == 0) {
@@ -73,5 +74,5 @@ WorldModel World::getWorldModel() {
 	for (std::map<int, Player>::iterator it = current_players.begin(); it != current_players.end(); ++it) {
 		players.push_back(it->second);
 	}
-	return WorldModel(players);
+	return WorldModel(players, ball_history.front());
 }

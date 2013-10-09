@@ -25,6 +25,20 @@
 #include "Self.h"
 #include <cmath>
 
+Ball::Ball() {
+	distance = 100.0;
+	direction = 0.0;
+	distChange = 0.0;
+	dirChange = 0.0;
+	x = 0.0;
+	y = 0.0;
+	vx = 0.0;
+	vy = 0.0;
+	simulation_time = 0.0;
+	inSightRange = false;
+	bound = 0;
+}
+
 Ball::Ball(int simulation_time) {
 	distance = 100.0;
 	direction = 0.0;

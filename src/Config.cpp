@@ -20,21 +20,33 @@
 
 #include "Config.h"
 #include <fstream>
-#include "Position.h"
 #include <boost/regex.hpp>
 #include <cstdlib>
 
 boost::regex position_regex("\\(position\\s(\\d+)\\s\\([\\d\\.\\-]+)\\s\\([\\d\\.\\-]+)\\)");
 
-int Config::POSITIONS[12];
+Position* Config::POSITIONS = 0;
 int Config::BUFFER_MAX_HISTORY = 8;
 int Config::PLAYER_MAX_HISTORY = 16;
 int Config::BALL_MAX_HISTORY = 16;
+int Config::COMMAND_PRECISION = 4;
 bool Config::LOGGING = false;
 
 Config::Config() {
 	std::ifstream file("conf.phx", std::ifstream::in);
+	Config::POSITIONS = new Position[12];
 	Config::POSITIONS[0] = Position(0.0, 0.0);
+	Config::POSITIONS[1] = Position(-50.0, 0.0);
+	Config::POSITIONS[2] = Position(-10.0, 0.0);
+	Config::POSITIONS[3] = Position(-1.0, -10.0);
+	Config::POSITIONS[4] = Position(-1.0, 10.0);
+	Config::POSITIONS[5] = Position(-12.0, 0.0);
+	Config::POSITIONS[6] = Position(-2.0, -11.0);
+	Config::POSITIONS[7] = Position(-2.0, 11.0);
+	Config::POSITIONS[8] = Position(-14.0, -5.0);
+	Config::POSITIONS[9] = Position(-14.0, 5.0);
+	Config::POSITIONS[10] = Position(-14.0, -10.0);
+	Config::POSITIONS[11] = Position(-14.0, 10.0);
 	if (file) {
 		std::string line;
 		while (std::getline(file, line)) {
@@ -47,21 +59,9 @@ Config::Config() {
 			}
 		}
 		file.close();
-	} else {
-		Config::POSITIONS[1] = Position(-50.0, 0.0);
-		Config::POSITIONS[2] = Position(-10.0, 0.0);
-		Config::POSITIONS[3] = Position(-1.0, -10.0);
-		Config::POSITIONS[4] = Position(-1.0, 10.0);
-		Config::POSITIONS[5] = Position(-12.0, 0.0);
-		Config::POSITIONS[6] = Position(-2.0, -11.0);
-		Config::POSITIONS[7] = Position(-2.0, 11.0);
-		Config::POSITIONS[8] = Position(-14.0, -5.0);
-		Config::POSITIONS[9] = Position(-14.0, 5.0);
-		Config::POSITIONS[10] = Position(-14.0, -10.0);
-		Config::POSITIONS[11] = Position(-14.0, 10.0);
 	}
 }
 
 Config::~Config() {
-
+	if (Config::POSITIONS) delete[] Config::POSITIONS;
 }

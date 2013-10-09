@@ -32,6 +32,8 @@
 #include "Position.h"
 #include "World.h"
 #include "Ball.h"
+#include "PlayMode.h"
+#include "Vector2D.h"
 
 bool see_received = false;
 
@@ -42,9 +44,11 @@ Self* Parser::self = 0;
 Game* Parser::game = 0;
 World* Parser::world = 0;
 PlayMode* Parser::active_play_mode = 0;
-boost::regex Parser::sense_body = boost::regex("\\(sense_body\\s+(\\d+)\\s+");
+//boost::regex Parser::sense_body = boost::regex("\\(sense_body\\s+(\\d+)\\s+");
 boost::regex Parser::see_regex = boost::regex("\\(([^()]+)\\)\\s*([\\d\\.\\-etk\\s]*)");
-boost::regex hear_player_regex = boost::regex("\\(hear\\s+(\\d+)\\s+([\\d\\.\\-e]+)\\s+our\\s+(\\d+)\\s+([\\\"\\w\\s]+)\\)");
+boost::regex hear_coach_regex("\\(hear\\s+(\\d+)\\s+(self|referee|online_coach_left|online_coach_right)\\s+([\\\"\\w\\s]*)\\)");
+boost::regex hear_player_regex("\\(hear\\s+(\\d+)\\s+([\\d\\.\\-e]+)\\s+our\\s+(\\d+)\\s+([\\\"\\w\\s]+)\\)");
+bool processing_body = false;
 bool Parser::processing_see = false;
 
 std::string Parser::sense_body_message = std::string();
@@ -57,16 +61,14 @@ bool compareFlags(Flag f0, Flag f1) {
 Parser::Parser(Self *self, World *world) {
 	Parser::self = self;
 	Parser::world = world;
-	hear_regex = boost::regex("\\(hear\\s+(\\d+)\\s+(self|referee|online_coach_left|online_coach_right)\\s+([\\\"\\w\\s]*)\\)");
-	hear_player_regex = boost::regex("");
 	Parser::game = new Game();
 	thread_sense_body = 0;
 	thread_see = 0;
 }
 
 void *Parser::process_sense_body(void *arg) {
+	processing_body = true;
 	Parser::self->processSenseBody(Parser::sense_body_message);
-	boost::cmatch match;
 	usleep(1000 * Server::SYNCH_SEE_OFFSET);
 	int success = pthread_mutex_lock(&Parser::SEE_MUTEX);
 	if (success) {
@@ -88,9 +90,12 @@ void *Parser::process_sense_body(void *arg) {
 	if (success) {
 		std::cerr << "Parser::process_sense_body(void*) -> cannot unlock mutex" << std::endl;
 	}
-	if (boost::regex_search(Parser::sense_body_message.c_str(), match, Parser::sense_body)) {
-		Parser::game->updateTime(atoi((std::string() + match[1]).c_str()));
-	}
+	boost::cmatch match;
+	size_t found = Parser::sense_body_message.find(" ", 12);
+	Parser::game->updateTime(atoi(Parser::sense_body_message.substr(12, found - 12).c_str()));
+//	if (boost::regex_search(Parser::sense_body_message.c_str(), match, Parser::sense_body)) {
+//		Parser::game->updateTime(atoi((std::string() + match[1]).c_str()));
+//	}
 	return 0;
 }
 
@@ -99,6 +104,7 @@ void *Parser::process_see(void *arg) {
 	see_received = true;
 	int simulation_time = Game::SIMULATION_TIME;
 	Position player_position = Self::getPosition();
+	Vector2D player_velocity = Self::getVelocity();
 	int success = pthread_mutex_lock(&Parser::SEE_MUTEX);
 	if (success) {
 		std::cerr << "Parser::process_see(void*) -> cannot lock mutex" << std::endl;
@@ -122,10 +128,10 @@ void *Parser::process_see(void *arg) {
 			flags.push_back(Flag(name, data, simulation_time));
 			break;
 		case 'p':
-			players.push_back(Player(name, data, simulation_time, player_position));
+			players.push_back(Player(name, data, simulation_time, player_position, player_velocity));
 			break;
 		case 'b':
-			ball.push_back(Ball(data, simulation_time, player_position));
+			ball.push_back(Ball(data, simulation_time, player_position, player_velocity));
 			break;
 		default:
 			break;
@@ -173,7 +179,7 @@ void Parser::parseMessage(std::string message) {
 		//(hear 432 173 opp "Phoenix")
 		//(hear 551 self "Nemesis");
 		boost::cmatch match;
-		if (boost::regex_match(message.c_str(), match, hear_regex)) {
+		if (boost::regex_match(message.c_str(), match, hear_coach_regex)) {
 			std::string sender = std::string() + match[2];
 			if (sender.compare("referee") == 0) {
 				game->updatePlayMode(std::string() + match[3]);

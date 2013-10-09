@@ -38,6 +38,7 @@ class Ball {
 	bool inSightRange;
 	Ball* bound;
 public:
+	Ball();
 	Ball(int simulation_time);
 	Ball(std::string position, int simulation_time);
 	Ball(std::string position, int simulation_time, Position player_position, Vector2D player_velocity);
